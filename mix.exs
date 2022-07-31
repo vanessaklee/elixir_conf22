@@ -24,7 +24,8 @@ defmodule ElixirConf.MixProject do
       {:axon, "~> 0.2.0-dev", github: "elixir-nx/axon"},
       {:exla, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "exla"},
       {:nx, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
-      {:explorer, "~> 0.2.0"}
+      {:explorer, "~> 0.2.0"},
+      {:kino, "~> 0.6.2"}
     ]
   end
 end
