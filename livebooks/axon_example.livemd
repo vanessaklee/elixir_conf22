@@ -73,9 +73,12 @@ targets =
 
 Let's start by defining a simple model:
 
+*Note: This is modified from the original example. The `Axon.input/2` function definition changed.
+`Axon.input("input", shape: {nil, 1, 28, 28})` was altered to `Axon.input({nil, 1, 28, 28}, "input")`)*
+
 ```elixir
 model =
-  Axon.input("input", shape: {nil, 1, 28, 28})
+  Axon.input({nil, 1, 28, 28}, "input")
   |> Axon.flatten()
   |> Axon.dense(128, activation: :relu)
   |> Axon.dense(10, activation: :softmax)
