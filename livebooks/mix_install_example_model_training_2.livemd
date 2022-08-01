@@ -9,8 +9,7 @@ Mix.install([
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
   {:req, "~> 0.3.0"},
-  {:vega_lite, "~> 0.1.4"},
-  {:unzip, "~> 0.7.0"}
+  {:vega_lite, "~> 0.1.4"}
 ])
 ```
 
@@ -20,9 +19,11 @@ The dataset for this experiment is the [Credit Card Fraud Prevention](https://ww
 
 ```elixir
 # change url to experiment with other data sets.
-url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/haberman.csv"
+url = "https://github.com/vanessaklee/elixir_conf/blob/main/data/creditcard.csv.zip"
 
-ds = Req.get!(url).body
+ds = Req.get!(url)
+ds.headers |> List.keyfind("content-encoding", 0)
+ds.body["gzipped"]
 ```
 
 ## Normalize the data
@@ -30,7 +31,11 @@ ds = Req.get!(url).body
 
 
 ```elixir
-df = Explorer.DataFrame.from_csv!()
+normalized_book_text =
+  book_text
+  |> String.downcase()
+  |> String.replace(~r/[^a-z \.\n]/, "")
+  |> String.to_charlist()
 ```
 
 We converted the text to a list of characters, where each character is a number (specifically, a Unicode code point). Lowercase English characters are represented with numbers between `97 = a` and `122 = z`, a space is `32 = [ ]`, a new line is `10 = \n` and the period is `46 = .`.
