@@ -26,10 +26,6 @@ elixir_conf-*.tar
 /tmp/
 .DS_Store
 
-# Large data files
-/data/
-*.csv
-
 # Misc
 .formatter.exs
 .env
