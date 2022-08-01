@@ -13,156 +13,183 @@ Mix.install([
 ])
 ```
 
-## Get the data
+## Get the data - Credit Card Fraud
 
 The dataset for this experiment is the [Credit Card Fraud Prevention](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) set.
 
 ```elixir
-# change url to experiment with other data sets.
-url = "https://github.com/vanessaklee/elixir_conf/blob/main/data/creditcard.csv.zip"
-
-ds = Req.get!(url)
-ds.headers |> List.keyfind("content-encoding", 0)
-ds.body["gzipped"]
+df =
+  Explorer.DataFrame.from_csv!("Projects/elixir_conf/data/creditcard.csv",
+    dtypes: [{"Time", :float}]
+  )
 ```
 
-## Normalize the data
+## Size the data
 
-
+Determine how many rows are in the dataset. Use that number to determine the size needed for training and testing.
 
 ```elixir
-normalized_book_text =
-  book_text
-  |> String.downcase()
-  |> String.replace(~r/[^a-z \.\n]/, "")
-  |> String.to_charlist()
+sample_size = Explorer.DataFrame.n_rows(df) |> IO.inspect(label: "Number of rows")
+
+# 85% of the data set to use for training; 15% for testing
+train_size = ceil(0.85 * sample_size)
+train_size = ceil(0.85 * sample_size) |> IO.inspect(label: "Training size")
+test_size = (sample_size - train_size) |> IO.inspect(label: "Test size")
+
+:ok
 ```
-
-We converted the text to a list of characters, where each character is a number (specifically, a Unicode code point). Lowercase English characters are represented with numbers between `97 = a` and `122 = z`, a space is `32 = [ ]`, a new line is `10 = \n` and the period is `46 = .`.
-
-So we should have 26 + 3 (= 29) characters in total. Let's see if that's true.
 
 ```elixir
-Enum.uniq(normalized_book_text) |> Enum.count()
-# Yay!
-```
+train_df = Explorer.DataFrame.slice(df, 0, train_size)
+test_df = Explorer.DataFrame.slice(df, 0, test_size)
 
-Since we want to use the 29 characters as possible values for each input in our neural network, We can re-map them to new values between 0 and 28. So each specific neuron will indicate a specific character.
+# Select a set with the target ("Class") and without for training and testing
+train_df_inputs = Explorer.DataFrame.select(train_df, &(&1 == "Class"), :drop)
+train_df_targets = Explorer.DataFrame.select(train_df, &(&1 == "Class"), :keep)
+test_df_inputs = Explorer.DataFrame.select(test_df, &(&1 == "Class"), :drop)
+test_df_targets = Explorer.DataFrame.select(test_df, &(&1 == "Class"), :keep)
+
+:ok
+```
 
 ```elixir
-alias VegaLite, as: Vl
-
-# Extract all then unique characters we have. Optionally we can sort them.
-characters = normalized_book_text |> Enum.uniq() |> Enum.sort()
-characters_count = Enum.count(characters)
-total_chars = Enum.count(normalized_book_text)
-
-# Create a mapping for every character
-char_to_idx = Enum.with_index(characters) |> Enum.into(%{})
-# And a reverse mapping to convert back to characters
-idx_to_char = Enum.with_index(characters, &{&2, &1}) |> Enum.into(%{})
-
-IO.puts("Total Book Characters: #{total_chars}")
-IO.puts("Total Unique Characters: #{characters_count}")
-
-frequencies = Enum.frequencies(normalized_book_text)
-
-data =
-  Enum.map(frequencies, fn {k, v} ->
-    %{"Characters" => List.to_string([k]), "Frequency" => v}
-  end)
-
-Vl.new(width: 700, height: 600)
-|> Vl.data_from_values(data)
-|> Vl.mark(:bar)
-|> Vl.encode_field(:x, "Characters", type: :nominal, axis: [label_angle: 0])
-|> Vl.encode_field(:y, "Frequency", type: :quantitative)
+# Function to convert the datafram to tensors
+to_tensor = fn data_frame ->
+  data_frame
+  |> Explorer.DataFrame.names()
+  |> Enum.map(
+    &(Explorer.Series.to_tensor(data_frame[&1])
+      |> Nx.new_axis(-1))
+  )
+  |> Nx.concatenate(axis: 1)
+end
 ```
-
-## Training and Test Data Sets
-
-Our goal is to teach the machine what comes after a sequence of characters (usually). For example given the following sequence **"Hello, My name i"** the computer should be able to guess that the next character is probably **"s"**.
-
-<!-- livebook:{"break_markdown":true} -->
-
-<!-- Learn more at https://mermaid-js.github.io/mermaid -->
-
-```mermaid
-graph LR;
-  A[Input: Hello my name i]-->NN[Neural Network]-->B[Output: s];
-```
-
-<!-- livebook:{"break_markdown":true} -->
-
-Let's choose an arbitrary sequence length and create a data set from the book text. All we need to do is read X amount of characters from the book as the input and then read 1 more as the designated output.
-
-After doing all that, we also want to convert every character to it's index using the `char_to_idx` mapping that we have created before.
-
-Neural networks work best if you scale your inputs and outputs. In this case we are going to scale everything between 0 and 1 by dividing them by the number of unique characters that we have.
-
-And for the final step we will reshape it so we can use the data in our LSTM model.
 
 ```elixir
-sequence_length = 100
+# convert sets to tensors
+train_inputs = to_tensor.(train_df_inputs)
+train_targets = to_tensor.(train_df_targets)
+test_inputs = to_tensor.(test_df_inputs)
+test_targets = to_tensor.(test_df_targets)
 
-train_data =
-  normalized_book_text
-  |> Enum.map(&Map.fetch!(char_to_idx, &1))
-  |> Enum.chunk_every(sequence_length, 1, :discard)
-  # We don't want the last chunk since we don't have a prediction for it.
-  |> Enum.drop(-1)
-  |> Nx.tensor()
-  |> Nx.divide(characters_count)
-  |> Nx.reshape({:auto, sequence_length, 1})
+# convert sets tensors to lists of tensors
+train_batch_inputs = Nx.to_batched(train_inputs, 2048, leftover: :repeat)
+train_batch_targets = Nx.to_batched(train_targets, 2048, leftover: :repeat)
+test_batch_inputs = Nx.to_batched(test_inputs, 2048, leftover: :repeat)
+test_batch_targets = Nx.to_batched(test_targets, 2048, leftover: :repeat)
+
+:ok
 ```
 
-For our train results, We will do the same. Drop the first `sequence_length` characters and then convert them to the mapping. This time we need to do something called **one-hot encoding**.
-
-The reason we want to use one hot encoding is that in our model we don't want to only return a character as the output. We want it to return the possibility of each character for the output. This way we can decide if certain possibility is good or not or even we can decide between multiple possible outputs or even discard everything if the network is not confident enough.
-
-In Nx, you can achieve this encoding by using this snippet
-
 ```elixir
-Nx.tensor([
-  [0],
-  [1],
-  [2]
-])
-|> Nx.equal(Nx.iota({3}))
+# Zip the batches together
+train_batch = Stream.zip(train_batch_inputs, train_batch_targets)
+test_batch = Stream.zip(test_batch_inputs, test_batch_targets)
+
+:ok
 ```
 
-To sum it up, Here is how we generate the train results.
-
 ```elixir
-train_results =
-  normalized_book_text
-  |> Enum.drop(sequence_length)
-  |> Enum.map(&Map.fetch!(char_to_idx, &1))
-  |> Nx.tensor()
-  |> Nx.reshape({:auto, 1})
-  |> Nx.equal(Nx.iota({characters_count}))
+train_max = Nx.reduce_max(train_inputs, axes: [0], keep_axes: true)
+
+# Function to normalize the data to a value between 0 and 1
+normalize = fn {batch, target} ->
+  {Nx.divide(batch, train_max), target}
+end
+
+training_data = train_batch |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
 ```
 
-## Defining the Model
+## Train the data!
 
 ```elixir
-# As the input, We expect the sequence_length characters. Each one is a number.
+# Define the model
 model =
-  Axon.input("input_chars", shape: {nil, sequence_length, 1})
-  # The Long Short Term Memory layer of our network
-  |> Axon.lstm(256)
-  # Selecting only the output from the LSTM Layer
-  |> then(fn {_, out} -> out end)
-  # Since we only want the last sequence in LSTM we will slice it and select the last one
-  |> Axon.nx(fn t -> t[[0..-1//1, -1]] end)
-  # 20% dropout so we will not become too dependent on specific neurons.
-  |> Axon.dropout(rate: 0.2)
-  # The output layer. One for each character and using softmax as activation
-  # so every node represents a probability.
-  |> Axon.dense(characters_count, activation: :softmax)
+  Axon.input({nil, 30}, "input")
+  |> Axon.dense(256)
+  |> Axon.relu()
+  |> Axon.dense(256)
+  |> Axon.relu()
+  |> Axon.dropout(rate: 0.3)
+  |> Axon.dense(256)
+  |> Axon.relu()
+  |> Axon.dropout(rate: 0.3)
+  |> Axon.dense(1)
+  |> Axon.sigmoid()
 ```
 
-## Training the Network
+```elixir
+fraud =
+  Nx.sum(train_targets)
+  |> Nx.to_number()
+
+legit = Nx.size(train_targets) - fraud
+
+loss =
+  &Axon.Losses.binary_cross_entropy(
+    &1,
+    &2,
+    negative_weight: 1 / legit,
+    positive_weight: 1 / fraud,
+    reduction: :mean
+  )
+
+optimizer = Axon.Optimizers.adam(0.01)
+
+:ok
+```
+
+```elixir
+model_state =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:precision)
+  |> Axon.Loop.metric(:recall)
+```
+
+```elixir
+model_state = model_state |> Axon.Loop.run(training_data, %{}, epochs: 2)
+```
+
+```elixir
+model
+|> Axon.serialize(%{model_state: model_state})
+|> then(&File.write!("Projects/elixir_conf/models/simple_model.axon", &1))
+```
+
+## Test the Model
+
+```elixir
+{read_model, params} =
+  File.read!("Projects/elixir_conf/models/simple_model.axon")
+  |> Axon.deserialize()
+
+model
+```
+
+```elixir
+IO.inspect(">> Fradulent data set output")
+
+model
+|> Axon.Loop.evaluator()
+|> Axon.Loop.metric(:true_positives, "fraud_declined", :running_sum)
+|> Axon.Loop.metric(:true_negatives, "legit_accepted", :running_sum)
+|> Axon.Loop.metric(:false_positives, "legit_declined", :running_sum)
+|> Axon.Loop.metric(:false_negatives, "fraud_accepted", :running_sum)
+|> Axon.Loop.run(test_batch, model_state)
+```
+
+TODO: visualize the results
+
+```elixir
+# alias VegaLite, as: Vl
+
+# Vl.new(width: 700, height: 600)
+# |> Vl.data_from_values(df)
+# |> Vl.mark(:bar)
+# |> Vl.encode_field(:x, "Characters", type: :nominal, axis: [label_angle: 0])
+# |> Vl.encode_field(:y, "Frequency", type: :quantitative)
+```
 
 To train the network, We will use Axon's Loop API. It is pretty straightforward.
 
@@ -228,52 +255,3 @@ cupboards as she fell past it.
 
 generate_fn.(model, params, init_seq) |> IO.puts()
 ```
-
-## Multi LSTM Layers
-
-We can improve our network by stacking multiple LSTM layers together. We just need to change our model and re-train our network.
-
-```elixir
-new_model =
-  Axon.input("input_chars", shape: {nil, sequence_length, 1})
-  |> Axon.lstm(256)
-  |> then(fn {_, out} -> out end)
-  |> Axon.dropout(rate: 0.2)
-  # This time we will pass all of the `out` to the next lstm layer.
-  # We just need to slice the last one.
-  |> Axon.lstm(256)
-  |> then(fn {_, out} -> out end)
-  |> Axon.nx(fn x -> x[[0..-1//1, -1]] end)
-  |> Axon.dropout(rate: 0.2)
-  |> Axon.dense(characters_count, activation: :softmax)
-```
-
-Then we can train the network using the exact same code as before
-
-```elixir
-# Using a smaller batch size in this case will give the network more opportunity to learn
-batch_size = 64
-train_batches = Nx.to_batched_list(train_data, batch_size)
-result_batches = Nx.to_batched_list(train_results, batch_size)
-
-IO.puts("Total batches: #{Enum.count(train_batches)}")
-
-new_params =
-  new_model
-  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adam(0.001))
-  |> Axon.Loop.run(Stream.zip(train_batches, result_batches), %{}, epochs: 50, compiler: EXLA)
-
-:ok
-```
-
-## Generate text with the new network
-
-```elixir
-generate_fn.(new_model, new_params, init_seq) |> IO.puts()
-```
-
-As you may see, It improved a lot with this new model and the extensive training. This time it knows about rules like adding a space after period.
-
-## References
-
-The above example is a modified version of the [Text Generation with LSTM in Axon](https://github.com/elixir-nx/axon/blob/main/notebooks/text_generator.livemd) example from the Axon library. It was heavily inspired by [this article](https://machinelearningmastery.com/text-generation-lstm-recurrent-neural-networks-python-keras/) by Jason Brownlee.
