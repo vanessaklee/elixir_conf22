@@ -1,4 +1,4 @@
-# Mix.Install Penrose
+# (breast cancer) Mix.Install
 
 ```elixir
 Mix.install([
@@ -13,21 +13,33 @@ Mix.install([
 ])
 ```
 
-## Get the data - Credit Card Fraud
+## Get the data - Breast Cancer
 
 The dataset for this experiment is the [Haberman Dataset](https://archive.ics.uci.edu/ml/datasets/haberman's+survival). The dataset contains cases from a study that was conducted between 1958 and 1970 at the University of Chicago's Billings Hospital on the survival of patients who had undergone surgery for breast cancer
 
-The dataset for this experiment is the [Credit Card Fraud Prevention](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) set.
+<!-- livebook:{"break_markdown":true} -->
+
+### Attributes
+
+* Age of patient at time of operation (numerical)
+* Patient's year of operation (year - 1900, numerical)
+* Number of positive axillary nodes detected (numerical)
+* Survival status (class attribute)
+  * 1 = the patient survived 5 years or longer
+  * 2 = the patient died within 5 year
 
 ```elixir
-df = Explorer.Datasets.iris()
+# df = Explorer.Datasets.iris()
+alias Explorer.DataFrame
+alias Explorer.S
 
-# File.stream!("Projects/elixir_conf/data/haberman.csv") |> CSV.decode! |> Enum.to_list()
-# df = Explorer.DataFrame.from_csv!("Projects/elixir_conf/data/haberman.csv", header: false)
-df =
-  Explorer.DataFrame.from_csv!("Projects/elixir_conf/data/creditcard.csv",
-    dtypes: [{"Time", :float}]
-  )
+df = DataFrame.from_csv!("Projects/elixir_conf/data/haberman.csv")
+```
+
+### Shape
+
+```elixir
+DataFrame.shape(df)
 ```
 
 ## Size the data
@@ -35,7 +47,7 @@ df =
 Determine how many rows are in the dataset. Use that number to determine the size needed for training and testing.
 
 ```elixir
-sample_size = Explorer.DataFrame.n_rows(df) |> IO.inspect(label: "Number of rows")
+sample_size = DataFrame.n_rows(df) |> IO.inspect(label: "Number of rows")
 
 # 85% of the data set to use for training; 15% for testing
 train_size = ceil(0.85 * sample_size)
@@ -45,50 +57,64 @@ test_size = (sample_size - train_size) |> IO.inspect(label: "Test size")
 :ok
 ```
 
-```elixir
-train_df = Explorer.DataFrame.slice(df, 0, train_size)
-test_df = Explorer.DataFrame.slice(df, 0, test_size)
+### Slice into training and testing sets
 
+```elixir
+train_df = DataFrame.slice(df, 0, train_size)
+test_df = DataFrame.slice(df, 0, test_size)
+X
 # Select a set with the target ("Class") and without for training and testing
-train_df_inputs = Explorer.DataFrame.select(train_df, &(&1 == "Class"), :drop)
-train_df_targets = Explorer.DataFrame.select(train_df, &(&1 == "Class"), :keep)
-test_df_inputs = Explorer.DataFrame.select(test_df, &(&1 == "Class"), :drop)
-test_df_targets = Explorer.DataFrame.select(test_df, &(&1 == "Class"), :keep)
+train_df_inputs = DataFrame.select(train_df, &(&1 == "class"), :drop)
+train_df_targets = DataFrame.select(train_df, &(&1 == "class"), :keep)
+test_df_inputs = DataFrame.select(test_df, &(&1 == "class"), :drop)
+test_df_targets = DataFrame.select(test_df, &(&1 == "class"), :keep)
 
 :ok
 ```
+
+### Define a function to convert the datafram to tensors
 
 ```elixir
 # Function to convert the datafram to tensors
 to_tensor = fn data_frame ->
   data_frame
-  |> Explorer.DataFrame.names()
+  |> DataFrame.names()
   |> Enum.map(
-    &(Explorer.Series.to_tensor(data_frame[&1])
+    &(Series.to_tensor(data_frame[&1])
       |> Nx.new_axis(-1))
   )
   |> Nx.concatenate(axis: 1)
 end
 ```
 
+### Convert the sets to tensors
+
 ```elixir
-# convert sets to tensors
 train_inputs = to_tensor.(train_df_inputs)
 train_targets = to_tensor.(train_df_targets)
 test_inputs = to_tensor.(test_df_inputs)
 test_targets = to_tensor.(test_df_targets)
 
-# convert sets tensors to lists of tensors
-train_batch_inputs = Nx.to_batched(train_inputs, 2048, leftover: :repeat)
-train_batch_targets = Nx.to_batched(train_targets, 2048, leftover: :repeat)
-test_batch_inputs = Nx.to_batched(test_inputs, 2048, leftover: :repeat)
-test_batch_targets = Nx.to_batched(test_targets, 2048, leftover: :repeat)
+:ok
+```
+
+### Convert tensor sets to lists of tensors
+
+```elixir
+# Training set size: 261; testing set size: 45
+batch_size = 9
+
+train_batch_inputs = Nx.to_batched(train_inputs, batch_size, leftover: :repeat)
+train_batch_targets = Nx.to_batched(train_targets, batch_size, leftover: :repeat)
+test_batch_inputs = Nx.to_batched(test_inputs, batch_size, leftover: :repeat)
+test_batch_targets = Nx.to_batched(test_targets, batch_size, leftover: :repeat)
 
 :ok
 ```
 
+### Zip the batches together
+
 ```elixir
-# Zip the batches together
 train_batch = Stream.zip(train_batch_inputs, train_batch_targets)
 test_batch = Stream.zip(test_batch_inputs, test_batch_targets)
 
@@ -103,15 +129,18 @@ normalize = fn {batch, target} ->
   {Nx.divide(batch, train_max), target}
 end
 
-training_data = train_batch |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
+training_data = train_batch |> Stream.map(&Nx.Defn.jit(normalize, [&1]))
 ```
 
 ## Train the data!
 
+### Define the Model
+
 ```elixir
-# Define the model
+num_of_cols = 4
+
 model =
-  Axon.input({nil, 30}, "input")
+  Axon.input("input", shape: {nil, num_of_cols})
   |> Axon.dense(256)
   |> Axon.relu()
   |> Axon.dense(256)
@@ -124,19 +153,21 @@ model =
   |> Axon.sigmoid()
 ```
 
+### Define Loss and Optimizer
+
 ```elixir
-fraud =
+deaths =
   Nx.sum(train_targets)
   |> Nx.to_number()
 
-legit = Nx.size(train_targets) - fraud
+nondeaths = Nx.size(train_targets) - deaths
 
 loss =
   &Axon.Losses.binary_cross_entropy(
     &1,
     &2,
-    negative_weight: 1 / legit,
-    positive_weight: 1 / fraud,
+    negative_weight: 1 / nondeaths,
+    positive_weight: 1 / deaths,
     reduction: :mean
   )
 
@@ -145,13 +176,19 @@ optimizer = Axon.Optimizers.adam(0.01)
 :ok
 ```
 
+### Model State
+
 ```elixir
 model_state =
   model
   |> Axon.Loop.trainer(loss, optimizer)
   |> Axon.Loop.metric(:precision)
   |> Axon.Loop.metric(:recall)
+
+:ok
 ```
+
+Model State, Step 2
 
 ```elixir
 model_state = model_state |> Axon.Loop.run(training_data, %{}, epochs: 2)
