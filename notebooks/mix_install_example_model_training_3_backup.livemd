@@ -2,9 +2,9 @@
 
 ```elixir
 Mix.install([
-  {:axon, "~> 0.2.0-dev", github: "elixir-nx/axon"},
-  {:exla, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "exla"},
-  {:nx, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
+  {:axon, "~> 0.1.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.2.1"},
   {:explorer, "~> 0.2.0"},
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
@@ -26,7 +26,7 @@ The dataset for this experiment is the [Haberman Dataset](https://archive.ics.uc
 * Number of positive axillary nodes detected (numerical)
 * Survival status (class attribute)
   * 1 = the patient survived 5 years or longer
-  * 0 = the patient died within 5 year
+  * 0 = the patient died within 5 years
 
 ```elixir
 # df = Explorer.Datasets.iris()
@@ -34,6 +34,63 @@ alias Explorer.DataFrame
 alias Explorer.Series
 
 df = DataFrame.from_csv!("Projects/elixir_conf/data/haberman.csv")
+```
+
+```elixir
+survived = df["class"] |> Series.sum() |> IO.inspect(label: "Survived")
+not_survived = (DataFrame.n_rows(df) - survived) |> IO.inspect(label: "Not survived")
+
+"Imbalanced dataset"
+```
+
+### Visualize the Data
+
+#### Smart Cells
+
+##### Types
+
+* _Quantitative_ - numerical data
+* _Nominal_ - categorical data without a set order or scale
+* _Ordinal_ - categorial data with a set order or scale
+* _Temporal_ - data which represents a state in time
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Age & Nodes
+
+<!-- livebook:{"attrs":{"chart_title":null,"height":150,"layers":[{"chart_type":"point","color_field":null,"color_field_aggregate":null,"color_field_type":null,"data_variable":"df","x_field":"age","x_field_aggregate":null,"x_field_type":"quantitative","y_field":"nodes","y_field_aggregate":null,"y_field_type":"quantitative"}],"vl_alias":"Elixir.VegaLite","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+VegaLite.new(width: 750, height: 150)
+|> VegaLite.data_from_values(df, only: ["age", "nodes"])
+|> VegaLite.mark(:point)
+|> VegaLite.encode_field(:x, "age", type: :quantitative)
+|> VegaLite.encode_field(:y, "nodes", type: :quantitative)
+```
+
+### Nodes & Class
+
+<!-- livebook:{"attrs":{"chart_title":null,"height":150,"layers":[{"chart_type":"point","color_field":null,"color_field_aggregate":null,"color_field_type":null,"data_variable":"df","x_field":"nodes","x_field_aggregate":null,"x_field_type":"quantitative","y_field":"class","y_field_aggregate":null,"y_field_type":"ordinal"}],"vl_alias":"Elixir.VegaLite","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+VegaLite.new(width: 750, height: 150)
+|> VegaLite.data_from_values(df, only: ["nodes", "class"])
+|> VegaLite.mark(:point)
+|> VegaLite.encode_field(:x, "nodes", type: :quantitative)
+|> VegaLite.encode_field(:y, "class", type: :ordinal)
+```
+
+### Age & Class
+
+<!-- livebook:{"attrs":{"chart_title":null,"height":150,"layers":[{"chart_type":"point","color_field":"__count__","color_field_aggregate":null,"color_field_type":null,"data_variable":"df","x_field":"age","x_field_aggregate":null,"x_field_type":"quantitative","y_field":"class","y_field_aggregate":null,"y_field_type":"ordinal"}],"vl_alias":"Elixir.VegaLite","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+VegaLite.new(width: 750, height: 150)
+|> VegaLite.data_from_values(df, only: ["age", "class"])
+|> VegaLite.mark(:point)
+|> VegaLite.encode_field(:x, "age", type: :quantitative)
+|> VegaLite.encode_field(:y, "class", type: :ordinal)
+|> VegaLite.encode(:color, aggregate: :count)
 ```
 
 ### Shape
@@ -111,7 +168,7 @@ test_targets = to_tensor.(test_df_targets)
 
 <!-- livebook:{"break_markdown":true} -->
 
-Axon expectsd small batches for training. Nx `to_bached/3` converts a tensor to a stream of tensor batches. From the [docs](https://hexdocs.pm/nx/Nx.html#to_batched_list/3):
+Axon expects minibatches for training. Nx `to_bached/3` converts a tensor to a stream of tensor batches. From the [docs](https://hexdocs.pm/nx/Nx.html#to_batched_list/3):
 
 > The first dimension (axis 0) is divided by `batch_size`. In case the dimension cannot be evenly divided by `batch_size`, you may specify what to do with leftover data using `:leftover`. `:leftover` must be one of `:repeat` or `:discard`. `:repeat` repeats the first `n` values to make the last batch match the desired batch size. `:discard` discards excess elements.
 
@@ -119,18 +176,16 @@ The training set has 261 rows and the testing set has 45. We will set the `batch
 
 ```elixir
 # Training set size: 261; testing set size: 45
-batch_size = 15
+batch_size = 20
 
-train_batch_inputs =
-  Nx.to_batched(train_inputs, batch_size, leftover: :repeat)
-  |> IO.inspect(label: "batched features")
+train_batch_inputs = Nx.to_batched_list(train_inputs, batch_size, leftover: :repeat)
 
 train_batch_targets =
-  Nx.to_batched(train_targets, batch_size, leftover: :repeat)
+  Nx.to_batched_list(train_targets, batch_size, leftover: :repeat)
   |> IO.inspect(label: "batched targets")
 
-test_batch_inputs = Nx.to_batched(test_inputs, batch_size, leftover: :repeat)
-test_batch_targets = Nx.to_batched(test_targets, batch_size, leftover: :repeat)
+test_batch_inputs = Nx.to_batched_list(test_inputs, batch_size, leftover: :repeat)
+test_batch_targets = Nx.to_batched_list(test_targets, batch_size, leftover: :repeat)
 
 :ok
 ```
@@ -186,13 +241,16 @@ The size of the input layer is equal to the number of features (columns) in your
 
 * 3 hidden layers with a hidden size of 2
 
-This is a starting point. Chaning the hidden size or activations will produce different outcomes. Simpler models might produce equal performance.
+TODO define regression vs classification
+
+This is a starting point. Changing the hidden size or activations will produce different outcomes. Simpler models might produce equal performance.
 
 ```elixir
-num_of_cols = 4
+num_of_cols = 3
 
+# Axon.input("input", shape: {nil, num_of_cols})
 model =
-  Axon.input("input", shape: {nil, num_of_cols})
+  Axon.input({nil, num_of_cols}, "input")
   |> Axon.dense(2)
   |> Axon.relu()
   |> Axon.dense(2)
@@ -221,7 +279,9 @@ Then the non-deaths.
 nondeaths = Nx.size(train_targets) - deaths
 ```
 
-Determine the loss.
+#### Loss Funciton
+
+The loss function measures how well a model fit the data set.The bigger the difference between the prediction and the ground truth (target or class), the higher the loss function value.
 
 ```elixir
 loss =
@@ -245,7 +305,8 @@ optimizer = Axon.Optimizers.adam(0.01)
 ```elixir
 model_state =
   model
-  |> Axon.Loop.trainer(loss, optimizer)
+  # |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.trainer(:mean_squared_error, :adam)
   |> Axon.Loop.metric(:precision)
   |> Axon.Loop.metric(:recall)
 
@@ -255,7 +316,8 @@ model_state =
 ### Run the Axon Loop to train the data
 
 ```elixir
-model_state = model_state |> Axon.Loop.run(training_data, %{}, epochs: 2)
+# model_state = model_state |> Axon.Loop.run(training_data, %{}, epochs: 2)
+model_state = model_state |> Axon.Loop.run(training_data, %{}, epochs: 350)
 ```
 
 ### Save the Model
@@ -347,31 +409,3 @@ Vl.new(width: 700, height: 600)
 |> Vl.encode_field(:x, "class", type: :nominal, axis: [label_angle: 0])
 |> Vl.encode_field(:y, "age", type: :quantitative)
 ```
-
-```elixir
-# Using a smaller batch size in this case will give the network more opportunity to learn
-batch_size = 64
-train_batches = Nx.to_batched_list(train_data, batch_size)
-result_batches = Nx.to_batched_list(train_results, batch_size)
-
-IO.puts("Total batches: #{Enum.count(train_batches)}")
-
-new_params =
-  new_model
-  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adam(0.001))
-  |> Axon.Loop.run(Stream.zip(train_batches, result_batches), %{}, epochs: 50, compiler: EXLA)
-
-:ok
-```
-
-## Generate text with the new network
-
-```elixir
-generate_fn.(new_model, new_params, init_seq) |> IO.puts()
-```
-
-As you may see, It improved a lot with this new model and the extensive training. This time it knows about rules like adding a space after period.
-
-## References
-
-The above example is a modified version of the [Text Generation with LSTM in Axon](https://github.com/elixir-nx/axon/blob/main/notebooks/text_generator.livemd) example from the Axon library. It was heavily inspired by [this article](https://machinelearningmastery.com/text-generation-lstm-recurrent-neural-networks-python-keras/) by Jason Brownlee.
