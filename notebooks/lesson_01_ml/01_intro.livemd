@@ -1,0 +1,116 @@
+# Machine Learning: Introduction
+
+## Goal 
+
+After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available 
+dataset. We will then employ the model to make predictions. This lesson services as an introduction fto and an overview of machine learning.
+
+### Machine Learning
+
+Machine learning is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions, and get better over time with exposure to data.
+
+There are three main types of machine learning
+- Supervised learning
+- Unsupervised learning
+- Reinforcement learning
+
+### Types of Machine Learning
+
+#### Supervised Learning
+
+Supervised learning is like learning by example. 
+
+Supervised learning uses labeled training data to learn a model or a function which is able to produce the correct output given an input. Supervised learning can be used for classification tasks and regression tasks. Feature engineering, identifying the characteristics in your input data that are most likely related to the output is crucial. 
+
+With enough examples the goal is to learn to produce appropriate outputs, even for new inputs. 
+
+##### An Example
+
+Real estate is a good example. The history of home sales in a particular area could be expressed as a collection of number pairs. The square footage of each home and its sales price. From these pairs of numbers, a machine can learn a model that calculates the expected sales price given the square footage. 
+How It Works
+The above example is a simple model, one input variable and one output. Square footage is only one factor that influences the price of a home, of course. The price of apartments can be influenced also by attributes such as what floor an apartment is on, the neighborhood that it's in, whether the building has a doorman or not, and so on. Given a sales history containing those attributes, plus sales prices, you can use machine learning to learn a more complex and realistic model that takes all of these attributes as inputs and predicts a sales price. 
+
+What makes this supervised learning? We used labeled data to train the model. In this example, the labels are prices. Machine learning experts talk about how important feature engineering is in developing machine learning models. 
+
+Finding the most discriminating features of the pairs of information that we're using in the training data. Discriminating features mean the features that are most likely related somehow to the labeled data. 
+
+Supervised learning can perform two main tasks:
+
+1. Classification
+  - The output is one of a set of discrete values, such as the name of the type of animal in a photograph
+1. Regression
+  - The output is a number, such as price in our real estate example
+
+##### Applications
+
+Applications of supervised learning include forecasting, image and handwriting recognition, text classification, and so on.
+
+There are a lot of domains where there's already a large set of very rich training data that can be used to train classification and regression models. For example, in the domain of personal health. These types of datasets can help predictive analytics tell a lot about what's likely to happen with a person's health based on predictive models over all of the individuals whose records have been used as training data.
+
+
+##### Challenges 
+
+*Training Data*
+
+Even if we know the right features for building a machine learning system, we also have to work through all the challenges in creating the training data. If we're going to have a human label, the expected outputs for a set of inputs as training data, we have to assume that that's a fairly easy computation for that human to do and that we're not going to get a lot of disagreement between two or three different humans who would be applying labels to the same data. 
+
+Building a sufficiently large data set for training a supervised model might require a lot of time and money because it might require a lot of effort from a lot of humans to get the job done. 
+
+
+#### Unsupervised Learning
+
+Unsupervised learning discovers patterns in data without explicit feedback or labeled examples like those in supervised learning. Clustering is a common unsupervised learning task. Given a large collection of things, find a way to group items into subsets that share important similarities. 
+
+For example, when someone breaks all people into two types of people, that is clustering using unsupervised learning to identify the two types.
+
+##### An Example
+
+An example of unsupervised learning is used in retail promotions. If an online retail business has two million customers, designing two million promotions to appeal to each customer is untenable. Instead, we could find four main types of customers according to features in their buying preferences. From those resulting four groups, we could then design four promotions. 
+How It Works
+Unsupervised Learning works by defining a method of measuring the distance or difference between items in your data set (i.e. between customers in our example). An algorithm defines clusters in which the items in a cluster are closer to each other than other items. 
+
+Clustering is frequently just the first level analysis done in unsupervised processing of data. If you add additional input, such as how many clusters you'd like or or hints about what features you want to use to calculate the distance between objects, you can reduce the time it takes to process the clusters when compared to a completely unsupervised process. This is called semi-supervised learning.
+
+Semi-supervised learning is unsupervised learning with some human guidance to improve its performance. A semi-supervised learning process with human intervention could improve a clustering algorithm by providing feedback on the number of clusters or on the features used for clustering. 
+
+##### Applications
+
+Applications of clustering include: customer segmentation, anomaly detection, social network analysis, anything involving the discovery of patterns and large amounts of data.
+
+Typical applications of clustering using unsupervised learning include: customer segmentation, such as our example; social network analysis, recommending new friends or groups after discovering what groups of people you seem to belong to; defining product baskets, discovering products likely to be purchased together, we can place them near each other in a store or recommend them to buyers; topic analysis or concept discovery, using clustering to analyze new stories and cluster them into the most common topics; or anomaly detection, you can use unsupervised learning to discover the most common patterns of sensor data produced by a manufacturing process for instance, and then look for outlying data which might suggest something is going wrong in your process. 
+
+##### Challenges
+
+One challenge of unsupervised learning is similar to supervised learning. In order to place the items into clusters, the algorithm has to decide which features are best for determining the clustering. Depending on what features are available, it may be hard to distinguish between two items and to decide which cluster they belong in. 
+
+#### Reinforcement Learning
+Reinforcement learning is learning through trial and error. Reinforcement learning is a way for machine learning in an unknown environment with only sensory input combined with rewards and punishments. Humans learn through reinforcement; when an action is rewarded, the action is reinforced. When an action is punished, the action is not reinforced.
+
+##### An Example
+A machine can learn to play a video game. The sensory inputs are the graphics and the rewards are the points. Reinforcement Learning problems are closed-loop problems. Inputs are not provided like with Supervised Learning. The learning is discovered by trying out all the available options and learning which actions lead to the highest reward.
+
+*How It Works*
+
+For a machine, Reinforcement Learning means a set of actions must be available. As each action is tried it is observed whether it was successful (reward) or not (punishment). If a sequence of actions leads to success, then the individual steps are linked to part of the success. If a long sequence of actions is necessary before the feedback is received, it can take a long time for learning to happen. It is preferable for more frequent feedback to occur along the sequence of actions so the machine can learn and make corrections more frequently. 
+
+##### Key Applications
+
+The most common applications for Reinforcement Learning involve mechanical systems. This includes robotics, flight simulation, and autonomous driving. Thinking of the videos of robots learning to maneuver in a new environment and learn all over again if they are damaged.
+
+##### Challenges
+
+Reinforcement Learning isn't the best choice if the cost of using trial and error is too high or if it takes too long to try the actions before getting feedback. For example, Reinforcement Learning is not a good choice for learning forecasting in the stock market. Each bad choice costs money.
+
+
+#### Machine Learning Algorithms and Models
+
+TODO This section needs more detail
+
+- Artificial neural networks
+- Support vector machines 
+- Ensemble learning
+
+
+```elixir
+# Do we need any code in this lesson? Something to play with?
+```
