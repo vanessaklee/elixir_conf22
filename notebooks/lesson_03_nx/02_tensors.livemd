@@ -1,4 +1,4 @@
-# Elixir Nx Basics: Tensors
+# Nx Basics: Tensors
 
 ```elixir
 Mix.install([
@@ -216,8 +216,7 @@ Nx.sum(tensor, axes: [:x])
 * with dimension names `[:z, :y, :x]`
 * calculate the sums along the `y` axis
 
-<!--
- possible answer
+<!-- possible answer
 challenge_tensor3 = 1..8 
   |> Enum.chunk_every(2)
   |> Enum.chunk_every(2)

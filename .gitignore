@@ -37,3 +37,4 @@ elixir_conf-*.tar
 .formatter.exs
 .env
 .envrc
+.tool-versions
