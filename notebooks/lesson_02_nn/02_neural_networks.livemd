@@ -1,0 +1,103 @@
+# Neural Networks: Introduction
+
+## Goal 
+
+After an introduction to machine learning we will define and train a machine learning model to solve a simple TBD problem using a publicly available dataset. This document covers the script for introducing neural networks.
+
+### Overview
+
+Neural Networks take in data (inputs), recognize the patterns in that data, and then predict the outputs for a new set of similar data. Based on the structure of the human brain.
+
+flowchart LR
+    Machine Learning --> Neural Networks --> Deep Learning
+
+#### Deep Learning 
+
+Deep learning refers to extracting and transforming data through multiple layers of neural networks where each layer takes inputs from the previous layer and refines it progressively. Algorithms train the layers to minimize errors and increase accuracy.
+
+### History
+
+1943: Warren McCulloch (neurophysiologist) and Walter Pitts (logician) created a mathematical model of an artificial neuron.
+
+Rosenblatt, Frank: (date??) built on that by building an actual machine, but the machine was not able to learn a simple mathematical function (i.e. xor) (see Marvin Minski & Seymour Papert's book Perceptrons [MIT] (citation??). But what their book proposed was that using multiple layers of the machines could address the limitation.
+
+"Winter" of AI
+
+1986 - MIT released a Parallel Distributed Processing (group of researchers working together), followed by work to add another layer to solve the problem with Minksy. Often the networks were too big/slow to be useful. Research was still saying you need more than two layers even then. 
+
+flowchart LR
+    More layers (> 2) --> deeper neural network --> thus DEEP learning
+
+#### Big Picture
+
+- Made up of layers of neurons that are the core processing units
+  - Input layer (receives the input)
+  - Hidden layers (perform most of the computations)
+  - Output layer (predicts final output)
+- Channels connect layers 
+  - Each channel is assigned a numerical value: weight
+  - Each *input* is multiplied by its weight and the result is sent as input to the *hidden layers*
+  - Each of the neurons that receive that data have a corresponding numerical value called the *bias*
+  - the bias is added to the *weight*
+  - this is then sent to threshold function called the *activation function*
+  - the result of this function will determine if the value will move on the network: *forward propagation*
+  - the highest value at the end of the network is the *prediction*
+  - the predicted *output* is compared to training data to learn how right or wrong the prediction is
+    - this information is transferred backwards through the network: *back propagation*
+    - the *weights* are adjusted 
+
+### Inputs, Weights, and Biases
+An artificial neuron is a basic building block of the neural network. The  components are inputs, weights, and biases. 
+
+#### Inputs
+Inputs are the set of values for which we need to predict the output value. They can be viewed as features or attributes in a dataset.
+
+#### Weights
+A weight is a value associated with a feature which indicates the importance of that feature in predicting the final value. The closer to zero a feature's weight, the less importance it has. Weight also tells us the relationship between a particular feature in the dataset and the target value.
+
+Consider the example of predicting the likelihood of purchasing a vehicle with a dataset made of two input features: vehicle price and vehicle popularity.
+Then consider the example as a line equation:
+
+`w1 * (Vehicle Cost) + w2 (Vehicle Popularity) + b = 0`
+
+When the vehicle cost goes up, the expression value goes up. If that expression value goes up, that means the likelihood of purchase goes up. That is the opposite of what we want! 
+
+This indicates to us that we need to invert the weight. The w1 value should be inverted from a positive to negative value. A negative weight value produces a negative product and the value of the expression decreases. That is the outcome we want: the higher the cost, the less the likelihood of purchase.
+
+If a positive weight is associated with a feature there is a direct relationship between that feature and the target value. If a negative weight is associated with a feature there is an inverse relationship between the feature and the target value.
+
+That is how weights help.
+
+#### Biases 
+Biases are constant values added to the product of inputs and weights to offset the result. Without biases, a neural network is only doing matrix multiplication on inputs and weights. This leads to overfitting the data set.
+
+By including biases we can reduce the variance and get better generalization. Biases shift the result of the activation function toward the left or right, the positive or negative.
+
+### Activation Function
+An activation function helps the network learn patterns in the data. If you compare it to the actual brain, the activation function is at the very end choosing which neuron gets fired next. This is the same role the it plans in an artificial neural network. The output from one signal is received as input by the next.
+
+TODO: probably need more here
+
+### Use Case Example 
+
+Problem Statement: __Classify photos of cats and dogs using a neural network__
+
+#### Kits
+
+Keras - Python Deep Learning Library (runs on top of TensorFlow, CNTK or Theano)
+
+#### Benefits
+
+Layers
+
+### Application of Neural Networks
+
+- Diagnosing and debugging systems
+  - Categorize error logs (or other types of logs)
+- Facial Recognition for age
+    - Differential face from background
+    - Correlate lines and spots on face that designate age
+- Forecasting
+    - rainfall or stock prices
+- Music composition
+  - based on patterns in existing functions
