@@ -1,0 +1,7 @@
+# The Basics of Statistics and Linear Regression
+
+## Goal 
+
+TODO what is the goal of the Statistics and Linear Regression lesson
+
+### Introduction

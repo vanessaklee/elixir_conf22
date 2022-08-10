@@ -1,0 +1,83 @@
+# Machine Learning: Models
+
+## Goal 
+
+This lesson will provide a brief introduction to some of the most common machine learning models.
+
+### Introduction
+
+Most ML models are based on certain machine learning algorithms. Classification and regression algorithms are supervised machine learning. Clustering algorithms are typical for unsupervised machine learning.
+
+#### Supervised
+
+- Logistic Regression
+  - used to determine if an input belongs to a particular group.
+- Support Vector 
+  - used to create coordinates for objects in an n-dimensional space; groups objects by common features.
+  - This hyperplane is known as the decision boundary, separating the classes of data points (e.g., oranges vs. apples) on either side of the plane.
+  - used for both classification and regression, but most common in solving classification problems.
+- Naive Bayes
+  - uses probability to classify objects based on features.
+  - a classification approach that employes the Bayes Theorem (principle of class conditional independence).
+  - the presence of one feature does not impact the presence of another in the probability of a given outcome .
+  - commonly used in text classification, spam identification, and recommendation systems.
+- Decision Trees
+  - classifiers that determine which category an input belongs to by traversing the leaf’s and nodes of a tree.
+  - like a flow chart where the class of an object is determined step-by-step using certain known conditions.
+- Linear Regression 
+  - targets a prediction value based on independent variables; best for finding out the relationship between variables and forecasting. 
+  - Regression models differ based on the relationship between dependent and independent variables and the number of independent variables.
+  - commonly used to identify the relationship between a dependent variable and one or more independent variables.
+  - seeks to plot a line of best fit calculated through the method of least squares.
+- Logic Regression
+  - best when the dependent variable is categorical, meaning they have binary outputs, like TRUE or FALSE.
+  - common for binary classification problems like spam identification.
+- k Nearest Neighbors 
+  - classifies data points based on their proximity and association to other available data to discover the most frequent or average characteristics shared among the objects. 
+  - assumes that similar data points can be found near each other and therefore calculates the distance between data points.
+  - not great for large datasets as the processing time lengthens as the size grows; therefore less common for classification; better suited for recommendation engines and image recognition.
+- Random Forest
+  - a collection of many decision trees from random subsets of the data. The result is a combination of trees that may make more accurate predictions than a single decision tree.
+  - used for both classification and regression purposes.
+- Boosting
+  - combine the predictions from multiple algorithms while considering the error from the previous algorithm.
+  - Gradient Boosting Machine, XGBoost, and LightGBM.
+
+#### Unsupervised Machine Learning
+
+K-Means: The K-Means algorithm finds similarities between objects and groups them into K different clusters.
+Hierarchical Clustering: Hierarchical clustering builds a tree of nested clusters without having to specify the number of clusters.
+
+#### Regression
+
+Regression in data science and machine learning is a statistical method that enables predicting outcomes based on a set of input variables. The outcome is often a variable that depends on a combination of the input variables.  
+
+#### Classifier
+
+A classifier is a machine learning algorithm that assigns an object as a member of a category or group. For example, classifiers are used to detect if an email is spam, or if a transaction is fraudulent.
+
+#### Deep Learning 
+
+A class of ML models that imitate more closely human information processing. The word "deep" comes from how the model is made up of many layers of processing to extract features from the input. Each layer of processing passes on a more abstract representation of the data to the next layer. Unlike the other models we've discussed, deep learning models don't need the input data to be labeled. They handle unstructured data and can tackle more human-like problems such as facial recognition or natural language processing.  
+
+##### Neural networks
+
+Neural networks are a type of deep learning. They process training data by closely modeling the interconnections of the human brain through layers of nodes, thus neural. The nodes are made up of inputs, weights, a bias, and an output. If that output value exceeds the bias (threshold), it activates the node and passes the data to the next layer. Neural networks learn their mapping function through supervised learning, adjusting based on the loss function through the process of gradient descent. Th model accuracy increases as the loss function nears zero and the liklihood of a correct prediction increases.
+
+#### Time Series 
+
+In a time-series model in machine learning the independent variables are a successive length of time: i.e. minutes, days, years. Those independent variables influce the the predicted variable. These models are often used to predict time-bound events like weather prediction.
+
+#### Choosing
+
+The best suited model most depends on the desired outcome. For example, to predict the gase mileage of a vehicle from historical data, a good choice would be a supervised learning model like linear regression. The desired outcome is to predict the relationship between variables to forecast on outcome. Remember, linear regression was define above as:
+
+> best for finding out the relationship between variables and forecasting
+
+To identify if a potential customer in a particular city with a particular income an commute would purchase a vehicle, a decision tree might be a better choice because they are:
+
+> like a flow chart where the class of an object is determined step-by-step using certain known conditions
+
+#### Model Deployment
+
+Once we have trained a model we need to make it available for use in testing or production environment. The model may be integrated with other applications. 

@@ -84,7 +84,7 @@ Problem Statement: __Classify photos of cats and dogs using a neural network__
 
 #### Kits
 
-Keras - Python Deep Learning Library (runs on top of TensorFlow, CNTK or Theano)
+[Keras](https://keras.io/) - Python Deep Learning Library (runs on top of TensorFlow, CNTK or Theano)
 
 #### Benefits
 

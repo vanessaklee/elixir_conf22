@@ -21,11 +21,13 @@ defmodule ElixirConf.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:axon, "~> 0.2.0-dev", github: "elixir-nx/axon"},
-      {:exla, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "exla"},
-      {:nx, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
+      {:axon, "~> 0.1.0"},
+      # {:exla, "~> 0.2.2"},
+      {:nx, "~> 0.2.1"},
       {:explorer, "~> 0.2.0"},
-      {:kino, "~> 0.6.2"}
+      {:kino, "~> 0.6.2"},
+      {:ex_todo, "~> 0.1.0"}
+
     ]
   end
 end

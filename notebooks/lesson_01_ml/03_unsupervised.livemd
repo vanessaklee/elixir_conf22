@@ -1,0 +1,38 @@
+# Machine Learning: Unsupervised Learning
+
+## Goal 
+
+This lesson covers the unsupervised learning type of machine learning. After this lesson you will have an overview and example of supervised learning, including how it can be applied an what the challenges are. 
+
+### Introduction
+
+Unsupervised learning uses algorithms to analyze and cluster unlabeled datasets. It discovers patterns in data without explicit feedback or labeled examples like those in supervised learning. Clustering is a common unsupervised learning task. Given a large collection of things, find a way to group items into subsets that share important similarities. 
+
+For example, when someone breaks all people into two types of people, that is clustering using unsupervised learning to identify the two types.
+
+Unsupervised learning algorithms discover hidden patterns or data groupings without the need for human intervention. Its ability to discover similarities and differences in information make it well-suited for exploratory data analysis and tasks like image recognition.
+
+##### An Example
+
+An example of unsupervised learning is used in retail promotions. If an online retail business has two million customers, designing two million promotions to appeal to each customer is untenable. Instead, we could find four main types of customers according to features in their buying preferences. From those resulting four groups, we could then design four promotions. 
+How It Works
+Unsupervised Learning works by defining a method of measuring the distance or difference between items in your data set (i.e. between customers in our example). An algorithm defines clusters in which the items in a cluster are closer to each other than other items. 
+
+Clustering is frequently just the first level analysis done in unsupervised processing of data. If you add additional input, such as how many clusters you'd like or or hints about what features you want to use to calculate the distance between objects, you can reduce the time it takes to process the clusters when compared to a completely unsupervised process. This is called semi-supervised learning.
+
+Semi-supervised learning is unsupervised learning with some human guidance to improve its performance. A semi-supervised learning process with human intervention could improve a clustering algorithm by providing feedback on the number of clusters or on the features used for clustering. 
+
+##### Applications
+
+Applications of clustering include: customer segmentation, anomaly detection, social network analysis, anything involving the discovery of patterns and large amounts of data.
+
+Typical applications of clustering using unsupervised learning include: customer segmentation, such as our example; social network analysis, recommending new friends or groups after discovering what groups of people you seem to belong to; defining product baskets, discovering products likely to be purchased together, we can place them near each other in a store or recommend them to buyers; topic analysis or concept discovery, using clustering to analyze new stories and cluster them into the most common topics; or anomaly detection, you can use unsupervised learning to discover the most common patterns of sensor data produced by a manufacturing process for instance, and then look for outlying data which might suggest something is going wrong in your process. 
+
+##### Challenges
+
+One challenge of unsupervised learning is similar to supervised learning. In order to place the items into clusters, the algorithm has to decide which features are best for determining the clustering. Depending on what features are available, it may be hard to distinguish between two items and to decide which cluster they belong in. 
+
+
+####  Unsupervised vs. supervised vs. semi-supervised learning
+
+Unsupervised machine learning and supervised machine learning are frequently discussed together. Unlike supervised learning, unsupervised learning uses unlabeled data. From that data, it discovers patterns that help solve for clustering or association problems. This is particularly useful when subject matter experts are unsure of common properties within a data set. Common clustering algorithms are hierarchical, k-means, and Gaussian mixture models.
