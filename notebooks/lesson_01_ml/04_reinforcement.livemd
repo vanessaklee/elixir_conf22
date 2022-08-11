@@ -25,15 +25,3 @@ The most common applications for Reinforcement Learning involve mechanical syste
 Reinforcement Learning isn't the best choice if the cost of using trial and error is too high or if it takes too long to try the actions before getting feedback. For example, Reinforcement Learning is not a good choice for learning forecasting in the stock market. Each bad choice costs money.
 
 
-#### Machine Learning Algorithms and Models
-
-TODO This section needs more detail
-
-- Artificial neural networks
-- Support vector machines 
-- Ensemble learning
-
-
-```elixir
-# Do we need any code in this lesson? Something to play with?
-```
