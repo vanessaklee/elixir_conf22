@@ -72,14 +72,27 @@ Once trained, the model can reason over data it hasn't seen before and make pred
 
 For example, machine learning models can be used for natural language processing (NLP). Those models parse and correctly recognize the intent or sentiment of combinations of words. Image recognition machine learning models can learn to recognize and discern objects.
 
-## Brain Break!
+## Model Training
 
-<img src="https://static.thenounproject.com/png/506914-200.png"
+Model training is the process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns is called model training. The data set is referred to as the training data. The result is the model, a function made of rules and data structures.
 
-```
- alt="Brain icon"
- style="width: 100px; float: left; margin-right: 10px;" />
-```
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 15.0px;" />
+
+<span style="color: #800080;">
+
+</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+<span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
+Brain Break!
+</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+<img src="https://static.thenounproject.com/png/506914-200.png" alt="Brain icon" style="width: 95px; float: left; margin-right: 40px;" />
 
 Fingers on the keyboard for some Elixir. Let's play with an Elixir library.
 
@@ -109,13 +122,9 @@ Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 :ok
 ```
 
-### Training
+<hr style="background-color: #800080;height: 15.0px;" />
 
-The process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns is called model training. The data set is referred to as the training data. The result is the model, a function made of rules and data structures.
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Vocabulary
+## Vocabulary
 
 <details>
   <summary>Accuracy</summary>
@@ -307,13 +316,11 @@ The process of running a machine learning algorithm on a dataset and optimizing 
 
 ![](images/sigmoid%20function.png)
 
-<!-- livebook:{"break_markdown":true} -->
-
-### Problems
+## Problems in Machine Learning
 
 It is easy to think that more data is better. More data generally leads to increased accuracy. It also leads to descreased performace in addition to difficulty in visualizing the data.
 
-#### Generalization
+### Generalization
 
 The goal of traning a model is to make that model perform accurately on data its never seen before. The is called Generalization. The generalization of a model to new data is what makes machine learning useful in solving everyday problems that require predictions or classification.
 
@@ -321,13 +328,13 @@ Say you train a model to classify images in to two groups: "dogs" or "not dogs".
 
 In this example, the generalization is caused by a lack of data diversity, but it can also be caused by other factors such as overfitting and underfitting.
 
-#### Overfitting
+### Overfitting
 
 Overfitting is when a model too closely matches, or fits, its training data. This means the model will not predict unseen data accurately, or not generalize. The can happen with a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevent information in the dataset and fit the trainingset too closely
 
 Low error rates are good indicators of overfitting. In order to prevent this type of behavior, part of the training dataset is typically set aside as the *Test Set* to check for overfitting. Overfitting is indicated when the training data has a low error rate and the test data has a high error rate.
 
-#### Underfitting
+### Underfitting
 
 Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to unseen data.
 
@@ -337,8 +344,4 @@ Underfitting is when a model produces inaccurate prediction outcomes because it 
 
 <!-- livebook:{"break_markdown":true} -->
 
-TODO add something to play with code-wize in this early intor lesson to ML; at least images?
-
-```elixir
-# Do we need any code in this lesson? Something to play with?
-```
+TODO add "Next" to say what lesson is coming next?
