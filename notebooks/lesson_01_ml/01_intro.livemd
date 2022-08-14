@@ -26,7 +26,7 @@ Machine learning (ML) is a type of artifical intelligence (AI), and is the proce
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/classificaiton.png)
+![](images/dogcatbreeds.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -59,6 +59,10 @@ Examples of well-known algorithms are:
 * Random Forest
 * k-Nearest Neighbors
 * Artificial neural networks
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/decision_tree.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -124,199 +128,9 @@ Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-## Vocabulary
-
-<details>
-  <summary>Accuracy</summary>
-  the predictions a classification model got right.
-</details>
-
-<details>
-  <summary>Activation Function</summary>
-  takes in the weighted sum of all of the inputs from the previous layer and then generates and passes an output value to the next layer (i.e. ReLU or sigmoid)
-</details>
-
-<details>
-  <summary>Anomaly Detection</summary>
-  identifying outliers, like if the mean for one feature is 100 with a standard deviation of 10, then an outlier is a value of 200.
-</details>
-
-<details>
-  <summary>Artificial Intelligence</summary>
-  non-human program or model able to solve complex tasks. Machine learning is a type of artificial intelligence.
-</details>
-
-<details>
-  <summary>Backpropagation</summary>
-  gradient descent algorithm on neural networks performed after each forward pass through the network to adjust the model’s weights.
-</details>
-
-<details>
-  <summary>Batch</summary>
-  set of examples used in one iteration of model training; batch size refers to the number of examples in the batch.
-</details>
-
-<details>
-  <summary>Bias</summary>
-  an additional input of a neural network with a constant value, positive or negative, used to increase or decrease the output of a neuron. It helps to ensure that even if all the inputs are zeros there will stil be an activation in the next layer. For example, in a sigmoid function, the biash shifts the curve left or right but does not change the same of the curve.
-</details>
-
-<details>
-  <summary>Class</summary>
-  the "class" predicted in classification machine learning. For example, if you're attempting to detect fraud the classes would be "fraud" and "not fraud". In the case of multiple classes to indentify dog breeds the classes are pug, golden retriever, poodle, etc.
-</details>
-
-<details>
-  <summary>Classification</summary>
-  separating data into multiple categorical classes or discrete values. Compared to regression, classification results in unordered discrete values by measuring data.
-</details>
-
-<details>
-  <summary>Data</summary>
-  (Dataset) collection of examples
-</details>
-
-<details>
-  <summary>Dataframe</summary>
-  datatype analogous to a table where each column of the dataFrame has a header.
-</details>
-
-<details>
-  <summary>Epoch</summary>
-  full training iteration over the dataset where example has been seen once
-</details>
-
-<details>
-  <summary>Ensemble Learning</summary>
-  collection of models trained independently whose predictions are averaged or aggregated.
-</details>
-
-<details>
-  <summary>Feature</summary>
-  independent input variable; for prediction the risk of heart disease, the features might be age, gender, and weight.
-</details>
-
-<details>
-  <summary>Generalization</summary>
-  model's ability to accurately predict outcomes on previously unseen data.
-</details>
-
-<details>
-  <summary>Hyperparameter</summary>
-  the parameter whose value fine tuned during training iterations of a model to control the learning process; i.e. learning rate. In contrast to a parameter, a hyper parameter is external to the model and its value cannot be estimated from the data.
-</details>
-
-<details>
-  <summary>Imbalanced Dataset</summary>
-  a dataset in which the labels for the two classes in a binary classification problem occur in significantly different frequencies. An example would be a dataset meant to train a model to predict disease where 1% of the examples are positive and 99% are negative.
-</details>
-
-<details>
-  <summary>Iteration</summary>
-  single update of a model's weights during training.
-</details>
-
-<details>
-  <summary>Label</summary>
-  (Target) the outcome "result" column of an example in supervised learning. In fraud detection the label would be "fraud" or "not fraud".
-</details>
-
-<details>
-  <summary>Learning Rate</summary>
-  parameter that determines the size of the optimization step at each iteration. It affects how quickly a model can learn because it directs how inforamtion learned by the loss function overrides old information.
-</details>
-
-<details>
-  <summary>Loss</summary>
-  measure of the distance between a model's prediction from its label.
-</details>
-
-<details>
-  <summary>Loss Function</summary>
-  reveals the accuracy of a model; the result of the loss function is the distance between the prediction and the true value. Its indicates whether or not weights and biases should to be adjusted to improve accuracy. It is an example of a machine learning algorithm learning from its mistakes.
-</details>
-
-<details>
-  <summary>Mini-batch</summary>
-  small subset of the entire batch of examples run together in a single training iteration.
-</details>
-
-<details>
-  <summary>Model</summary>
-  file representing what a machine learning system learned from the training data.
-</details>
-
-<details>
-  <summary>Normalization</summary>
-  process of converting an values into a standard range typically 0 to 1.
-</details>
-
-<details>
-  <summary>Optimizer</summary>
-  specific implementation of the gradient descent algorithm; i.e. Adam (ADAptive with Momentum).
-</details>
-
-<details>
-  <summary>Parameter</summary>
-  variable that is internal to the model and whose value can be estimated from data; compare to a hyperparameter.
-</details>
-
-<details>
-  <summary>Precision</summary>
-  classification model metric to identify the frequency of how often the model predicted accurately.
-</details>
-
-<details>
-  <summary>Prediction</summary>
-  model's output when provided an input.
-</details>
-
-<details>
-  <summary>Recall</summary>
-  classification model metric of how many out of all the possible positive labels did the model accurately classify?
-</details>
-
-<details>
-  <summary>Regression</summary>
-  distinguishing data into continuous real values rather than clases or discrete values. Compared to classification, regression results in ordered continuous values by measuring the root mean square error.
-</details>
-
-<details>
-  <summary>Shape</summary>
-  number of elements in each dimension of a tensor.
-</details>
-
-<details>
-  <summary>Sigmoid Function</summary>
-  maps logistic or multinomial regression output to probabilities, returning a value between 0 and 1.
-</details>
-
-<details>
-  <summary>Target</summary>
-  (Label) the outcome "result" column of an example in supervised learning. In fraud detection the label would be "fraud" or "not fraud".
-</details>
-
-<details>
-  <summary>Tensor</summary>
-  datastructure which is a multidimensional array of vectors and matrices. A vector is a one-dimensional tensor and a matrix is a two-dimensional tensor.
-</details>
-
-<details>
-  <summary>Training</summary>
-  process of determining the ideal parameters to make up a model.
-
-</details>
-
-<details>
-  <summary>Weights</summary>
-  enable a neural network to increase or decrease connections between neurons to increase the influence of one over another.
-</details>
-
-<!-- livebook:{"break_markdown":true} -->
-
-![](images/sigmoid%20function.png)
-
 ## Problems in Machine Learning
+
+<img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 95px; float: left; margin-right: 50px;" />
 
 It is easy to think that more data is better. More data generally leads to increased accuracy. It also leads to descreased performace in addition to difficulty in visualizing the data.
 
@@ -326,7 +140,13 @@ The goal of traning a model is to make that model perform accurately on data its
 
 Say you train a model to classify images in to two groups: "dogs" or "not dogs". If the dataset you used to train the model contains only two breeds of dogs it may perform very accurately. Will it generalize to a dataset containing more dog breeds? Or one with cats and wolves? Unlikely. In this case you might see the testing dataset with 90% accuraccy. That accuracy is likely to drop to the 70s for the other dog breeds and below 40 for the mix of animals.
 
-In this example, the generalization is caused by a lack of data diversity, but it can also be caused by other factors such as overfitting and underfitting.
+The problem in this example is a lack of data diversity. Let's look at two other problems we can run into with training data: overfitting and underfitting.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/fit.png)
+
+<!-- livebook:{"break_markdown":true} -->
 
 ### Overfitting
 
@@ -334,14 +154,18 @@ Overfitting is when a model too closely matches, or fits, its training data. Thi
 
 Low error rates are good indicators of overfitting. In order to prevent this type of behavior, part of the training dataset is typically set aside as the *Test Set* to check for overfitting. Overfitting is indicated when the training data has a low error rate and the test data has a high error rate.
 
+![](images/overfit.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
 ### Underfitting
 
 Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to unseen data.
 
-<!-- livebook:{"break_markdown":true} -->
-
-![](images/fitting.png)
+![](images/underfit.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
-TODO add "Next" to say what lesson is coming next?
+<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">
+[next](02_supervised.livemd) >
+</span>

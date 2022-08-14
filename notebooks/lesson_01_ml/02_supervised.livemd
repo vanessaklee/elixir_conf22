@@ -16,7 +16,7 @@ With enough examples the goal is to learn to produce appropriate outputs, even f
 
 Real estate is a good example. The history of home sales in a particular area could be expressed as a collection of number pairs. The square footage of each home and its sales price. From these pairs of numbers, a machine can learn a model that calculates the expected sales price given the square footage. 
 
-_How It Works_
+##### How It Works
 The above example is a simple model, one input variable and one output. Square footage is only one factor that influences the price of a home, of course. The price of apartments can be influenced also by attributes such as what floor an apartment is on, the neighborhood that it's in, whether the building has a doorman or not, and so on. Given a sales history containing those attributes, plus sales prices, you can use machine learning to learn a more complex and realistic model that takes all of these attributes as inputs and predicts a sales price. 
 
 What makes this supervised learning? We used labeled data to train the model. In this example, the labels are prices. Machine learning experts talk about how important feature engineering is in developing machine learning models. 
@@ -54,7 +54,6 @@ There are a lot of domains where there's already a large set of very rich traini
 Some of the most commonly used learning methods, which will be discussed in more detail over the next lesson, include: 
 
 - Logistic Regression
-- Support Vector 
 - Naive Bayes
 - Decision Trees
 - Linear Regression 
