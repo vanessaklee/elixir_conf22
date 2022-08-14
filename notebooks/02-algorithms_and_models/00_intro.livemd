@@ -1,0 +1,97 @@
+# Algorithms & Models
+
+## Goal
+
+The sections in this lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+
+## Overview
+
+In the last section we learned that ML algorithms are basically procedures run on data, and they output models. We identified several well-known algorithms. Let's look at each of them a bit more closely to see how and why they are best put to use to solve particular problems.
+
+## Supervised and Unsupervised Learning Algorithms
+
+This lesson will cover algorithms and models used in both supervised and unsupervised machine learning.
+
+### Supervised
+
+Supervised Learning is the type of machine learning where the target outcome is known or labeled. Most supervised machine learning can be divided as either **Classification** or **Regression**.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![classification_regression](images/classification_regression.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+* **Classification Algorithm**
+  * categorical: predicts a discrete (finite) class label
+    * will a customer _purchase an item_, yes or no?
+  * task: to map the input value (`x`) to the discrete output variable (`y`)
+  * how?: makes predictions by categorizing data into classes based on independent variables
+  * well-suited for sovling problems like:
+    * binary classification has two discrete outcome classes (labels)
+      * will it rain or not?
+        * yes / no
+      * cancer cell detection
+        * true / false
+      * email spam detection
+        * "spam" / "not spam"
+    * multiclass classification has more than two outcome classes (labels)
+      * weather prediction  
+        * "sunny" / "cloudy" / "rainy"
+* **Regression Algorithm**
+  * continuous: predicts a continuous (infinite) quantity
+    * _how much_ will a customer spend on a purchase?
+  * task: to map the input value (`x`) to the continuous output variable (`y`)
+  * how?: makes predictions based on correlations between dependent and independent variables
+  * well-suited for sovling problems like:
+    * house prices
+      * _what is the value of my home?_
+    * weather patterns
+      * _what will the temperature be tomorrow?_
+    * gas prices 
+      * _will gas prices drop next month?_
+
+<!-- livebook:{"break_markdown":true} -->
+
+ML falls under one of those categories and then understanding that activation functions are described by loss functions which primitively use MSE and and Cross-Entropy loss for regression and classification respectively was really helpful in taking me a bit deeper.
+
+Classification and Regression are examples of supervised learning algorithms.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Regression
+
+Regression in data science and machine learning is a statistical method that enables predicting outcomes based on a set of input variables. The outcome is often a variable that depends on a combination of the input variables.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Classification
+
+Classificaiton algorithms assign an object as a member of a category or group. For example, classifiers are used to detect if an email is spam, or if a transaction is fraudulent.
+
+## Conclusion
+
+#### Classification
+
+| Task: map input value to ... | Predicts by finding the ... | Output   |
+| ---------------------------- | --------------------------- | -------- |
+| a discrete output variable   | best fit line               | discrete |
+
+| Question                  | Answer                                   |
+| ------------------------- | ---------------------------------------- |
+| what will the weather be? | a discrete `sunny`, `cloudy`, or `rainy` |
+
+#### Regression
+
+| Task: map input value to ... | Predicts by finding the ...       | Output     |
+| ---------------------------- | --------------------------------- | ---------- |
+| a continuous output variable | decision boundary between classes | continuous |
+
+| Question               | Answer                            |
+| ---------------------- | --------------------------------- |
+| what will the temp be? | a value between -20°F and 120°F |
+
+<!-- livebook:{"break_markdown":true} -->
+
+TODO next
+TODO previous

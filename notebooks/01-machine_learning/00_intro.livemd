@@ -26,7 +26,7 @@ Machine learning (ML) is a type of artifical intelligence (AI), and is the proce
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/dogcatbreeds.png)
+![breeds](images/breeds.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -41,6 +41,57 @@ There are three main types of machine learning
 * Reinforcement learning
 
 We will cover each of the 3 types in the next section.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### How it Works
+
+A supervised learning system has a data flow that looks like this:
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph TD;
+  ML{{Supervised Machine Learning}}-->TRN([TRAINING]);
+  ML-->TST[TESTING];
+  TRN-->In([Input training dataset]);
+  In-->LS([Learning System]);
+  In---GT([Ground Truth]);
+  LS-->Out([Verifiable Output]);
+  Out-->M((Model));
+  GT-->Out;
+  TST-->UD[New, unseen input data];
+  UD-->M;
+  M-->P[[Prediction, a.k.a best guess]]
+  
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Most supervised machine learning can be divided as either **Classification** or **Regression**.
+
+The goal of ML is to make a **prediction**.
+
+Once a prediction is made it is compared to the **Ground Truth** (the expected result).
+
+The **Loss Function** gives a quantity to the distance between the prediction and the groudn truth.
+
+Regression algorithms typically use Mean Square Error (MSE), which determines loss as the average squared difference between the prediction and the ground truth.
+
+CLassification algorithms typically use Cross Entropy Loss (aka softmax), which measures loss as the difference between probabilities that a model assigns to classes
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph TD;
+  ML([Machine Learning])-->PD([Prediction]);
+  PD-->LF([Loss Function]);
+  GT([Ground Truth])-->LF;
+  LF-->RG([Regression]);
+  LF-->CL([Classification]);
+  RG-->MSE([Mean Squared Error]);
+  CL-->CEL([Cross Entropy Loss]);
+```
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -63,6 +114,10 @@ Examples of well-known algorithms are:
 <!-- livebook:{"break_markdown":true} -->
 
 ![](images/decision_tree.png)
+
+<span style="float: right; font-size: 12px;">
+_Decision Tree_
+</span>
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -158,9 +213,17 @@ Low error rates are good indicators of overfitting. In order to prevent this typ
 
 <!-- livebook:{"break_markdown":true} -->
 
+![](images/overfit.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
 ### Underfitting
 
 Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to unseen data.
+
+![](images/underfit.png)
+
+<!-- livebook:{"break_markdown":true} -->
 
 ![](images/underfit.png)
 

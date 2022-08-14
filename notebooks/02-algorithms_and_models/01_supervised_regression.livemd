@@ -1,0 +1,238 @@
+# Algorithms & Models
+
+```elixir
+Mix.install([
+  {:httpoison, "~> 1.8"}
+])
+```
+
+## Goal
+
+This lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+
+## Overview
+
+In the last section we learned that ML algorithms are basically procedures run on data, and they output models. We identified several well-known algorithms. Let's look at each of them a bit more closely to see how and why they are best put to use to solve particular problems.
+
+## Supervised Learning Algorithms
+
+Supervised Learning is the type of machine learning where the target outcome is known or labeled. Classification and Regression are examples of supervised learning algorithms. Classification is used when  the outcome is finite (a customer purchased an item). Regression is used when the outcome is infinite (the value of the purchase).
+
+<!-- livebook:{"break_markdown":true} -->
+
+![classification_regression](images/classification_regression.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Regression
+
+Regression in data science and machine learning is a statistical method that enables predicting outcomes based on a set of input variables. The outcome is often a variable that depends on a combination of the input variables.
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Linear & Logistic Regression
+
+Linear regression targets a prediction value based on independent variables to discover the relationship between variables and forecasting. Regression algorithms differ based on the relationship between dependent and independent variables and the number of independent variables. Linear regression seeks to plot a line of best fit calculated through the method of least squares.
+
+Logistical regression estimates the probability of an event occurring based on a given dataset of independent variables. Its also used to estimate the relationship between a dependent variable and one or more independent variables, but it makes a prediction about a categorical variable versus a continuous one: true or false, yes or no, 1 or 0, etc.
+
+Both linear and logistic regression are among the most popular algorithms within data science. Both are used to make predictions about future outcomes, linear regression is typically easier to understand. Linear regression also does not require as large of a sample size as logistic regression. Logistic regression needs a larger number of examples to represent values across all the response categories or the model may not have sufficient statistical power to detect a significant effect.
+
+#### Uses
+
+* fraud detection
+* disease prediction
+* binary classification problems like spam identification
+
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 15.0px;" />
+
+<span style="color: #800080;">
+
+</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+<span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
+Brain Break!
+</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+<img src="https://static.thenounproject.com/png/506914-200.png" alt="Brain icon" style="width: 95px; float: left; margin-right: 40px;" />
+
+Story Time. Let's use our imagination to understand what regression means and how it is useful.
+
+Imagine you own a pet supply shop. First things first, your shop needs a name.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Randomly select a pet type and call out to random word generator using HttPoison.
+
+```elixir
+pet = ["llama", "ferret", "parrot", "rabbit"] |> Enum.random()
+url = "https://api.datamuse.com/words?rel_nry=#{pet}&max=50&md=p"
+```
+
+This returns a list of maps containing nearly rhyming words. Extract, transform, and load the adjectives from the list.
+
+```elixir
+adjs =
+  HTTPoison.get!(url)
+  |> case do
+    %HTTPoison.Response{body: body} -> elem(Jason.decode(body), 1)
+    _ -> []
+  end
+  |> Enum.map(fn w ->
+    Enum.map(w, fn {k, v} -> {String.to_atom(k), v} end)
+    |> Enum.into(%{})
+  end)
+  |> Enum.filter(fn w -> is_list(Map.get(w, :tags)) end)
+  |> Enum.filter(fn w -> !String.contains?(w.word, " ") end)
+  |> Enum.filter(fn w -> !Enum.count(w.tags) > 2 end)
+  |> Enum.filter(fn w -> "adj" in Map.get(w, :tags) end)
+  |> Enum.sort_by(& &1.score, :desc)
+  |> Enum.sort_by(& &1.numSyllables, :desc)
+  |> Enum.reverse()
+  |> Enum.take(8)
+```
+
+Randomly select on and pair it with your random pet to craete your store name.
+
+```elixir
+pet = String.capitalize(pet)
+
+adj =
+  adjs
+  |> Enum.random()
+  |> Map.get(:word)
+  |> String.capitalize()
+
+store = Enum.join([adj, pet, "Pet Supply"], " ")
+```
+
+```elixir
+IO.puts("-----------------PRESS RELEASE---------------------")
+IO.puts("#{store} had best sales month ever!")
+IO.puts("What will sales be next month?")
+IO.puts("How can they continue the streak?")
+IO.puts("Weather update: Will the rain ever stop?")
+IO.puts("---------------------------------------------------")
+```
+
+![shop](images/petsupply.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+All eyes are on you. You need to predict next month’s sales number for your pet supply store. But how can anyone predict the future?
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Variables
+
+Dozens of factors from the weather to a competitor’s promotion to the newest pet food trend can impact the number. Your gut tells you the weather is the most important variable. You've experienced it yourself:
+
+> When it rains, you sell more.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Regression Forcasts the Future
+
+Regression can help determine which variable has the highest impact.
+
+#### Dependent Variable
+
+The dependent variable is the variable you want to predict. In this case, your dependent variable is monthly sales.
+
+![supplies](images/putsupply3.png)
+
+#### Independent Variables
+
+These are the factors that **might** impact on your dependent variable.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/rain.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Data
+
+So you gather your monthly sales numbers and the average monthly rainfall for the last three years. Plotted on a chart, the data looks like this:
+
+![plot](images/shop_reg1.png)
+
+The y-axis the dependent variable (sales) and the x-axis is the independent variable (rainfall).
+
+It sure looks like your gut was right: the more rainful, the higher your sales.
+
+<!-- livebook:{"break_markdown":true} -->
+
+But how much does it have to rain to make a difference?
+
+Put a line through the middle of the data points on our chart. This is an example of a __regression line__.
+
+![regression_line](images/regression_line.png)
+
+It is the line that best fits the data and explains the relationship between the independent variable and dependent variable.
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Formula
+
+This formula explains the slope of the line: `y = 200 + 5x + error term`
+
+`y = 200`
+
+Historically when there was no rain, your sales averaged 200. Assuming other variables stay the same, you can expect future sales to be the same.
+
+`5x`
+
+Historically for every additional inch of rain you made an average of five more sales. For each increment `x` increases by one, `y` increases by five.
+
+`error term`
+
+It is tempting to stop here. Rain __clearly__ has the biggest impact on sales, but we need the `error term` to tell us whether rainfall is a variable __worth your attention__.
+
+A regression line has an `error term` because independent variables are not perfect predictors of dependent variables. The line is an estimate. The larger the `error term`, the less confident you should be in your regression line. We could additional variables until the `error term` decreases.
+
+```elixir
+# rainfall inches
+x = 7
+y = 200 + 5 * x
+
+IO.inspect(y, label: "predicted sales")
+
+actual_sales = 245
+
+error_term = actual_sales - y
+
+IO.inspect(error_term, label: "error term")
+
+y = 200 + 5 * x + error_term
+
+IO.inspect(y, label: "predicted sales corrected with error term")
+
+y == actual_sales
+```
+
+A major advantage of regression is the ability to discover the impact of multiple variables at once (Multiple Regression). For example, you could add data about promotions, competitors, and local pet events.
+
+Regression get help determine which independent variable have the most influence over the depending variable. But remember, __correlation is not causation__.
+
+<img src="https://imgs.xkcd.com/comics/correlation.png" alt="Correlation" />
+
+<span style="font-size: 8px;">
+[Image Source: xkcd](https://imgs.xkcd.com/comics/correlation.png)
+</span>
+
+We used regression to prove there is definitely a correlation between rain and monthly sales. We **cannot** confidently claim rain __caused__ the sales. We're selling pet supplies, not umbrellas after all.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 15.0px;" />
+
+<span style="color: #800080;">
+
+</span>

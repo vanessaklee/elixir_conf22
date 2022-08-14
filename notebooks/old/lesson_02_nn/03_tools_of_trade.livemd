@@ -1,0 +1,51 @@
+# Machine Learning: Traditional Tools
+
+## Goal 
+
+A brief introduction to the traditional tools used to solve problems with machine learning. 
+
+## Introduction
+
+TODO finish this section
+
+### Python 
+
+Python evolved to be the go-to tool for Machine Learning and Artificial Intelligence developers. Why? Likely due to the fact that is is open-source with well-maintained and established libraries. Python is easier to learn and integrate than many lanaguages and is often the language used to introduce compter science. Some of the most prevalent Python libraries for ML are:
+
+1. [NumPy](https://numpy.org/) - Comprehensive support for large, multi-dimensional arrays and matrices and mathematical functions to operate on them
+1. [TensorFlow](https://www.tensorflow.org/) - End-to-end source platform for ML
+1. [Keras](https://keras.io/) - Deep Learning API
+1. [PyTorch](https://pytorch.org/) - Accelerates the path from research prototyping to deployment
+1. [Pandas](https://pandas.pydata.org/) - Data Analysis 
+1. [SciPy](https://scipy.org/) - 
+1. [Scikit-learn]() - Algorithims for scientific and technical computing
+
+#### Natural Lanaguage Processing (NLP)
+
+TODO overview of NLP
+
+##### History
+
+TODO history of NLP
+
+##### algorithms
+
+TODO alogrithms
+
+*Bag of Words, N-Grams, TF-IDF*
+Some of the first tools used to experiment with NLP. Evolved into SpaCy and NLTK, among others. Bag of Words Bag of words counts the appearance of a certain word in a text without regard for order. But sometimes order matters, which is where N-Grams help. An N-Gram is a connected string of N items from a text, and it can be comprised of blocks of words or  sets of syllables. TF-IDF (Term Frequency — Inverse Document Frequency) refers to the relative frequency of a word in a document.
+
+*LSTM*
+LSTM (Long Short Term Memory) are a type of Recurrent Neural Network (RNN) capable of learning long-term dependencies. They were introduced by Hochreiter & Schmidhuber (1997). They are designed to avoid the problem of remembering information for long periods of time, such as with large text. Cell State is one of the important elements of an LSTM. It is the overall context of a sentence and functions like a conveyor which flows through all the time steps and updates on the addition of new data.
+
+*BERT*
+[BERT (Bidirectional Encoder Representations from Transformers)](https://github.com/google-research/bert) is considered the state of the art language model for NLP that came out of Google AI Language. It quickly rose to the top because of it's results in a wide variety of NLP tasks, including Question Answering (SQuAD v1.1) and Natural Language Inference (MNLI). It is considered innovative due to the bidirectional training of Transformer, a popular attention model, to language modelling. Previous efforts looked at a text sequence either from left to right or combined left-to-right and right-to-left training. A model trained bidirectionally can gain a deeper sense of language context and flow. 
+
+*ALBERT*
+[ALBERT](https://github.com/google-research/albert) is a BERT-lite for self-supervised learning of langauge representations. 
+
+RoBERTa
+[RoBERTa (Robustly optimized BERT approach)](https://github.com/pytorch/fairseq/blob/main/examples/roberta/README.md) is a retraining of BERT with improved training methodology resulting in 1000% more data and increased computing power. Minor changes in padding, starting, and ending of the sentences.
+
+##### Tools
+[SpaCy](https://github.com/explosion/spaCy)

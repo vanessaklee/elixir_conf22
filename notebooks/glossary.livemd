@@ -68,6 +68,11 @@ graph LR;
 </details>
 
 <details>
+  <summery>Cross Entropy Loss (softmax)</summary>
+  Used in cLassification algorithms typically to measure loss as the difference between probabilities that a model assigns to classes.
+</details>
+
+<details>
   <summary>Data</summary>
   (Dataset) collection of examples
 </details>
@@ -161,6 +166,11 @@ pie showData
 | Most often used to preprocess datasets         | Most often used for complex prediction |
 
 <!-- livebook:{"break_markdown":true} -->
+
+<details>
+  <summery>Mean Squared Error (MSE)</summary>
+  Used in regression algorithms to determines loss as the average squared difference between the prediction and the ground truth.
+</details>
 
 <details>
   <summary>Mini-batch</summary>
