@@ -6,44 +6,26 @@
    1. [Supervised Learning](01-machine_learning/01_supervised.livemd)
    2. [Unsupervised Learning](01-machine_learning/02_unsupervised.livemd)
    3. [Reinforcement Learning](01-machine_learning/03_reinforcement.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Algorithms and Models</span>](02-algorithms_and_models/00_intro.livemd)
+2. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Algorithms and Models</span>](02-algorithms_and_models/00_intro.livemd)
    1. Supervised 
       1. [Regression](02-algorithms_and_models/01_supervised_regression.livemd)
       2. [Classification](02-algorithms_and_models/02_supervised_classification.livemd)
    2. [Unsupervised](02-algorithms_and_models/03_unsupervised.livemd)
    3. [Conclusion](02-algorithms_and_models/04_conclusion.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>](03-neural_networks/01_neural_networks.livemd)
+3. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>](03-neural_networks/01_neural_networks.livemd)
    1. [Deep Learning](03-neural_networks/02_deep_learning.livemd)
    2. [Tools of the Trade](03-neural_networks/03_tools_of_trade.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. <span style="color: #800080; font-size: 24px; font-weight: bold;">Statistics</span>
+4. <span style="color: #800080; font-size: 24px; font-weight: bold;">Statistics</span>
    1. [Introduction to Machine Learning Statistics](04-statistics/01_intro.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>](05-elixir_nx/01_overview.livemd)
+5. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>](05-elixir_nx/01_overview.livemd)
    1. [Tensors](05-elixir_nx/02_tensors.livemd)
    2. [Defn](05-elixir_nx/01_defn.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. <span style="color: #800080; font-size: 24px; font-weight: bold;">Elixir Explorer & Axon</span>
+6. <span style="color: #800080; font-size: 24px; font-weight: bold;">Elixir Explorer & Axon</span>
    1. [Explorer](06-nx_plus/01_explorer.livemd)
       1. [Series](06-nx_plus/02_explorer_series.livemd)
       2. [Dataframes ](06-nx_plus/03_explorer_dataframes.livemd)
    2. [Axon](06-nx_plus/04_axon.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span>
+7. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span>
    1. [Ask the Right Questions](07-nx_in_action/01_intro.livemd)
    2. [Model: Train, Test, Predict](07-nx_in_action/02-models_intro.livemd)
       1. Novice (titanic? CO2 vehicle emmissions?)
@@ -60,10 +42,7 @@
          3. Predict
    3. [ML in production](07-nx_in_action/03_prod.livemd)
    4. [The Future of Nx](07-nx_in_action/04_future.livemd)
-
-<!-- livebook:{"break_markdown":true} -->
-
-1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Review</span>](08-review/01_review.livemd)
+8. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Review</span>](08-review/01_review.livemd)
 
 <!-- livebook:{"break_markdown":true} -->
 
