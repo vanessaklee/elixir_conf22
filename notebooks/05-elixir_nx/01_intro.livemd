@@ -1,18 +1,14 @@
-# Machine Learning in Elixir: Nx Ecosystem
+# Introduction to Numerical Elixir
 
 ## Goal 
 
-To provide a thorough overview of the Nx Ecosystem followed by step-by-step guides for using the tools available in the ecosystem libraries to solve problems with machine learning.
+To provide a thorough overview of the Numerical Elixir (Nx) ecosystem followed by step-by-step guides for using the tools available in the ecosystem libraries to solve problems with machine learning.
 
-## Introduction
+## Overview
 
-TODO Smooth and flesh this lesson out; needs work
+There are several libraries that make up the Numerical Elixir ecosystem. Each of them specializes in a different tool for machine learning similar to the Python libraries like PyTorch and Numpy.
 
-### Overview
-
-#### Libraries
-
-##### Nx Ecosystem
+### Nx Ecosystem
 
 The Nx ecosystem is made up of several quickly developing libraries. Keep an eye on the [Numerical Elixir parent repo](https://github.com/elixir-nx) for new libraries to emerge. 
 
@@ -28,7 +24,7 @@ The Nx ecosystem is made up of several quickly developing libraries. Keep an eye
 | [STB Image](https://github.com/elixir-nx/stb_image) | A tiny image library using stb_image as the backend |
 | [Livebook](https://livebook.dev/) | Interactive & collaborative Elixir code notebooks similar to Jupyter Notebooks |
 
-##### Other Libraries
+#### Livebook and Data Visualization Libraries
 
 This training course uses Livebook for lesson content as well as for writing and experimenting with Elixir code. There are a few libraries we will be using to enhance our use of Livebook.
 

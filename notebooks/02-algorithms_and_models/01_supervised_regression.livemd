@@ -68,7 +68,7 @@ Imagine you own a pet supply shop. First things first, your shop needs a name.
 
 <!-- livebook:{"break_markdown":true} -->
 
-Randomly select a pet type and call out to random word generator using HttPoison.
+Randomly select a pet type and call out to random [word generator](https://www.datamuse.com/api/) using HttPoison.
 
 ```elixir
 pet = ["llama", "ferret", "parrot", "rabbit"] |> Enum.random()
