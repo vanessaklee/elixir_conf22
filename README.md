@@ -13,6 +13,8 @@ Download and install the Elixir [Livebook App](https://livebook.dev/#install). R
 - Codebase
 - Hexdocs?
 
+TODO: finish setup slides beyond the "notebooks" selection once the chater names are prettier
+
 ## TODO
 ExToDo found the following TODOs (8/7/2022)
 
