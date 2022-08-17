@@ -74,15 +74,7 @@ defmodule LinReg do
     }
   end
 
-  defn init_random_params do
-    m = Nx.random_normal({}, 0.0, 0.1)
-    b = Nx.random_normal({}, 0.0, 0.1)
-    {m, b}
-  end
-
-  def train(epochs, data) do
-    init_params = init_random_params()
-
+  def train(epochs, data, init_params) do
     for _ <- 1..epochs, reduce: init_params do
       acc ->
         data
@@ -90,9 +82,14 @@ defmodule LinReg do
         |> Enum.reduce(
           acc,
           fn batch, cur_params ->
-            {inp, tar} = Enum.unzip(batch)
-            x = Nx.tensor(inp)
-            y = Nx.tensor(tar)
+            IO.inspect(batch, label: "batch")
+            IO.inspect(cur_params, label: "cur_params")
+            # {inp, tar} = Enum.unzip(batch)
+            {x, y} = batch
+            IO.inspect(x, label: "input")
+            IO.inspect(y, label: "target")
+            # x = Nx.tensor(inp)
+            # y = Nx.tensor(tar)
             update(cur_params, x, y)
           end
         )
@@ -102,6 +99,129 @@ end
 ```
 
 ```elixir
+{features, targets} = Scidata.Iris.download()
+```
+
+```elixir
+Enum.count(features) |> IO.inspect(label: "features")
+Enum.count(features) |> IO.inspect(label: "targets")
+:ok
+```
+
+```elixir
+feature_max =
+  Nx.tensor(features)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+```
+
+```elixir
+inputs =
+  Enum.map(features, fn feature ->
+    Nx.divide(Nx.tensor(feature), feature_max)
+  end)
+```
+
+```elixir
+targets =
+  Enum.map(targets, fn t ->
+    Nx.tensor([t])
+  end)
+```
+
+```elixir
+data = Enum.zip([inputs, targets])
+```
+
+```elixir
+set_size = Enum.count(data)
+train_size = ceil(0.85 * set_size)
+```
+
+```elixir
+data = Enum.shuffle(data)
+train_set = Enum.slice(data, 0, train_size)
+test_set = Enum.slice(data, train_size, set_size - train_size)
+```
+
+```elixir
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
+# match shape of inputs {4, 1}
+init_feature = Nx.random_normal({4, 1}, 0.0, 0.1)
+# match shape of targets {1, 1}
+init_target = Nx.tensor([1], type: {:s, 64})
+
+init_input = {init_feature, init_target}
+
+#  model = LinReg.train(50, train_set, init_input)
+model = LinReg.train(150, data, init_input)
+
+# make some predictions
+data
+# test_set
+|> Enum.each(fn {input, truth} ->
+  prediction =
+    LinReg.predict(model, input)
+    |> scalar.()
+
+  IO.inspect(
+    "Actual: #{scalar.(truth)}. Predicted: #{prediction}. Loss: #{scalar.(truth) - prediction}"
+  )
+end)
+```
+
+```elixir
+import Nx.Defn
+
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
+{features, targets} = Scidata.Iris.download()
+
+feature_max = Nx.reduce_max(Nx.tensor(features), axes: [0], keep_axes: true)
+
+inputs =
+  Enum.map(features, fn feature ->
+    Nx.divide(Nx.tensor(feature), feature_max)
+  end)
+
+targets =
+  Enum.map(targets, fn t ->
+    # Nx.tensor([t], type: {:f, 32})  
+    # |> Nx.reshape({1,1})
+    Nx.tensor([t])
+  end)
+
+data = Enum.zip([inputs, targets])
+
+# match shape of inputs {4, 1}
+init_feature = Nx.random_normal({4, 1}, 0.0, 0.1)
+# match shape of targets {1, 1}
+init_target = Nx.tensor([1], type: {:s, 64})
+
+init_input = {init_feature, init_target}
+
+model = LinReg.train(25, data, init_input)
+
+# make some predictions
+data
+|> Enum.each(fn {input, truth} ->
+  prediction =
+    LinReg.predict(model, input)
+    |> scalar.()
+
+  IO.inspect("Actual: #{scalar.(truth)}. Predicted: #{prediction}")
+end)
+```
+
+```elixir
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
 target_m = :rand.normal(0.0, 10.0)
 target_b = :rand.normal(0.0, 5.0)
 target_fn = fn x -> target_m * x + target_b end
@@ -112,12 +232,7 @@ data =
 
 IO.puts("Target m: #{target_m}\tTarget b: #{target_b}\n")
 {m, b} = LinReg.train(100, data)
-# IO.puts("Learned m: #{m}\tLearned b: #{b}")
-m = Nx.to_flat_list(m) |> List.first()
-
-b = Nx.to_flat_list(b) |> List.first()
-
-IO.puts("Learned m: #{m}\tLearned b: #{b}")
+IO.puts("Learned m: #{scalar.(m)}\tLearned b: #{scalar.(b)}")
 ```
 
 ```elixir
@@ -147,80 +262,24 @@ bias = Nx.random_normal({1, 1}, 0.0, 0.1)
 
 wb = {weights, bias}
 
-Enum.reduce(1..25, wb, fn epoch, params ->
-  Enum.reduce(data, params, fn {input, target}, {weight, bias} ->
-    LinReg.update({weight, bias}, input, target)
-    # update(interation, input, target)
-
-    # predict = input
-    # |> Nx.dot(weight)
-    # |> Nx.add(bias)
-
-    # IO.inspect(predict, label: "predict")
-
-    # loss = Nx.mean(Nx.subtract(target, predict), 2)
-    # loss = Nx.grad
-
-    # loss = 
-    # {grad_m, grad_b} = grad(interation, &loss(&1, input, target))
-
-    # {
-    #   m - grad_m * 0.01,
-    #   b - grad_b * 0.01
-    # }
-
-    # predict = predict(params, input)
-    # Nx.mean(Nx.power(target - predict, 2))
-
-    # x
-    # |> Nx.dot(m)
-    # |> Nx.add(b)
+{m, b} =
+  Enum.reduce(1..25, wb, fn epoch, params ->
+    Enum.reduce(data, params, fn {input, target}, {weight, bias} ->
+      LinReg.update({weight, bias}, input, target)
+    end)
   end)
-end)
-```
 
-```elixir
-{features, targets} = Scidata.Iris.download()
-
-features = Enum.map(features, fn f -> Nx.tensor([f]) end)
-targets = Enum.map(targets, fn t -> Nx.tensor([t]) end)
-
-data = Enum.zip([features, targets])
-
-weights = Nx.random_normal({3, 1}, 0.0, 0.1)
-bias = Nx.random_normal({1, 1}, 0.0, 0.1)
-wb = {weights, bias}
-
-Enum.reduce(1..25, wb, fn epoch, params ->
-  Enum.reduce(data, params, fn {input, target}, {weight, bias} ->
-    # update(interation, input, target)
-    IO.inspect(input)
-
-    # predict = input
-    # |> Nx.dot(weight)
-    # |> Nx.add(bias)
-
-    # loss = 
-    # {grad_m, grad_b} = grad(interation, &loss(&1, input, target))
-
-    # {
-    #   m - grad_m * 0.01,
-    #   b - grad_b * 0.01
-    # }
-
-    # predict = predict(params, input)
-    # Nx.mean(Nx.power(target - predict, 2))
-
-    # x
-    # |> Nx.dot(m)
-    # |> Nx.add(b)
-  end)
-end)
+IO.puts("Learned m: #{LinReg.scalar(m)}\tLearned b: #{LinReg.scalar(b)}")
 ```
 
 The Dataframe `shape/1` returns a tuple of shape of the data: `{rows, columns}`:
 
 ```elixir
+alias Explorer.DataFrame
+alias Explorer.Series
+
+df = Explorer.Datasets.iris()
+
 DataFrame.shape(df)
 ```
 
@@ -467,6 +526,48 @@ inputs =
     |> Nx.new_axis(-1)
   end)
   |> Nx.concatenate(axis: 1)
+```
+
+```elixir
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
+{features, targets} = Scidata.Iris.download()
+
+feature_max = Nx.reduce_max(Nx.tensor(features), axes: [0], keep_axes: true)
+
+inputs =
+  Enum.map(features, fn feature ->
+    Nx.divide(Nx.tensor(feature), feature_max)
+  end)
+
+targets =
+  Enum.map(targets, fn t ->
+    Nx.tensor([t], type: {:f, 32})
+    |> Nx.reshape({1, 1})
+  end)
+
+data = Enum.zip([inputs, targets])
+
+# match shape of inputs {4, 1}
+init_feature = Nx.random_normal({4, 1}, 0.0, 0.1)
+# match shape of targets {1, 1}
+init_target = Nx.random_normal({1, 1}, 0.0, 0.1)
+
+init_input = {init_feature, init_target}
+
+model = LinReg.train(25, data, init_input)
+
+# make some predictions
+data
+|> Enum.each(fn {input, truth} ->
+  prediction =
+    LinReg.predict(model, input)
+    |> scalar.()
+
+  IO.inspect("Actual: #{scalar.(truth)}. Predicted: #{prediction}")
+end)
 ```
 
 ## Target Normalization
