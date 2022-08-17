@@ -48,10 +48,6 @@ Both linear and logistic regression are among the most popular algorithms within
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<span style="color: #800080;">
-
-</span>
-
 <!-- livebook:{"break_markdown":true} -->
 
 <span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
@@ -232,7 +228,3 @@ We used regression to prove there is definitely a correlation between rain and m
 <!-- livebook:{"break_markdown":true} -->
 
 <hr style="background-color: #800080;height: 15.0px;" />
-
-<span style="color: #800080;">
-
-</span>

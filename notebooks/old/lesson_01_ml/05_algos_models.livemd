@@ -48,10 +48,6 @@ Both linear and logistic regression are among the most popular algorithms within
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<span style="color: #800080;">
-
-</span>
-
 <!-- livebook:{"break_markdown":true} -->
 
 <span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
@@ -233,10 +229,6 @@ We used regression to prove there is definitely a correlation between rain and m
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<span style="color: #800080;">
-
-</span>
-
 ## Supervised Learning Algorithms
 
 ### Classification
@@ -287,10 +279,6 @@ TODO: brain break needed here? data analysis task? The haberman dataset analysis
 <!-- livebook:{"break_markdown":true} -->
 
 <hr style="background-color: #800080;height: 15.0px;" />
-
-<span style="color: #800080;">
-
-</span>
 
 ## Unsupervised Machine Learning Algorithms
 
@@ -388,10 +376,6 @@ In the next section we will go into a more detailed look of deep learning and ne
 <!-- livebook:{"break_markdown":true} -->
 
 <hr style="background-color: #800080;height: 15.0px;" />
-
-<span style="color: #800080;">
-
-</span>
 
 ## Choosing the Right Model
 

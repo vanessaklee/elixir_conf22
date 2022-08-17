@@ -9,33 +9,30 @@ Mix.install([
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
   {:req, "~> 0.3.0"},
+  {:scidata, "~> 0.1.9"},
   {:vega_lite, "~> 0.1.4"}
 ])
 ```
 
 ## Question
 
-Can we use Linear Regression to predict the CO2 emission of a car based on the size of the engine?
-
-This question is best answered by a Linear Regression algorithm because the variable to be predicted is continuous (CO2 emissions).
-
-The goal is to model the CO2 emissions as a function of engine size.
+Can we use Classification to prediect Iris species?
 
 ## Dataset
 
-The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets held within the `Explorer` library so we can interact with it easily.
+The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets held within the Nx ecosystem (`Explorer` and `Scidata`) so we can interact with it easily.
 
 It includes three iris species. There are 50 samples of each species along with additional properties. One flower species is linearly separable from the other two, but the other two are not linearly separable from each other.
 
-##### Citation
+<span style="font-size: 14px;">
+Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multiple measurements in taxonomic problems. Annals of Eugenics.
+</span>
 
-Original Owners: R. A. Fisher (1936) The use of multiple measurements in taxonomic problems. Annals of Eugenics. 7 (2): 179–188. doi:10.1111/j.1469-1809.1936.tb02137.x
-
-Iris. (1936). UCI Machine Learning Repository.
+![](images/iris.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
-#### Attributes
+### Features
 
 * sepal_length `float`
 * sepal_width `float`
@@ -43,7 +40,7 @@ Iris. (1936). UCI Machine Learning Repository.
 * petal_width `float`
 * species `string`
 
-#### Observations
+### Observations
 
 * There are 150 observations with 4 features each
 * There are no null values
@@ -58,6 +55,7 @@ alias Explorer.DataFrame
 alias Explorer.Series
 
 df = Explorer.Datasets.iris()
+# {features, labels} = Scidata.Iris.download()
 ```
 
 The Dataframe `shape/1` returns a tuple of shape of the data: `{rows, columns}`:
@@ -111,7 +109,9 @@ VegaLite.new(width: 750, height: 350)
 |> VegaLite.encode(:y, aggregate: :count)
 ```
 
-It reveals there are exactly 50 of each of the three Species features. The x-axis captures the `species` column, which is a nominal type. The y-axis is set to `Count(*)`.
+It reveals there are exactly 50 of each of the three Species features; we have a balanced dataset.
+
+The x-axis captures the `species` column, which is a nominal type. The y-axis is set to `Count(*)`.
 
 ##### Types
 
@@ -139,164 +139,248 @@ VegaLite.new(width: 750, height: 150)
 
 Earlier we used `n_rows/1` to get the number of rows in the dataset. That is useful now to determine the size needed for training and testing.
 
-Split 85% of examples into a training set and 15% for testing.
+The training set should have the majority of the data. Put 85% of the rows in this set. Its the data that “trains” the machine learning model. The test set will be used to test the model to verify how accurately it makes predictions.
+
+Split 85% of examples into a training set: `slice(df, offset, length)`
+
+We will replicate these steps in the next section to create a test set with 15% of the rows.
 
 ```elixir
-sample_size = train_size = ceil(0.85 * sample_size) |> IO.inspect(label: "Training")
-test_size = (sample_size - train_size) |> IO.inspect(label: "Testing")
-
-:ok
+sample_size = DataFrame.n_rows(df)
+train_size = ceil(0.85 * sample_size)
 ```
-
-Use those percentages to slice the data into training and testing sets
 
 ```elixir
 train_df = DataFrame.slice(df, 0, train_size)
-test_df = DataFrame.slice(df, 0, test_size)
-
-:ok
 ```
 
-## Split Features from Targets
-
-Split both the training and testing sets into two sets: one set of features and other set of targets because Axon expects tuples of {features, targets} to train a model. The target in this class is the "class" column, the 1 if the patient survived 5 years or longer or 0 if they did not. The rest of the columns are features.
-
-```elixir
-train_df_inputs =
-  DataFrame.select(train_df, &(&1 == "class"), :drop) |> IO.inspect(label: "features")
-
-train_df_targets =
-  DataFrame.select(train_df, &(&1 == "class"), :keep) |> IO.inspect(label: "targets")
-
-test_df_inputs = DataFrame.select(test_df, &(&1 == "class"), :drop)
-test_df_targets = DataFrame.select(test_df, &(&1 == "class"), :keep)
-
-:ok
-```
-
-### Convert the sets to tensors
+<hr style="background-color: #EED202;height: 15.0px;" />
 
 <!-- livebook:{"break_markdown":true} -->
 
-The training and testing tests are still Explorer DataFrames, but Axon expects Nx Tensors. Convert the sets into Nx tensors.
+<span style="color: #DEA731; font-size: 1.7rem; font-weight: 600;">
+<img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 50px; float: left; margin-top: 1px; margin-bottom: 10px; margin-right: 10px;" />CAUTION!
+</span>
+
+This is a novice excersize meant as a warm up to putting the Nx ecosystem into action. You'll note the Iris dataset is very small.
+
+This method we are using is not suggestd for real world problems since splitting the dataset into a training and testing set reduces the size even more.
+
+Since the goal is to predict iris species using a dataset the model has not seen before, ideally we would have a much larger training and testing set.
+
+Remember back in an earlier lesson when we discussed the challenges of machine learning. Here we are at risk of **overfitting** the training data.
+
+<!-- livebook:{"break_markdown":true} -->
+
+
+
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #EED202;height: 15.0px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+
+
+## Features & Targets
+
+Next, split the testing set into:
+
+1. input features
+2. input targets
+
+The target is the `species` column. The rest of the columns are features. Use Dataframe `select/3` to drop the `species` column to create a **feature set** and to keep only the `species` column for a **target set**.
 
 ```elixir
-to_tensor = fn data_frame ->
-  data_frame
-  |> DataFrame.names()
-  |> Enum.map(
-    &(Series.to_tensor(data_frame[&1])
-      |> Nx.new_axis(-1))
-  )
+feature_set =
+  train_df
+  |> DataFrame.select(&(&1 == "species"), :drop)
+```
+
+```elixir
+target_set =
+  train_df
+  |> DataFrame.select(&(&1 == "species"), :keep)
+```
+
+### Feature Normalization
+
+<!-- livebook:{"break_markdown":true} -->
+
+So far we've been working with Dataframes. It's time to convert to tensors.
+
+It is also time to normalize the data.
+
+For example, the features are `floats` such as 5.6. The values need to be normalized between 0 and 1.
+
+First, get the features from the `feature_set`:
+
+```elixir
+features = DataFrame.names(feature_set)
+```
+
+Next, enumerate over that list. First we will just IO.inspect the list value on each iteration.
+
+```elixir
+features
+|> Enum.map(fn name ->
+  IO.inspect(name)
+end)
+```
+
+Do the same enumeration again, only this time look at the feature's values.
+
+```elixir
+features
+|> Enum.map(fn name ->
+  IO.inspect(feature_set[name])
+end)
+```
+
+Ok, they are all Series. That makes it easy to convert them to tensors so we can find the maximum value of the feature. Like this:
+
+```elixir
+features
+|> Enum.map(fn name ->
+  s = Series.to_tensor(feature_set[name])
+  Nx.reduce_max(s, axes: [0], keep_axes: true)
+end)
+```
+
+Now that we have the maximum value for the feature in the enumeration, use it normalize the values.
+
+Do do that, we want to transform the orignal Series into the value of the original value divided by the maximum value.
+
+Nx division results in a tensor. We need a `float`. Convert the tensor to a flat list and take the only element.
+
+```elixir
+features
+|> Enum.map(fn name ->
+  s = Series.to_tensor(feature_set[name])
+  max = Nx.reduce_max(s, axes: [0], keep_axes: true)
+
+  Series.transform(feature_set[name], fn v ->
+    Nx.divide(v, max)
+    |> IO.inspect(label: "n")
+    |> Nx.to_flat_list()
+    |> List.first()
+  end)
+end)
+```
+
+The values are normalized!
+
+Time to convert the transformed Series to a tensor.
+
+```elixir
+features
+|> Enum.map(fn name ->
+  s = Series.to_tensor(feature_set[name])
+  max = Nx.reduce_max(s, axes: [0], keep_axes: true)
+
+  Series.transform(feature_set[name], fn v ->
+    Nx.divide(v, max)
+    |> IO.inspect(label: "n")
+    |> Nx.to_flat_list()
+    |> List.first()
+  end)
+  |> Series.to_tensor()
+end)
+```
+
+Pipe the tensor into `Nx.new_axis/3` and set the axis to negative, which will start from the back.
+
+End the enumeration and concatenate all the tensors on a single axis.
+
+```elixir
+inputs =
+  features
+  |> Enum.map(fn name ->
+    s = Series.to_tensor(feature_set[name])
+    max = Nx.reduce_max(s, axes: [0], keep_axes: true)
+
+    Series.transform(feature_set[name], fn v ->
+      Nx.divide(v, max)
+      |> Nx.to_flat_list()
+      |> List.first()
+    end)
+    |> Series.to_tensor()
+    |> Nx.new_axis(-1)
+  end)
   |> Nx.concatenate(axis: 1)
-end
-
-train_inputs = to_tensor.(train_df_inputs) |> IO.inspect(label: "features")
-train_targets = to_tensor.(train_df_targets) |> IO.inspect(label: "targets")
-
-test_inputs = to_tensor.(test_df_inputs)
-test_targets = to_tensor.(test_df_targets)
-
-:ok
 ```
 
-### Convert to lists of tensors
+## Target Normalization
+
+Our target are currently strings, i.e. "Iris-setosa". Normalize them by converting them to integers.
+
+##### Label
+
+* 0: Iris Setosa
+* 1: Iris Versicolour
+* 2: Iris Virginica
 
 <!-- livebook:{"break_markdown":true} -->
 
-Axon expects minibatches for training. Nx `to_bached/3` converts a tensor to a stream of tensor batches. From the [docs](https://hexdocs.pm/nx/Nx.html#to_batched_list/3):
-
-> The first dimension (axis 0) is divided by `batch_size`. In case the dimension cannot be evenly divided by `batch_size`, you may specify what to do with leftover data using `:leftover`. `:leftover` must be one of `:repeat` or `:discard`. `:repeat` repeats the first `n` values to make the last batch match the desired batch size. `:discard` discards excess elements.
-
-The training set has 261 rows and the testing set has 45. We will set the `batch_size` to 15 and the `leftover` to `:repeat` since our dataset is small.
+Review what the `target_set` looks like:
 
 ```elixir
-# Training set size: 261; testing set size: 45
-batch_size = 20
-
-train_batch_inputs = Nx.to_batched_list(train_inputs, batch_size, leftover: :repeat)
-
-train_batch_targets =
-  Nx.to_batched_list(train_targets, batch_size, leftover: :repeat)
-  |> IO.inspect(label: "batched targets")
-
-test_batch_inputs = Nx.to_batched_list(test_inputs, batch_size, leftover: :repeat)
-test_batch_targets = Nx.to_batched_list(test_targets, batch_size, leftover: :repeat)
-
-:ok
+target_set
 ```
 
-Zip the batched features with the batched targets for each set, training and testing.
+The "species" column is a Series of strings.
+
+Access only that column, then transform the value such that each type gets its integer value.
 
 ```elixir
-train_batch = Stream.zip(train_batch_inputs, train_batch_targets)
-test_batch = Stream.zip(test_batch_inputs, test_batch_targets)
-
-:ok
+targets =
+  target_set["species"]
+  |> Series.transform(fn x ->
+    case String.downcase(x) do
+      "iris-setosa" -> 0
+      "iris-versicolour" -> 1
+      "iris-versicolor" -> 1
+      "iris-virginica" -> 2
+    end
+  end)
 ```
 
-### Normalize
+Then convert the Series to a tensor.
+
+```elixir
+input_targets =
+  targets
+  |> Series.to_tensor()
+  |> Nx.new_axis(-1)
+```
+
+## Train
+
+### Classification Algorithm
+
+We will train a multiclass classification model on this dataset.
+
+It will map the input values (`x`) to a discrete output variable (`y`) and makes predictions by categorizing data into classes based on independent variables.
+
+#### Outcome is CATEGORICAL: predicts a discrete (finite) class label.
+
+##### Multiclass classification (more than two outcome labels)
+
+* Iris species prediction  
+  * setosa / versicolor /virginica
 
 <!-- livebook:{"break_markdown":true} -->
-
-Normalize the input data. Ideally, each column should be a value between 1 and 0. This increases the performance of the model. The simpliest way to achieve normalization is to divide each feature by the maximum value of the feature.
-
-For this dataset we need to normalize the 3 feature columns. The target column is already a 1 or 0.
-
-```elixir
-train_max =
-  Nx.reduce_max(train_inputs, axes: [0], keep_axes: true)
-  |> IO.inspect(label: "max value of each feature")
-
-normalize = fn {batch, target} ->
-  normalized_feature = Nx.divide(batch, train_max)
-  {normalized_feature, target}
-end
-
-training_data =
-  train_batch
-  |> Stream.map(&Nx.Defn.jit(normalize, [&1]))
-
-:ok
-```
-
-## Model
 
 ### Define the Model
 
-The model trained here is a feed-forward neural network. You can choose among many established models, but this one is good to classify our features as predictive of surgery survival or not.
-
-The dataset is relatively small, with a very small set of input features. This means the model can do well with a minimum number of intermediate layers. Another way to think of this is the number of neuronal layers and the number of neurons comprising each layer.
-
-For most problems, good performance can be achieved by determining the hidden layer using  two rules:
-
-1. the number of hidden layers equals one
-2. the number of neurons in that layer is the mean of the neurons in the input and output layers
-
-The size of the input layer is equal to the number of features (columns) in your data. Some NN configurations add one additional node for a bias term. In our case, the number is *4*.The size of the output layer is typically 1.
-
-* 3 hidden layers with a hidden size of 2
-
-TODO define regression vs classification
-
-This is a starting point. Changing the hidden size or activations will produce different outcomes. Simpler models might produce equal performance.
+1. Epochs - how many training iterations to take over the dataset
+2. Learning rate - size of the optimization step at each iteration
+3. Loss - measure of the distance between the prediction from the label
 
 ```elixir
-num_of_cols = 3
-
-# Axon.input("input", shape: {nil, num_of_cols})
-model =
-  Axon.input({nil, num_of_cols}, "input")
-  |> Axon.dense(2)
-  |> Axon.relu()
-  |> Axon.dense(2)
-  |> Axon.relu()
-  |> Axon.dropout(rate: 0.3)
-  |> Axon.dense(2)
-  |> Axon.relu()
-  |> Axon.dropout(rate: 0.3)
-  |> Axon.dense(1)
-  |> Axon.sigmoid()
+epochs = 20
+learning_rate = 0.001
+loss = :mean_squared_error
 ```
 
 ### Define Loss and Optimizer
@@ -304,18 +388,47 @@ model =
 First, the deaths in the dataset.
 
 ```elixir
-deaths =
-  Nx.sum(train_targets)
-  |> Nx.to_number()
+import Nx.Defn
 ```
-
-Then the non-deaths.
 
 ```elixir
-nondeaths = Nx.size(train_targets) - deaths
+# data = Enum.zip([inputs, input_targets])
+# data = [inputs, targets]
+# # data = Nx.concatenate([inputs, input_targets])
+# Stream.zip(inputs, input_targets)
+# |> Enum.map(fn x -> IO.inspect x end)
+# |> Stream.map(fn {input, target} -> IO.inspect({input, target}) end)
+
+# batch_inputs = Nx.to_batched_list(inputs, 10, leftover: :repeat)
+# batch_targets = Nx.to_batched_list(input_targets, 10, leftover: :repeat)
+# batch = Enum.zip(batch_inputs, batch_targets)
+
+batch = Enum.zip([inputs], [input_targets])
+
+data =
+  batch
+  |> Enum.map(fn {batch, target} ->
+    {batch, target}
+  end)
 ```
 
-#### Loss Funciton
+```elixir
+weights = Nx.random_normal({3, 1}, 0.0, 0.1)
+bias = Nx.random_normal({1, 1}, 0.0, 0.1)
+wb = {weights, bias}
+```
+
+```elixir
+Enum.reduce(1..epochs, wb, fn _epoch, params ->
+  IO.inspect(data)
+  # Enum.reduce(data, params, fn {input, target}, iteration_params ->
+  #   # update(iteration_params, input, target)
+  #   IO.inspect {iteration_params, input, target}
+  # end)
+end)
+```
+
+#### Loss
 
 The loss function measures how well a model fit the data set.The bigger the difference between the prediction and the ground truth (target or class), the higher the loss function value.
 

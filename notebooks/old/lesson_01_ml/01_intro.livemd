@@ -135,10 +135,6 @@ Model training is the process of running a machine learning algorithm on a datas
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<span style="color: #800080;">
-
-</span>
-
 <!-- livebook:{"break_markdown":true} -->
 
 <span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">

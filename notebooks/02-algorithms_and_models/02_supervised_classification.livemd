@@ -57,7 +57,3 @@ TODO: brain break needed here? data analysis task? The haberman dataset analysis
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<span style="color: #800080;">
-
-</span>
-
