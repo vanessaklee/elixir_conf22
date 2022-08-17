@@ -16,41 +16,44 @@ Mix.install([
 
 ## Question
 
-Can we use Linear Regression to prediect Iris species?
+Can we use Linear Regression to prediect passangers who will survive the Titanic disaster?
 
 ## Dataset
 
-The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets held within the Nx ecosystem (`Explorer` and `Scidata`) so we can interact with it easily.
-
-It includes three iris species. There are 50 samples of each species along with additional properties. One flower species is linearly separable from the other two, but the other two are not linearly separable from each other.
+TODO
 
 <span style="font-size: 14px;">
 Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multiple measurements in taxonomic problems. Annals of Eugenics.
 </span>
 
-
-
-![](images/iris.png)
+![](images/titanic.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Features
 
+TODO
+
 * sepal_length `float`
-* sepal_width `float`
-* petal_length `float`
-* petal_width `float`
-* species `string`
 
 ### Observations
 
 * There are 150 observations with 4 features each
-* There are no null values
-* There are 50 observations of each species (setosa, versicolor, virginica)
 
 ## Load
 
 With the use of Explorer, we can easily load the iris data into a dataframe.
+
+```elixir
+alias Explorer.DataFrame
+alias Explorer.Series
+```
+
+```elixir
+csv = "elixir_conf/data/titanic/train.csv"
+IO.puts("Loading #{csv}")
+df = DataFrame.from_csv!(csv)
+```
 
 ```elixir
 {features, targets} = Scidata.Iris.download()
@@ -379,8 +382,6 @@ train_size = ceil(0.85 * sample_size)
 train_df = DataFrame.slice(df, 0, train_size)
 ```
 
-<!-- livebook:{"break_markdown":true} -->
-
 <hr style="background-color: #EED202;height: 15.0px;" />
 
 <!-- livebook:{"break_markdown":true} -->
@@ -399,11 +400,15 @@ Remember back in an earlier lesson when we discussed the challenges of machine l
 
 <!-- livebook:{"break_markdown":true} -->
 
+
+
 <!-- livebook:{"break_markdown":true} -->
 
 <hr style="background-color: #EED202;height: 15.0px;" />
 
 <!-- livebook:{"break_markdown":true} -->
+
+
 
 ## Features & Targets
 
