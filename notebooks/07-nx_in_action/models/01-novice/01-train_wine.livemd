@@ -56,6 +56,380 @@ df = DataFrame.from_csv!(csv)
 ```
 
 ```elixir
+DataFrame.names(df)
+```
+
+```elixir
+DataFrame.table(df)
+```
+
+### Observations
+
+`Survived`
+
+* 0 = No
+* 1 = Yes
+
+`Pclass` is a proxy for socio-economic status
+
+* 1 = 1st Class = Upper Class
+* 2 = 2nd Class = Middle Class
+* 3 = 3rd Calss = Lower Class
+
+`Age` is fractional if less than 1. If estimated, is it in the form of xx.5
+
+`Embarked`
+
+* C = Cherbourg
+* Q = Queenstown
+* S = Southampton
+
+Family relations are defined as:
+
+* Sibling (`SibSp`) = brother, sister, stepbrother, stepsister
+* Spouse (`SibSp`) = husband, wife (mistresses and fiancés were ignored)
+* Parent (`Parch`) = mother, father
+* Child (`Parch`) = daughter, son, stepdaughter, stepson
+
+```elixir
+DataFrame.shape(df)
+```
+
+```elixir
+age_values = df["Age"]
+```
+
+```elixir
+age_values |> Series.nil?() |> Series.to_list() |> Enum.frequencies()
+```
+
+```elixir
+# check all the columns for nils
+DataFrame.names(df)
+|> Enum.map(fn name ->
+  df[name]
+  |> Series.nil?()
+  |> Series.count()
+  |> DataFrame.to_columns()
+  |> case do
+    %{"values" => [false]} -> nil
+    %{"counts" => [_, nils]} -> IO.inspect("#{name} has #{nils} nil values")
+  end
+end)
+
+:ok
+```
+
+```elixir
+# Dropping Columns which are not usefull
+# Drop Name, Ticket, Cabin, Embarked, PassengerId
+# Fill in nils for age 
+df = DataFrame.select(df, ["Survived", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare"])
+```
+
+```elixir
+s =
+  Series.transform(df["Sex"], fn v ->
+    if v == "female", do: 0, else: 1
+  end)
+
+df = Explorer.DataFrame.mutate(df, Sex: s)
+```
+
+that gets rid of too much data
+instead use `fill_missing`
+
+we have options
+
+##### Strategies
+
+* :forward - replace nil with the previous value
+* :backward - replace nil with the next value
+* :max - replace nil with the series maximum
+* :min - replace nil with the series minimum
+* :mean - replace nil with the series mean
+
+Ther are too many missing ages to go with mean; let's use the :forward to replace missing ages.
+
+```elixir
+df = Explorer.DataFrame.mutate(df, Age: df["Age"] |> Series.fill_missing(:forward))
+```
+
+But certain columns, like cabin, are too difficult to normalize (i.e. "C123") and seem unlike to influence accurancy. Remove it and PassengerID
+
+```elixir
+# Dropping Columns which are not usefull
+# Drop Name, Ticket, Cabin, Embarked, PassengerId
+# Fill in nils for age 
+df = DataFrame.select(df, ["Survived", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare"])
+```
+
+```elixir
+s =
+  Series.transform(df["Sex"], fn v ->
+    if v == "female", do: 0, else: 1
+  end)
+
+df = Explorer.DataFrame.mutate(df, Sex: s)
+```
+
+```elixir
+targets = DataFrame.select(df, &(&1 == "Survived"), :keep)
+features = DataFrame.select(df, &(&1 == "Survived"), :drop)
+```
+
+```elixir
+to_tensor = fn df ->
+  df
+  |> Explorer.DataFrame.names()
+  |> Enum.map(&(Explorer.Series.to_tensor(df[&1]) |> Nx.new_axis(-1)))
+  |> Nx.concatenate(axis: 1)
+end
+
+targets = to_tensor.(targets)
+features = to_tensor.(features)
+```
+
+```elixir
+batched_targets = Nx.to_batched_list(targets, 200)
+batched_features = Nx.to_batched_list(features, 200)
+batched = Stream.zip(batched_features, batched_targets)
+```
+
+```elixir
+max = Nx.reduce_max(features, axes: [0], keep_axes: true)
+
+normalize = fn {batch, target} ->
+  {Nx.divide(batch, max), target}
+end
+
+training_set = batched |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
+```
+
+```elixir
+model =
+  Axon.input({200, 6}, "input")
+  |> Axon.dense(256)
+  |> Axon.relu()
+  |> Axon.dense(256)
+  |> Axon.relu()
+  |> Axon.dropout(rate: 0.1)
+  |> Axon.dense(256)
+  |> Axon.relu()
+  |> Axon.dropout(rate: 0.1)
+  |> Axon.dense(1)
+  |> Axon.dense(3, activation: :softmax)
+```
+
+```elixir
+epochs = 75
+
+trained_model =
+  model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(0.0001))
+  # |> Axon.Loop.metric(:accuracy, "Accuracy")
+  # |> Axon.Loop.metric(:precision)
+  # |> Axon.Loop.metric(:recall)
+  |> Axon.Loop.run(training_set, %{}, epochs: epochs)
+```
+
+```elixir
+optimizer = Axon.Optimizers.adam(1.0e-3)
+
+trained_model =
+  model
+  |> Axon.Loop.trainer(:binary_cross_entropy, :sgd)
+  |> Axon.Loop.metric(:precision)
+  |> Axon.Loop.metric(:recall)
+  |> Axon.Loop.run(training_set, %{}, epochs: epochs)
+```
+
+```elixir
+# inputs = features
+# |> DataFrame.names()
+# |> Enum.map(fn name ->
+#   &(Series.to_tensor(features[&1])
+#     |> Nx.new_axis(-1))
+# end)
+# |> Nx.concatenate(axis: 1)
+
+max =
+  features
+  |> DataFrame.names()
+  |> Enum.map(fn name ->
+    Series.to_tensor(features[name])
+    |> Nx.reduce_max(axes: [0], keep_axes: true)
+  end)
+
+normalize = fn {feature, target} ->
+  IO.inspect(max, label: "max value of each feature")
+  IO.inspect(feature, label: "max value of each feature")
+  normalized = Nx.divide(feature, max)
+  {normalized, target}
+end
+
+inputs = Stream.map(Stream.zip(features, targets), &Nx.Defn.jit(normalize, [&1]))
+
+# inputs |> Nx.to_batched_list(30)
+
+# train_df = Stream.zip(inputs, targets)
+```
+
+```elixir
+model =
+  Axon.input({nil, 1, 891, 7}, "input")
+  |> Axon.conv(16, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
+  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
+  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
+  |> Axon.dropout(rate: 0.1)
+  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
+  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
+  |> Axon.dropout(rate: 0.1)
+  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
+  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
+  |> Axon.dropout(rate: 0.2)
+  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
+  |> Axon.flatten()
+  |> Axon.dense(16, activation: :relu)
+  |> Axon.dropout(rate: 0.1)
+  |> Axon.dense(8, activation: :relu)
+  |> Axon.dense(2, activation: :softmax)
+```
+
+```elixir
+epochs = 30
+
+trained_model =
+  model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(0.000005))
+  # |> Axon.Loop.metric(:accuracy, "Accuracy")
+  |> Axon.Loop.run(inputs, %{}, epochs: epochs)
+```
+
+```elixir
+# normalize
+# Sex: female = 0, male = 1
+# Embarked: S = 0, C = 1, Q = 2
+features
+|> DataFrame.names()
+|> Enum.map(fn name ->
+  case name do
+    "Sex" ->
+      Series.transform(features[name], fn v ->
+        if v == "female", do: 0, else: 1
+      end)
+
+    "Embarked" ->
+      Series.transform(features[name], fn v ->
+        if v == "S", do: 0, else: if(v == "C", do: 1, else: 2)
+      end)
+
+    _ ->
+      s = Series.to_tensor(features[name])
+      max = Nx.reduce_max(s, axes: [0], keep_axes: true)
+
+      Series.transform(features[name], fn v ->
+        Nx.divide(v, max)
+        |> Nx.to_flat_list()
+        |> List.first()
+      end)
+      |> Series.to_tensor()
+      |> Nx.new_axis(-1)
+  end
+end)
+|> Enum.map(
+  &(Series.to_tensor(features[&1])
+    |> Nx.new_axis(-1))
+)
+|> Nx.concatenate(axis: 1)
+
+# inputs = Enum.map(features, fn feature ->  
+#   Nx.divide(Nx.tensor(feature), feature_max)
+# end)
+
+# features = to_tensor.(features) |> IO.inspect(label: "features")
+# targets = to_tensor.(targets) |> IO.inspect(label: "targets")
+
+# s = Series.to_tensor(features[name])
+# IO.inspect(name, label: "name")
+# max = Nx.reduce_max(s, axes: [0], keep_axes: true)
+# Series.transform(features[name], fn v ->
+#   Nx.divide(v, max) |> IO.inspect(label: "n")
+#   |> Nx.to_flat_list()
+#   |> List.first()
+# end)
+# end)
+
+# features = to_tensor.(features) |> IO.inspect(label: "features")
+```
+
+```elixir
+feature_max =
+  Nx.tensor(features)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+```
+
+```elixir
+# Normalize Sex, Embark
+# Embarked
+
+# C = Cherbourg
+# Q = Queenstown
+# S = Southampton
+
+features = DataFrame.select(df, &(&1 == "Survived"), :drop) |> IO.inspect(label: "features")
+targets = DataFrame.select(df, &(&1 == "Survived"), :keep) |> IO.inspect(label: "targets")
+
+feature_max =
+  Nx.tensor(features)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+
+# to_tensor = fn data_frame ->
+#   data_frame
+#   |> DataFrame.names()
+#   |> Enum.map(
+#     &(Series.to_tensor(data_frame[&1])
+#       |> Nx.new_axis(-1))
+#   )
+#   |> Nx.concatenate(axis: 1)
+# end
+
+# inputs = Enum.map(features, fn feature ->  
+#   Nx.divide(Nx.tensor(feature), feature_max)
+# end)
+
+# features = to_tensor.(features) |> IO.inspect(label: "features")
+# targets = to_tensor.(targets) |> IO.inspect(label: "targets")
+
+# feature_max =
+# Nx.reduce_max(features, axes: [0], keep_axes: true)
+# |> IO.inspect(label: "max value of each feature")
+
+# batch = Stream.zip(features, targets)
+
+# normalize = fn {batch, target} ->
+#   normalized_feature = Nx.divide(batch, train_max)
+#   {normalized_feature, target}
+# end
+
+# feature_max = 
+#   Nx.tensor(features)
+#   |> Nx.reduce_max(axes: [0], keep_axes: true)
+
+# inputs = Enum.map(features, fn feature ->  
+#   Nx.divide(Nx.tensor(feature), feature_max)
+# end)
+```
+
+```elixir
+train_df_inputs =
+  DataFrame.select(train_df, &(&1 == "class"), :drop) |> IO.inspect(label: "features")
+
+train_df_targets =
+  DataFrame.select(train_df, &(&1 == "class"), :keep) |> IO.inspect(label: "targets")
+```
+
+```elixir
 {features, targets} = Scidata.Iris.download()
 ```
 

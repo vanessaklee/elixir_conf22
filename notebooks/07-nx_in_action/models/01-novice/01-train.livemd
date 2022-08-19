@@ -58,7 +58,7 @@ With the use of Explorer, we can easily load the iris data into a dataframe.
 
 ```elixir
 Enum.count(features) |> IO.inspect(label: "features")
-Enum.count(features) |> IO.inspect(label: "targets")
+Enum.count(targets) |> IO.inspect(label: "targets")
 :ok
 ```
 
@@ -67,6 +67,8 @@ feature_max =
   Nx.tensor(features)
   |> Nx.reduce_max(axes: [0], keep_axes: true)
 ```
+
+normally you would stream this so as not to put it all in memory but this is a tiny dataset
 
 ```elixir
 inputs =
