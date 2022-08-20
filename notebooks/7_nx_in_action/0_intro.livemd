@@ -1,4 +1,4 @@
-# Nx in Action: ML with Elixir
+# Nx in Action / DIY Machine Learning in Elixir
 
 ## Framework
 
@@ -6,19 +6,38 @@
 
 What is the problem you want to solve? What is the quesition you want to answer?
 
+The challenge of machine learning, and artificial intelligence in general, is to ask the right questions and understand what the answers you get mean.
+
+That means taking the time to look at the big picture. It is easy to get excited by the little accomplishment, especially in deep learning: each layer making progress and predictions printing out one after the other. Remember to keep asking yourself if you are asking the best questions and asking those questions of the best dataset.
+
+We are humans asking machines to answer questions for us, but as humans our sensory percention evolved over billions of years of evolution.
+
+<!-- livebook:{"break_markdown":true} -->
+
+> <span style="font-size: 14px; font-style: italic;">"It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility"</span>
+> 
+> <span style="font-size: 14px;">Hans Moravec, 1988</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
 ### Gather the Data
 
 Find a relevant dataset.
+
+<!-- livebook:{"break_markdown":true} -->
 
 ### Prepare & Analyze
 
 Take a good look at the data. Look for potential problems, patterns, classifications, correlations and comparisons. Turn “abnormal” data into “normalized” data. Normalizing includes extraction, loading, and data cleaning to identify aberrant, missing, or outliers.
 
+<!-- livebook:{"break_markdown":true} -->
+
 ### Model Data (Train)
 
 Use your problem and dataset to determine the best algorithms. The wrong model can lead to poor performance.
 
+<!-- livebook:{"break_markdown":true} -->
+
 ### Test
 
 After you've trained your model, test your model to look for over- or underfitting.
-

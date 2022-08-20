@@ -29,10 +29,6 @@ Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multi
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/iris.png)
-
-<!-- livebook:{"break_markdown":true} -->
-
 ### Features
 
 * sepal_length `float`
@@ -203,25 +199,17 @@ train_size = ceil(0.85 * sample_size)
 train_df = DataFrame.slice(expdf, 0, train_size)
 ```
 
-<hr style="background-color: #EED202;height: 15.0px;" />
+<hr style="background-color: #EED202; height: 5px;" />
 
-<!-- livebook:{"break_markdown":true} -->
+<img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 50px; display: block; margin-left: auto; margin-right: auto;" />
 
-<span style="color: #DEA731; font-size: 1.7rem; font-weight: 600;">
-<img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 50px; float: left; margin-top: 1px; margin-bottom: 10px; margin-right: 10px;" />CAUTION!
+<span style="font-size: 16px; font-style: italic;">
+This is a novice exercise meant as a warm up to putting the Nx ecosystem into action. You'll note the Iris dataset is very small.This method we are using is not suggestd for real world problems since splitting the dataset into a training and testing set reduces the size even more.
+
+Since the goal is to predict iris species using a dataset the model has not seen before, ideally we would have a much larger training and testing set. Remember back in an earlier lesson when we discussed the challenges of machine learning. Here we are at risk of **overfitting** the training data.
 </span>
 
-This is a novice exercise meant as a warm up to putting the Nx ecosystem into action. You'll note the Iris dataset is very small.
-
-This method we are using is not suggestd for real world problems since splitting the dataset into a training and testing set reduces the size even more.
-
-Since the goal is to predict iris species using a dataset the model has not seen before, ideally we would have a much larger training and testing set.
-
-Remember back in an earlier lesson when we discussed the challenges of machine learning. Here we are at risk of **overfitting** the training data.
-
-<!-- livebook:{"break_markdown":true} -->
-
-<hr style="background-color: #EED202;height: 15.0px;" />
+<hr style="background-color: #EED202;height: 5px;" />
 
 ## Features & Targets
 
@@ -240,6 +228,10 @@ target_set =
   train_df
   |> DataFrame.select(&(&1 == "species"), :keep)
 ```
+
+![](images/binary.png)
+
+<!-- livebook:{"break_markdown":true} -->
 
 ### Feature Normalization
 
@@ -281,7 +273,7 @@ features
 end)
 ```
 
-Now that we have the maximum value for the feature in the enumeration, use it normalize the values.
+Now we use the maximum value of the feature to normalize each of the values.
 
 Do do that, we want to transform the orignal Series into the value of the original value divided by the maximum value.
 
@@ -301,7 +293,7 @@ features
 end)
 ```
 
-These normalized can then be easily transformed into a tensor.
+Transform that into a tensor.
 
 ```elixir
 features
