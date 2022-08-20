@@ -30,6 +30,10 @@ After you've trained your model, test your model to look for over- or underfitti
 
 Let's review Neural Networks in Axon.
 
+### Activation
+
+Feel free to experiment with the code in the following sections and examples. Axon provides options for activation: :exp, :gelu, :linear, :relu, :sigmoid, :tanh, and more.
+
 ### dense
 
 Axon's `dense` is a functional implementation of a dense layer. It performs linear transformation on the input. It takes these paramters in these shapes:
