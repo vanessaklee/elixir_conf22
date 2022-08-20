@@ -114,10 +114,7 @@ The number of actual positive classes (`true_pos`) relative to the number of act
 
 Define the necessary values.
 
-```elixir
-epochs = 25
-loss_rate = 0.001
-```
+<!-- livebook:{"break_markdown":true} -->
 
 TODO explain
 
@@ -162,6 +159,7 @@ model =
   |> Axon.dropout(rate: dropout_rate)
   |> Axon.dense(5)
   |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:recall)
   |> Axon.Loop.run(df, %{}, epochs: epochs)
 ```
 
@@ -176,5 +174,6 @@ model =
   |> Axon.dropout(rate: dropout_rate)
   |> Axon.dense(5)
   |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:accuracy)
   |> Axon.Loop.run(df, %{}, epochs: epochs)
 ```

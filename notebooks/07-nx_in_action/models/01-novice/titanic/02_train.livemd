@@ -38,8 +38,6 @@ targets = DataFrame.select(df, &(&1 == "Survived"), :keep)
 features = DataFrame.select(df, &(&1 == "Survived"), :drop)
 
 batch_size = 200
-epochs = 3
-loss_rate = 0.001
 ```
 
 ```elixir
@@ -61,18 +59,35 @@ train_cols = cols - 1
 ```
 
 ```elixir
+epochs = 50
+loss = :mean_absolute_error
+learning_rate = 0.001
+dropout_rate = 0.1
+optimizer = Axon.Optimizers.adamw(learning_rate)
+
 model =
-  Axon.input({batch_size, train_cols}, "input")
-  |> Axon.dense(256)
-  |> Axon.relu()
-  |> Axon.dense(256)
-  |> Axon.relu()
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.dense(256)
-  |> Axon.relu()
-  |> Axon.dropout(rate: 0.1)
+  Axon.input({batch_size, train_cols}, "inputs")
+  |> Axon.dense(10)
+  |> Axon.dropout(rate: dropout_rate)
   |> Axon.dense(1)
-  |> Axon.dense(3, activation: :softmax)
+```
+
+```elixir
+model =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+```elixir
+model =
+  Axon.input({batch_size, train_cols}, "inputs")
+  |> Axon.dense(25)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(5)
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:accuracy)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
 ```
 
 Explain binary cross entropy
@@ -80,12 +95,12 @@ Explain binary cross entropy
 ```elixir
 model =
   Axon.input({batch_size, train_cols}, "input")
-  |> Axon.dense(256)
+  |> Axon.dense(25)
   |> Axon.relu()
-  |> Axon.dense(256)
+  |> Axon.dense(25)
   |> Axon.relu()
   |> Axon.dropout(rate: 0.3)
-  |> Axon.dense(256)
+  |> Axon.dense(25)
   |> Axon.relu()
   |> Axon.dropout(rate: 0.3)
   |> Axon.dense(1)
@@ -118,16 +133,6 @@ model_state =
 ```
 
 ```elixir
-model =
-  model
-  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(loss_rate))
-  # |> Axon.Loop.metric(:accuracy, "Accuracy")
-  # |> Axon.Loop.metric(:precision)
-  # |> Axon.Loop.metric(:recall)
-  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
-```
-
-```elixir
 defmodule LinReg do
   import Nx.Defn
 
@@ -154,8 +159,8 @@ defmodule LinReg do
 
   def train(data) do
     # match type & shape of inputs {4, 1} & targets {1}
-    init_feature = Nx.random_normal({200, 4}, 0.0, 0.1)
-    init_target = Nx.tensor([1], type: {:s, 64})
+    init_feature = Nx.random_normal({200, 6}, 0.0, 0.1)
+    init_target = Nx.tensor([1])
     init_params = {init_feature, init_target}
 
     for _ <- 1..@epochs, reduce: init_params do
@@ -174,37 +179,17 @@ end
 
 ```elixir
 model = LinReg.train(train_set)
-```
 
-```elixir
-model =
-  Axon.input({nil, 1, 891, 7}, "input")
-  |> Axon.conv(16, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.dropout(rate: 0.2)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.flatten()
-  |> Axon.dense(16, activation: :relu)
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.dense(8, activation: :relu)
-  |> Axon.dense(2, activation: :softmax)
-```
+test_set
+|> Enum.each(fn {input, truth} ->
+  prediction =
+    LinReg.predict(model, input)
+    |> scalar.()
 
-```elixir
-epochs = 30
-
-model =
-  model
-  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(0.000005))
-  # |> Axon.Loop.metric(:accuracy, "Accuracy")
-  |> Axon.Loop.run(inputs, %{}, epochs: epochs)
+  IO.inspect(
+    "Actual: #{scalar.(truth)}. Predicted: #{prediction}. Loss: #{scalar.(truth) - prediction}"
+  )
+end)
 ```
 
 ## Advanced Challenge
