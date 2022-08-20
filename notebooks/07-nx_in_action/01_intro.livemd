@@ -28,7 +28,7 @@ After you've trained your model, test your model to look for over- or underfitti
 
 ## Neural Networks & Axon
 
-Let's review Neural Networs in Axon.
+Let's review Neural Networks in Axon.
 
 ### dense
 
@@ -51,6 +51,10 @@ Since `kernel` and `bias` are typically learnable parameters, they are trained u
 A gradient method is a type of algorithm to solve problems of form, in our class a slope. In this lesson we will see use a gradient descent method to determine the loss function. 
 
 Gradient descent is used to find the minimum value for a function. You begin with randam values for the parameters and then take small steps in the direction of the slope at each iteration. 
+
+### dropout
+
+Dropout helps prevent overfitting. It does this by preventing the model from relying too much on certain connections. It takes a dropout `rate` to use to determine the probability `rate` and then scales the input tensor based on it. 
 
 ## Next Steps or "what we don't have time to cover here"
 
