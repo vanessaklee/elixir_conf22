@@ -18,70 +18,107 @@ Mix.install([
 
 Can we prediect Iris species using a classification model?
 
-## Dataset
-
-The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets held within the Nx ecosystem (`Explorer` and `Scidata`) so we can interact with it easily.
-
-It includes three iris species. There are 50 samples of each species along with additional properties. One flower species is linearly separable from the other two, but the other two are not linearly separable from each other.
-
-<span style="font-size: 14px;">
-Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multiple measurements in taxonomic problems. Annals of Eugenics.
-</span>
-
-![](images/iris.png)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Features
-
-* sepal_length `float`
-* sepal_width `float`
-* petal_length `float`
-* petal_width `float`
-* species `string`
-
-### Observations
-
-* There are 150 observations with 4 features each
-* There are no null values
-* There are 50 observations of each species (setosa, versicolor, virginica)
-
 ## Load
 
-With the use of Explorer, we can easily load the iris data into a dataframe.
+Load the data from Scidata.
 
 ```elixir
 {features, targets} = Scidata.Iris.download()
 ```
 
-```elixir
-Enum.count(features) |> IO.inspect(label: "features")
-Enum.count(features) |> IO.inspect(label: "targets")
-:ok
-```
+Normalize the data as we did in the last section.
 
 ```elixir
 feature_max =
   Nx.tensor(features)
   |> Nx.reduce_max(axes: [0], keep_axes: true)
-```
 
-```elixir
 inputs =
   Enum.map(features, fn feature ->
     Nx.divide(Nx.tensor(feature), feature_max)
   end)
-```
 
-```elixir
 targets =
   Enum.map(targets, fn t ->
     Nx.tensor([t])
   end)
+
+df = Enum.zip([inputs, targets])
+```
+
+## Train
+
+Define the necessary values.
+
+```elixir
+epochs = 30
+input_shape = {1, 4}
+
+learning_rate = 0.001
+dropout_rate = 0.1
+
+optimizer = Axon.Optimizers.adamw(learning_rate)
+loss = :mean_absolute_error
+```
+
+TODO explain
+
+```elixir
+model =
+  Axon.input(input_shape, "inputs")
+  |> Axon.dense(10)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(1)
 ```
 
 ```elixir
-df = Enum.zip([inputs, targets])
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.run(df, %{}, epochs: epochs)
+```
+
+```elixir
+model =
+  Axon.input(input_shape, "inputs")
+  |> Axon.dense(25)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(5)
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:recall)
+  |> Axon.Loop.run(df, %{}, epochs: epochs)
+```
+
+```elixir
+# epochs = 15
+
+model =
+  Axon.input(input_shape, "inputs")
+  |> Axon.dense(75)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(50)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(5)
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:accuracy)
+  |> Axon.Loop.run(df, %{}, epochs: epochs)
+```
+
+```elixir
+model =
+  Axon.input(input_shape, "input")
+  |> Axon.flatten()
+  |> Axon.dense(128, activation: :relu)
+  |> Axon.dense(10, activation: :softmax)
+```
+
+```elixir
+# trained_model =
+#   model
+#   |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+#   |> Axon.Loop.metric(:accuracy, "Accuracy")
+#   # |> Axon.Loop.metric(:precision)
+#   # |> Axon.Loop.metric(:recall)
+#   |> Axon.Loop.run(df, %{}, epochs: epochs)
 ```
 
 ## Metrics
@@ -124,73 +161,6 @@ The number of actual positive classes (`true_pos`) relative to the number of act
 | **Prediction: Yes hot dog!** | Hot Dog (food)      | Hot Dog (Dachshund) |
 | **Prediction: No hot dog**   | Chili Dog (food)    | Pizza (food)        |
 
-## Train
-
-Define the necessary values.
-
-<!-- livebook:{"break_markdown":true} -->
-
-TODO explain
-
-```elixir
-epochs = 30
-learning_rate = 0.001
-loss = :mean_absolute_error
-dropout_rate = 0.1
-optimizer = Axon.Optimizers.adamw(learning_rate)
-
-model =
-  Axon.input({1, 4}, "inputs")
-  |> Axon.dense(10)
-  |> Axon.dropout(rate: dropout_rate)
-  |> Axon.dense(1)
-
-# model =
-#   Axon.input({1, 4}, "input")
-#   |> Axon.flatten()
-#   |> Axon.dense(128, activation: :relu)
-#   |> Axon.dense(10, activation: :softmax)
-```
-
-```elixir
-model
-|> Axon.Loop.trainer(loss, optimizer)
-|> Axon.Loop.run(df, %{}, epochs: epochs)
-
-# trained_model =
-#   model
-#   |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
-#   |> Axon.Loop.metric(:accuracy, "Accuracy")
-#   # |> Axon.Loop.metric(:precision)
-#   # |> Axon.Loop.metric(:recall)
-#   |> Axon.Loop.run(df, %{}, epochs: epochs)
-```
-
-```elixir
-model =
-  Axon.input({1, 4}, "inputs")
-  |> Axon.dense(25)
-  |> Axon.dropout(rate: dropout_rate)
-  |> Axon.dense(5)
-  |> Axon.Loop.trainer(loss, optimizer)
-  |> Axon.Loop.metric(:recall)
-  |> Axon.Loop.run(df, %{}, epochs: epochs)
-```
-
-```elixir
-# epochs = 15
-
-model =
-  Axon.input({1, 4}, "inputs")
-  |> Axon.dense(75)
-  |> Axon.dropout(rate: dropout_rate)
-  |> Axon.dense(50)
-  |> Axon.dropout(rate: dropout_rate)
-  |> Axon.dense(5)
-  |> Axon.Loop.trainer(loss, optimizer)
-  |> Axon.Loop.metric(:accuracy)
-  |> Axon.Loop.run(df, %{}, epochs: epochs)
-```
 ## Train
 
 ### Classification Algorithm
