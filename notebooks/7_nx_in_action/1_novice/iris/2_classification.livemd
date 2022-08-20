@@ -16,7 +16,7 @@ Mix.install([
 
 ## Question
 
-Can we prediect Iris species using a classification model?
+Can we predict Iris species using a classification model?
 
 ## Load
 

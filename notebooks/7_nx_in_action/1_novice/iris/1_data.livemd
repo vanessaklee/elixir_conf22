@@ -29,6 +29,10 @@ Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multi
 
 <!-- livebook:{"break_markdown":true} -->
 
+![](images/iris.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
 ### Features
 
 * sepal_length `float`
@@ -44,6 +48,8 @@ Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multi
 * There are 50 observations of each species (setosa, versicolor, virginica)
 
 ## Load: Scidata
+
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 55px; float: left; margin-right: 40px;" />
 
 The Nx ecosystem library, Scidata, provides the Iris dataset for us. It is returned as a tuple of features (inputs) and targets (classes).
 
@@ -83,7 +89,9 @@ df = Enum.zip([inputs, targets])
 
 ## Load: Explorer
 
-The Nx ecosystem library, Explorer, also provides the Iris dataset so it can be easily loaded into a dataframe.
+<img src="https://raw.githubusercontent.com/elixir-nx/explorer/main/explorer.png" alt="Brain icon" style="width: 200px; float: left; margin-right: 20px;" />
+
+The Iris dataset is also easily available from the Nx ecosystem library, Explorer. Explorer provides the Iris dataset differently, but such that it can be readily loaded into a dataframe.
 
 ```elixir
 alias Explorer.DataFrame
@@ -103,6 +111,8 @@ DataFrame.n_columns(expdf)
 ```
 
 ## Visualize
+
+<img src="https://static.thenounproject.com/png/5094962-200.png" style="width: 75px; float: left; margin-right: 20px;" />
 
 To visualize the data, use Explorer to sample a few rows of the Dataframe with `sample/3` and print it out in a table view with `table/2`
 
@@ -145,12 +155,20 @@ VegaLite.new(width: 750, height: 350)
 
 There are exactly 50 of each of the three Species features; we have a balanced dataset.
 
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+<img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
+
 ##### Types
 
 * _Quantitative_ - numerical data
 * _Nominal_ - categorical data without a set order or scale
 * _Ordinal_ - categorial data with a set order or scale
 * _Temporal_ - data which represents a state in time
+
+<hr style="background-color: #800080;height: 5.0px;" />
 
 <!-- livebook:{"break_markdown":true} -->
 
