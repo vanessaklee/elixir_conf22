@@ -92,5 +92,4 @@ graph TD;
 
 <!-- livebook:{"break_markdown":true} -->
 
-TODO next
-TODO previous
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](2_regression.livemd)

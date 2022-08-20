@@ -57,3 +57,13 @@ TODO: brain break needed here? data analysis task? The haberman dataset analysis
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
+
+<hr style="background-color: #800080;height: 15.0px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](2_regression.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](4_unsupervised.livemd)
+
+

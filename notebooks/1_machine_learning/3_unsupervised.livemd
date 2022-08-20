@@ -68,6 +68,6 @@ We will go in-depth on different algorithms used in unsupervised learning in the
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](01_supervised.livemd)
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](2_supervised.livemd)
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](03_reinforcement.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](4_reinforcement.livemd)

@@ -40,6 +40,6 @@ Reinforcement Learning isn't the best choice if the cost of using trial and erro
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](02_unsupervised.livemd)
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_unsupervised.livemd)
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](../02-algorithms_and_models/00_intro.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](../2_algorithms_models/1_intro.livemd)
