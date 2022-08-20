@@ -100,15 +100,15 @@ graph TD;
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Algorithms
+### ML Algorithms
 
-An algorithm is a mathematical method designed to find patterns in data. ML algorithms draw on linear algebra, statistics, and calculus. They can be implemented in a range of different programming languages.
+An algorithm is a mathematical process upon which following specific steps lead to an expected outcome. In Machine Learning, algorithms draw upon linear algebra, statistics and calculus to weigh the probability of multiple outcomes. They can be implemented in a variety of different languages.
 
-Basically, algorithms are procedures run on data. Models are output by algorithms and are made up of model data and a prediction algorithm.
+Essentially, ML algorithms are functions with an input of data and an output of predictive models.
 
 Examples of well-known algorithms are:
 
-* Regression
+* Regression (linear, logistic, etc.)
 * Classification
 * Clustering
 * Decision Trees
