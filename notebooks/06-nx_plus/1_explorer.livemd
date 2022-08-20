@@ -1,4 +1,4 @@
-# Explorer
+# Nx / Explorer
 
 ```elixir
 Mix.install([
@@ -9,13 +9,11 @@ Mix.install([
 
 ## Goal
 
-To provide a broad overview of the Explorer library and a detailed look at Explorer's Series and Dataframes.
+To provide an overview of the Explorer library and a detailed look at Explorer's Series and Dataframes.
 
 ## Introduction
 
 Explorer brings series and dataframes to the Nx ecosystem. Series are one-dimensional and dataframes are two-dimensional. Both are a standard data structures in EDA (exploratory data analytics).
-
-### Overview
 
 A Dataframe is a two-dimensional table. The columns and rows of a dataframe similar to those in databases like SQL. The Explorer library exposes dataframes and dataframe manipulation through an API. If you are familiar with `tidyverse` or `pandas` then the Explorer API will be familiar.
 

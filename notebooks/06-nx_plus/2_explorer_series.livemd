@@ -1,4 +1,4 @@
-# Explorer: Series
+# Nx / Explorer / Series
 
 ```elixir
 Mix.install([

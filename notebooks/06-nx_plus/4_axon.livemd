@@ -1,8 +1,15 @@
-# MNIST
+# Nx / Axon
 
-## Introduction
+```elixir
+Mix.install([
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"}
+])
+```
 
-This livebook will walk you through training a basic neural network using Axon, accelerated by the EXLA compiler. We'll be working on the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset which is a dataset of handwritten digits with corresponding labels. The goal is to train a model that correctly classifies these handwritten digits with a single label [0-9].
+## Goal
+
+To provide an overview of the Axon library, which provides Nx-powered Neural Networks for Elixir. It demonstrates how to use Axon to train a basic neural network. We'll be working on the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset which is a dataset of handwritten digits with corresponding labels. The goal is to train a model that correctly classifies these handwritten digits with a single label [0-9].
 
 ## Dependencies
 

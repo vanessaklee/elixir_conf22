@@ -1,4 +1,4 @@
-# Explorer: DataFrame
+# Nx / Explorer / DataFrames
 
 ```elixir
 Mix.install([
