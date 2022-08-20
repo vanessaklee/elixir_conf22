@@ -15,3 +15,4 @@ Download and install the Elixir [Livebook App](https://livebook.dev/#install). R
 
 TODO: finish setup slides beyond the "notebooks" selection once the chater names are prettier
 
+Sign
