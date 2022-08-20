@@ -1,0 +1,27 @@
+# Nx in Action: ML with Elixir
+
+```elixir
+
+```
+
+## Framework
+
+### Define the Problem
+
+What is the problem you want to solve? What is the quesition you want to answer?
+
+### Gather the Data
+
+Find a relevant dataset. 
+
+### Prepare & Analyze
+
+Take a good look at the data. Look for potential problems, patterns, classifications, correlations and comparisons. Turn “abnormal” data into “normalized” data. Normalizing includes extraction, loading, and data cleaning to identify aberrant, missing, or outliers. 
+
+### Model Data (Train)
+
+Use your problem and dataset to determine the best algorithms. The wrong model can lead to poor performance.
+
+### Test 
+
+After you've trained your model, test your model to look for over- or underfitting. 

@@ -1,0 +1,109 @@
+# Nx in Action: Novice
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.1.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.2.1"},
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"}
+])
+```
+
+## Question
+
+Can we prediect Iris species?
+
+![](images/iris.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+## Load
+
+With the use of Explorer, we can easily load the iris data into a dataframe.
+
+```elixir
+alias Explorer.DataFrame
+alias Explorer.Series
+
+csv = "elixir_conf/data/iris/normalized/train.csv"
+df = DataFrame.from_csv!(csv)
+```
+
+## Metrics
+
+#### Accuracy
+
+_How accurate is the model at making predictions on unseen data?_
+
+The number of correct predictions relative to the total number of predictions
+
+`(true_pos + true_neg) / (true_pos + true_neg + false_pos + false_neg)`
+
+#### Precision
+
+_Out of all positive predictions made by the model, what percentage are truly positive?_
+
+The number of actual positive classes (`true_pos`) found in the dataset relative to the number of actual positive classes (`true_pos`) plus classes that were falsely identified as positive (`false_pos`).
+
+(true_pos) / (true_pos + false_pos)
+
+#### Recall
+
+_Of all of the actual positive classes in the dataset, how many of them did the model recall?_
+
+The number of actual positive classes (`true_pos`) relative to the number of actual positive classes (`true_pos`) plus classes that were falsely identified as negative (`false_neg`) — those misidentified as negative.
+
+`(true_pos) / (true_pos + false_neg)`
+
+## Train
+
+Define the necessary values.
+
+```elixir
+targets = DataFrame.select(df, &(&1 == "species"), :keep)
+features = DataFrame.select(df, &(&1 == "species"), :drop)
+
+batch_size = 100
+epochs = 25
+loss_rate = 0.001
+```
+
+```elixir
+to_tensor = fn df ->
+  df
+  |> Explorer.DataFrame.names()
+  |> Enum.map(&(Explorer.Series.to_tensor(df[&1]) |> Nx.new_axis(-1)))
+  |> Nx.concatenate(axis: 1)
+end
+
+targets = to_tensor.(targets)
+features = to_tensor.(features)
+
+batched_targets = Nx.to_batched_list(targets, batch_size)
+batched_features = Nx.to_batched_list(features, batch_size)
+train_set = Stream.zip(batched_features, batched_targets)
+{_rows, cols} = DataFrame.shape(df)
+train_cols = cols - 1
+```
+
+TODO explain categorical cross entropy
+
+```elixir
+model =
+  Axon.input({batch_size, train_cols}, "input")
+  |> Axon.flatten()
+  |> Axon.dense(128, activation: :relu)
+  |> Axon.dense(10, activation: :softmax)
+```
+
+```elixir
+trained_model =
+  model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+  |> Axon.Loop.metric(:accuracy, "Accuracy")
+  # |> Axon.Loop.metric(:precision)
+  # |> Axon.Loop.metric(:recall)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```

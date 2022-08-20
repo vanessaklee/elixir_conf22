@@ -1,413 +1,54 @@
-# Nx in Action / Novice / Train
+# Nx in Action/ Novice/ Iris / Classification
 
 ```elixir
 Mix.install([
   {:axon, "~> 0.1.0"},
   {:exla, "~> 0.2.2"},
   {:nx, "~> 0.2.1"},
-  {:explorer, "~> 0.2.0"}
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"},
+  {:req, "~> 0.3.0"},
+  {:scidata, "~> 0.1.9"},
+  {:vega_lite, "~> 0.1.4"}
 ])
 ```
 
 ## Question
 
-Can we predict passangers who will survive the Titanic disaster?
+Can we prediect Iris species?
+
+## Dataset
+
+The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets held within the Nx ecosystem (`Explorer` and `Scidata`) so we can interact with it easily.
+
+It includes three iris species. There are 50 samples of each species along with additional properties. One flower species is linearly separable from the other two, but the other two are not linearly separable from each other.
+
+<span style="font-size: 14px;">
+Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multiple measurements in taxonomic problems. Annals of Eugenics.
+</span>
+
+![](images/iris.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/titanic.png)
+### Features
 
-<!-- livebook:{"break_markdown":true} -->
+* sepal_length `float`
+* sepal_width `float`
+* petal_length `float`
+* petal_width `float`
+* species `string`
+
+### Observations
+
+* There are 150 observations with 4 features each
+* There are no null values
+* There are 50 observations of each species (setosa, versicolor, virginica)
 
 ## Load
 
-With the use of Explorer, load the normalized training set you saved in the last section.
-
-```elixir
-alias Explorer.DataFrame
-alias Explorer.Series
-
-csv = "elixir_conf/data/titanic/normalized/train.csv"
-df = DataFrame.from_csv!(csv)
-
-csv_test = "elixir_conf/data/titanic/normalized/test.csv"
-df_test = DataFrame.from_csv!(csv)
-```
-
-```elixir
-DataFrame.shape(df)
-```
-
-```elixir
-age_values = df["Age"]
-```
-
-```elixir
-age_values |> Series.nil?() |> Series.to_list() |> Enum.frequencies()
-```
-
-```elixir
-# check all the columns for nils
-DataFrame.names(df)
-|> Enum.map(fn name ->
-  df[name]
-  |> Series.nil?()
-  |> Series.count()
-  |> DataFrame.to_columns()
-  |> case do
-    %{"values" => [false]} -> nil
-    %{"counts" => [_, nils]} -> IO.inspect("#{name} has #{nils} nil values")
-  end
-end)
-
-:ok
-```
-
-```elixir
-# Dropping Columns which are not usefull
-# Drop Name, Ticket, Cabin, Embarked, PassengerId
-# Fill in nils for age 
-
-df = DataFrame.select(df, ["Survived", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare"])
-
-df = DataFrame.select(df, ["Survived", "Pclass", "Sex", "Age", "Fare"])
-```
-
-```elixir
-s =
-  Series.transform(df["Sex"], fn v ->
-    if v == "female", do: 0, else: 1
-  end)
-
-df = Explorer.DataFrame.mutate(df, Sex: s)
-```
-
-that gets rid of too much data
-instead use `fill_missing`
-
-we have options
-
-##### Strategies
-
-* :forward - replace nil with the previous value
-* :backward - replace nil with the next value
-* :max - replace nil with the series maximum
-* :min - replace nil with the series minimum
-* :mean - replace nil with the series mean
-
-Ther are too many missing ages to go with mean; let's use the :forward to replace missing ages.
-
-```elixir
-df = Explorer.DataFrame.mutate(df, Age: df["Age"] |> Series.fill_missing(:forward))
-```
-
-But certain columns, like cabin, are too difficult to normalize (i.e. "C123") and seem unlike to influence accurancy. Remove it and PassengerID
-
-```elixir
-targets = DataFrame.select(df, &(&1 == "Survived"), :keep)
-features = DataFrame.select(df, &(&1 == "Survived"), :drop)
-```
-
-```elixir
-to_tensor = fn df ->
-  df
-  |> Explorer.DataFrame.names()
-  |> Enum.map(&(Explorer.Series.to_tensor(df[&1]) |> Nx.new_axis(-1)))
-  |> Nx.concatenate(axis: 1)
-end
-
-targets = to_tensor.(targets)
-features = to_tensor.(features)
-```
-
-```elixir
-batched_targets = Nx.to_batched_list(targets, 200)
-batched_features = Nx.to_batched_list(features, 200)
-batched = Stream.zip(batched_features, batched_targets)
-```
-
-```elixir
-max = Nx.reduce_max(features, axes: [0], keep_axes: true)
-
-normalize = fn {batch, target} ->
-  {Nx.divide(batch, max), target}
-end
-
-training_set = batched |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
-```
-
-```elixir
-model =
-  Axon.input({200, 4}, "input")
-  |> Axon.dense(256)
-  |> Axon.relu()
-  |> Axon.dense(256)
-  |> Axon.relu()
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.dense(256)
-  |> Axon.relu()
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.dense(1)
-  |> Axon.dense(3, activation: :softmax)
-```
-
-```elixir
-epochs = 50
-loss_rate = 0.001
-
-trained_model =
-  model
-  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(loss_rate))
-  # |> Axon.Loop.metric(:accuracy, "Accuracy")
-  # |> Axon.Loop.metric(:precision)
-  # |> Axon.Loop.metric(:recall)
-  |> Axon.Loop.run(training_set, %{}, epochs: epochs)
-```
-
-```elixir
-optimizer = Axon.Optimizers.adam(1.0e-3)
-
-trained_model =
-  model
-  |> Axon.Loop.trainer(:binary_cross_entropy, :sgd)
-  |> Axon.Loop.metric(:precision)
-  |> Axon.Loop.metric(:recall)
-  |> Axon.Loop.run(training_set, %{}, epochs: epochs)
-```
-
-```elixir
-defmodule LinReg do
-  import Nx.Defn
-
-  @epochs 100
-  @learning_rate 0.02
-
-  defn predict({m, b}, x) do
-    m * x + b
-  end
-
-  defn loss(params, x, y) do
-    y_pred = predict(params, x)
-    Nx.mean(Nx.power(y - y_pred, 2))
-  end
-
-  defn update({m, b} = params, inp, tar) do
-    {grad_m, grad_b} = grad(params, &loss(&1, inp, tar))
-
-    {
-      m - grad_m * @learning_rate,
-      b - grad_b * @learning_rate
-    }
-  end
-
-  def train(data) do
-    # match type & shape of inputs {4, 1} & targets {1}
-    init_feature = Nx.random_normal({200, 4}, 0.0, 0.1)
-    init_target = Nx.tensor([1], type: {:s, 64})
-    init_params = {init_feature, init_target}
-
-    for _ <- 1..@epochs, reduce: init_params do
-      acc ->
-        data
-        |> Enum.reduce(
-          acc,
-          fn {x, y}, current_params ->
-            IO.inspect(update(current_params, x, y), label: "gradient")
-          end
-        )
-    end
-  end
-end
-```
-
-```elixir
-model = LinReg.train(training_set)
-```
-
-```elixir
-# inputs = features
-# |> DataFrame.names()
-# |> Enum.map(fn name ->
-#   &(Series.to_tensor(features[&1])
-#     |> Nx.new_axis(-1))
-# end)
-# |> Nx.concatenate(axis: 1)
-
-max =
-  features
-  |> DataFrame.names()
-  |> Enum.map(fn name ->
-    Series.to_tensor(features[name])
-    |> Nx.reduce_max(axes: [0], keep_axes: true)
-  end)
-
-normalize = fn {feature, target} ->
-  IO.inspect(max, label: "max value of each feature")
-  IO.inspect(feature, label: "max value of each feature")
-  normalized = Nx.divide(feature, max)
-  {normalized, target}
-end
-
-inputs = Stream.map(Stream.zip(features, targets), &Nx.Defn.jit(normalize, [&1]))
-
-# inputs |> Nx.to_batched_list(30)
-
-# train_df = Stream.zip(inputs, targets)
-```
-
-```elixir
-model =
-  Axon.input({nil, 1, 891, 7}, "input")
-  |> Axon.conv(16, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.conv(32, kernel_size: {3, 3}, strides: 1, padding: :same, activation: :relu)
-  |> Axon.dropout(rate: 0.2)
-  |> Axon.max_pool(kernel_size: {2, 2}, strides: 2, padding: :same)
-  |> Axon.flatten()
-  |> Axon.dense(16, activation: :relu)
-  |> Axon.dropout(rate: 0.1)
-  |> Axon.dense(8, activation: :relu)
-  |> Axon.dense(2, activation: :softmax)
-```
-
-```elixir
-epochs = 30
-
-trained_model =
-  model
-  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(0.000005))
-  # |> Axon.Loop.metric(:accuracy, "Accuracy")
-  |> Axon.Loop.run(inputs, %{}, epochs: epochs)
-```
-
-```elixir
-# normalize
-# Sex: female = 0, male = 1
-# Embarked: S = 0, C = 1, Q = 2
-features
-|> DataFrame.names()
-|> Enum.map(fn name ->
-  case name do
-    "Sex" ->
-      Series.transform(features[name], fn v ->
-        if v == "female", do: 0, else: 1
-      end)
-
-    "Embarked" ->
-      Series.transform(features[name], fn v ->
-        if v == "S", do: 0, else: if(v == "C", do: 1, else: 2)
-      end)
-
-    _ ->
-      s = Series.to_tensor(features[name])
-      max = Nx.reduce_max(s, axes: [0], keep_axes: true)
-
-      Series.transform(features[name], fn v ->
-        Nx.divide(v, max)
-        |> Nx.to_flat_list()
-        |> List.first()
-      end)
-      |> Series.to_tensor()
-      |> Nx.new_axis(-1)
-  end
-end)
-|> Enum.map(
-  &(Series.to_tensor(features[&1])
-    |> Nx.new_axis(-1))
-)
-|> Nx.concatenate(axis: 1)
-
-# inputs = Enum.map(features, fn feature ->  
-#   Nx.divide(Nx.tensor(feature), feature_max)
-# end)
-
-# features = to_tensor.(features) |> IO.inspect(label: "features")
-# targets = to_tensor.(targets) |> IO.inspect(label: "targets")
-
-# s = Series.to_tensor(features[name])
-# IO.inspect(name, label: "name")
-# max = Nx.reduce_max(s, axes: [0], keep_axes: true)
-# Series.transform(features[name], fn v ->
-#   Nx.divide(v, max) |> IO.inspect(label: "n")
-#   |> Nx.to_flat_list()
-#   |> List.first()
-# end)
-# end)
-
-# features = to_tensor.(features) |> IO.inspect(label: "features")
-```
-
-```elixir
-feature_max =
-  Nx.tensor(features)
-  |> Nx.reduce_max(axes: [0], keep_axes: true)
-```
-
-```elixir
-# Normalize Sex, Embark
-# Embarked
-
-# C = Cherbourg
-# Q = Queenstown
-# S = Southampton
-
-features = DataFrame.select(df, &(&1 == "Survived"), :drop) |> IO.inspect(label: "features")
-targets = DataFrame.select(df, &(&1 == "Survived"), :keep) |> IO.inspect(label: "targets")
-
-feature_max =
-  Nx.tensor(features)
-  |> Nx.reduce_max(axes: [0], keep_axes: true)
-
-# to_tensor = fn data_frame ->
-#   data_frame
-#   |> DataFrame.names()
-#   |> Enum.map(
-#     &(Series.to_tensor(data_frame[&1])
-#       |> Nx.new_axis(-1))
-#   )
-#   |> Nx.concatenate(axis: 1)
-# end
-
-# inputs = Enum.map(features, fn feature ->  
-#   Nx.divide(Nx.tensor(feature), feature_max)
-# end)
-
-# features = to_tensor.(features) |> IO.inspect(label: "features")
-# targets = to_tensor.(targets) |> IO.inspect(label: "targets")
-
-# feature_max =
-# Nx.reduce_max(features, axes: [0], keep_axes: true)
-# |> IO.inspect(label: "max value of each feature")
-
-# batch = Stream.zip(features, targets)
-
-# normalize = fn {batch, target} ->
-#   normalized_feature = Nx.divide(batch, train_max)
-#   {normalized_feature, target}
-# end
-
-# feature_max = 
-#   Nx.tensor(features)
-#   |> Nx.reduce_max(axes: [0], keep_axes: true)
-
-# inputs = Enum.map(features, fn feature ->  
-#   Nx.divide(Nx.tensor(feature), feature_max)
-# end)
-```
-
-```elixir
-train_df_inputs =
-  DataFrame.select(train_df, &(&1 == "class"), :drop) |> IO.inspect(label: "features")
-
-train_df_targets =
-  DataFrame.select(train_df, &(&1 == "class"), :keep) |> IO.inspect(label: "targets")
-```
+With the use of Explorer, we can easily load the iris data into a dataframe.
 
 ```elixir
 {features, targets} = Scidata.Iris.download()
@@ -440,200 +81,36 @@ targets =
 ```
 
 ```elixir
-data = Enum.zip([inputs, targets])
+df = Enum.zip([inputs, targets])
 ```
 
-```elixir
-set_size = Enum.count(data)
-train_size = ceil(0.85 * set_size)
-```
+## Metrics
 
-```elixir
-data = Enum.shuffle(data)
-train_set = Enum.slice(data, 0, train_size)
-test_set = Enum.slice(data, train_size, set_size - train_size)
-```
+#### Accuracy
 
-```elixir
-scalar = fn tensor ->
-  tensor |> Nx.to_flat_list() |> List.first()
-end
-```
+_How accurate is the model at making predictions on unseen data?_
 
-```elixir
-defmodule LinReg do
-  import Nx.Defn
+The number of correct predictions relative to the total number of predictions
 
-  @epochs 100
-  @learning_rate 0.02
+`(true_pos + true_neg) / (true_pos + true_neg + false_pos + false_neg)`
 
-  defn predict({m, b}, x) do
-    m * x + b
-  end
+#### Precision
 
-  defn loss(params, x, y) do
-    y_pred = predict(params, x)
-    Nx.mean(Nx.power(y - y_pred, 2))
-  end
+_Out of all positive predictions made by the model, what percentage are truly positive?_
 
-  defn update({m, b} = params, inp, tar) do
-    {grad_m, grad_b} = grad(params, &loss(&1, inp, tar))
+The number of actual positive classes (`true_pos`) found in the dataset relative to the number of actual positive classes (`true_pos`) plus classes that were falsely identified as positive (`false_pos`).
 
-    {
-      m - grad_m * @learning_rate,
-      b - grad_b * @learning_rate
-    }
-  end
+(true_pos) / (true_pos + false_pos)
 
-  def train(data) do
-    # match type & shape of inputs {4, 1} & targets {1}
-    init_feature = Nx.random_normal({4, 1}, 0.0, 0.1)
-    init_target = Nx.tensor([1], type: {:s, 64})
-    init_params = {init_feature, init_target}
+#### Recall
 
-    for _ <- 1..@epochs, reduce: init_params do
-      acc ->
-        data
-        |> Enum.reduce(
-          acc,
-          fn {x, y}, current_params ->
-            update(current_params, x, y)
-          end
-        )
-    end
-  end
-end
-```
+_Of all of the actual positive classes in the dataset, how many of them did the model recall?_
 
-```elixir
-model = LinReg.train(train_set)
+The number of actual positive classes (`true_pos`) relative to the number of actual positive classes (`true_pos`) plus classes that were falsely identified as negative (`false_neg`) — those misidentified as negative.
 
-test_set
-|> Enum.each(fn {input, truth} ->
-  prediction =
-    LinReg.predict(model, input)
-    |> scalar.()
+`(true_pos) / (true_pos + false_neg)`
 
-  IO.inspect(
-    "Actual: #{scalar.(truth)}. Predicted: #{prediction}. Loss: #{scalar.(truth) - prediction}"
-  )
-end)
-```
 
-```elixir
-model = LinReg.train(data)
-
-data
-|> Enum.each(fn {input, truth} ->
-  prediction =
-    LinReg.predict(model, input)
-    |> scalar.()
-
-  IO.inspect(
-    "Actual: #{scalar.(truth)}. Predicted: #{prediction}. Loss: #{scalar.(truth) - prediction}"
-  )
-end)
-```
-
-```elixir
-import Nx.Defn
-
-scalar = fn tensor ->
-  tensor |> Nx.to_flat_list() |> List.first()
-end
-
-{features, targets} = Scidata.Iris.download()
-
-feature_max = Nx.reduce_max(Nx.tensor(features), axes: [0], keep_axes: true)
-
-inputs =
-  Enum.map(features, fn feature ->
-    Nx.divide(Nx.tensor(feature), feature_max)
-  end)
-
-targets =
-  Enum.map(targets, fn t ->
-    Nx.tensor([t])
-  end)
-
-data = Enum.zip([inputs, targets])
-
-# match shape of inputs {4, 1}
-init_feature = Nx.random_normal({4, 1}, 0.0, 0.1)
-# match shape of targets {1, 1}
-init_target = Nx.tensor([1], type: {:s, 64})
-
-init_input = {init_feature, init_target}
-
-model = LinReg.train(150, data, init_input)
-
-# make some predictions
-data
-|> Enum.each(fn {input, truth} ->
-  prediction =
-    LinReg.predict(model, input)
-    |> scalar.()
-
-  IO.inspect(
-    "Actual: #{scalar.(truth)}. Predicted: #{prediction}. Loss: #{scalar.(truth) - prediction}"
-  )
-end)
-```
-
-```elixir
-scalar = fn tensor ->
-  tensor |> Nx.to_flat_list() |> List.first()
-end
-
-target_m = :rand.normal(0.0, 10.0)
-target_b = :rand.normal(0.0, 5.0)
-target_fn = fn x -> target_m * x + target_b end
-
-data =
-  Stream.repeatedly(fn -> for _ <- 1..32, do: :rand.uniform() * 10 end)
-  |> Stream.map(fn x -> Enum.zip(x, Enum.map(x, target_fn)) end)
-
-IO.puts("Target m: #{target_m}\tTarget b: #{target_b}\n")
-{m, b} = LinReg.train(100, data)
-IO.puts("Learned m: #{scalar.(m)}\tLearned b: #{scalar.(b)}")
-```
-
-```elixir
-import Nx.Defn
-
-{features, targets} = Scidata.Iris.download()
-
-feature_max = Nx.reduce_max(Nx.tensor(features), axes: [0], keep_axes: true)
-
-inputs =
-  Enum.map(features, fn feature ->
-    Nx.divide(Nx.tensor(feature), feature_max)
-  end)
-
-targets =
-  Enum.map(targets, fn t ->
-    Nx.tensor([t], type: {:f, 32})
-    |> Nx.reshape({1, 1})
-  end)
-
-data = Enum.zip([inputs, targets])
-
-# match shape of inputs {4, 1}
-weights = Nx.random_normal({4, 1}, 0.0, 0.1)
-# match shape of targets {1, 1}
-bias = Nx.random_normal({1, 1}, 0.0, 0.1)
-
-wb = {weights, bias}
-
-{m, b} =
-  Enum.reduce(1..25, wb, fn epoch, params ->
-    Enum.reduce(data, params, fn {input, target}, {weight, bias} ->
-      LinReg.update({weight, bias}, input, target)
-    end)
-  end)
-
-IO.puts("Learned m: #{LinReg.scalar(m)}\tLearned b: #{LinReg.scalar(b)}")
-```
 
 The Dataframe `shape/1` returns a tuple of shape of the data: `{rows, columns}`:
 
