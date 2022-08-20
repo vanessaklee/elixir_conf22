@@ -2,41 +2,7 @@
 
 ## Goal
 
-After an introduction to machine learning we will define and train a machine learning model to solve a simple TBD problem using a publicly available dataset. This document covers the script for introducing neural networks.
-
-### Overview
-
-Neural Networks take in data (inputs), recognize the patterns in that data, and then predict the outputs for a new set of similar data. Based on the structure of the human brain.
-
-flowchart LR
-
-```
-Machine Learning --> Neural Networks --> Deep Learning
-```
-
-<!-- livebook:{"break_markdown":true} -->
-
-#### Deep Learning
-
-Deep learning refers to extracting and transforming data through multiple layers of neural networks where each layer takes inputs from the previous layer and refines it progressively. Algorithms train the layers to minimize errors and increase accuracy.
-
-<!-- livebook:{"break_markdown":true} -->
-
-### History
-
-1943: Warren McCulloch (neurophysiologist) and Walter Pitts (logician) created a mathematical model of an artificial neuron.
-
-Rosenblatt, Frank: (date??) built on that by building an actual machine, but the machine was not able to learn a simple mathematical function (i.e. xor) (see Marvin Minski & Seymour Papert's book Perceptrons [MIT] (citation??). But what their book proposed was that using multiple layers of the machines could address the limitation.
-
-"Winter" of AI
-
-1986 - MIT released a Parallel Distributed Processing (group of researchers working together), followed by work to add another layer to solve the problem with Minksy. Often the networks were too big/slow to be useful. Research was still saying you need more than two layers even then.
-
-flowchart LR
-
-```
-More layers (> 2) --> deeper neural network --> thus DEEP learning
-```
+After introducing machine learning we’ll dive into Neural Networks which, themselves, are just another probabilistic method of learning about data. We’ll begin by first describing neural networks and then solving the simple problem of X using Y dataset.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -58,7 +24,33 @@ More layers (> 2) --> deeper neural network --> thus DEEP learning
     * this information is transferred backwards through the network: *back propagation*
     * the *weights* are adjusted
 
-<!-- livebook:{"break_markdown":true} -->
+## Neural Networks
+
+### What are Neural Networks?
+
+Neural networks are fundamentally composed of artificial neurons which are in turn modeled from biological neurons – cells in the brain that are excited by sensory input. For example the perceptron, the first artificial neuron, abstracts biological neurons by taking a set of weighted inputs (X1,X2,X3), processes them through an activation threshold (bias) and produces a binary output of 0 or 1.
+
+![](images/neuron.png)
+
+Therefore, a neural network is a collection of artificial neurons separated by “layers”. Each layer can process the input of another providing a rich feature set for prediction. Mathematically this can be described as “a neural networks take an input vector of p variables X = (X1, X2, … Xp) and creates a nonlinear function f(X) to predict response Y”.
+
+![](images/Screen%20Shot%202022-08-20%20at%205.22.23%20PM.png)
+
+In modern neural networks the preferred choice of activation function within a artificial neuron is the ReLU (rectified linear unit) activation function or, in earlier neural networks, sigmoid activation functions. The main reason for moving beyond perceptrons is that outputs of neurons were fixed at either 0 or 1. Modern neurons output values between 0 and 1 which provides smaller changes in the overall network when hyperparameter tuning.
+
+### Application of Neural Networks
+
+* Diagnosing and debugging systems
+  * Categorize error logs (or other types of logs)
+* Facial Recognition for age
+  * Differential face from background
+  * Correlate lines and spots on face that designate age
+* Forecasting
+  * rainfall or stock prices
+* Music composition
+  * based on patterns in existing functions
+
+### TODO: Do we need this section? Should we add a definition section?
 
 ### Inputs, Weights, and Biases
 
@@ -93,39 +85,9 @@ By including biases we can reduce the variance and get better generalization. Bi
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Activation Function
+#### Deep Learning
 
-An activation function helps the network learn patterns in the data. If you compare it to the actual brain, the activation function is at the very end choosing which neuron gets fired next. This is the same role the it plans in an artificial neural network. The output from one signal is received as input by the next.
-
-TODO: probably need more here
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Use Case Example
-
-Problem Statement: __Classify photos of cats and dogs using a neural network__
-
-#### Kits
-
-[Keras](https://keras.io/) - Python Deep Learning Library (runs on top of TensorFlow, CNTK or Theano)
-
-#### Benefits
-
-Layers
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Application of Neural Networks
-
-* Diagnosing and debugging systems
-  * Categorize error logs (or other types of logs)
-* Facial Recognition for age
-  * Differential face from background
-  * Correlate lines and spots on face that designate age
-* Forecasting
-  * rainfall or stock prices
-* Music composition
-  * based on patterns in existing functions
+Deep learning refers to extracting and transforming data through multiple layers of neural networks where each layer takes inputs from the previous layer and refines it progressively. Algorithms train the layers to minimize errors and increase accuracy.
 
 ## Conclusion
 
