@@ -105,6 +105,14 @@ A gradient method is a type of algorithm to solve problems of form, in our class
 
 Gradient descent is used to find the minimum value for a function. You begin with randam values for the parameters and then take small steps in the direction of the slope at each iteration.
 
+Typically you will call `dense/3` in a pipe, like this:
+
+`Axon.input(input_shape, "Input")`
+`|> Axon.dense(5)`
+`
+
+where `5` is the `units`, which specifies the number of output units.
+
 ### dropout
 
 Dropout helps prevent overfitting. It does this by preventing the model from relying too much on certain connections. It takes a dropout `rate` to use to determine the probability `rate` and then scales the input tensor based on it.
