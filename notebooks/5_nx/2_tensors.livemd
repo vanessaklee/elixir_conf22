@@ -1,4 +1,4 @@
-# Nx Basics: Multi-Dimensional Data with Nx Tensors
+# Nx / Multi-Dimensional Data with Nx Tensors
 
 ```elixir
 Mix.install([

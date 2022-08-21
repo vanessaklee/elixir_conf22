@@ -1,0 +1,126 @@
+# Nx in Action/ Novice/ Iris / Classification
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.1.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.2.1"},
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"},
+  {:req, "~> 0.3.0"},
+  {:scidata, "~> 0.1.9"},
+  {:vega_lite, "~> 0.1.4"}
+])
+```
+
+## Question
+
+Can we predict Iris species using a classification model?
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Classification Algorithm
+
+We will train a multiclass classification model on this dataset.
+
+It will map the input values (`x`) to a discrete output variable (`y`) and makes predictions by categorizing data into classes based on independent variables.
+
+#### Outcome is CATEGORICAL: predicts a discrete (finite) class label.
+
+##### Multiclass classification (more than two outcome labels)
+
+* Iris species prediction  
+  * setosa / versicolor / virginica
+
+## Load
+
+Load the data from Scidata.
+
+```elixir
+{features, targets} = Scidata.Iris.download()
+```
+
+Normalize the data as we did in the last section.
+
+```elixir
+feature_max =
+  Nx.tensor(features)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+
+inputs =
+  Enum.map(features, fn feature ->
+    Nx.divide(Nx.tensor(feature), feature_max)
+  end)
+
+targets =
+  Enum.map(targets, fn t ->
+    Nx.tensor([t])
+  end)
+
+df = Enum.zip([inputs, targets])
+```
+
+## Train
+
+### Define the Model
+
+```elixir
+epochs = 25
+learning_rate = 0.001
+optimizer = Axon.Optimizers.adamw(learning_rate)
+loss = :mean_absolute_error
+
+dropout_rate = 0.1
+input_shape = {1, 4}
+```
+
+```elixir
+model =
+  Axon.input(input_shape, "inputs")
+  |> Axon.dense(75)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(50)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(5)
+
+model_state =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:accuracy)
+  |> Axon.Loop.run(df, %{}, epochs: epochs)
+```
+
+```elixir
+# set_size = Enum.count(df)
+# train_size = ceil(0.85 * set_size)
+# test_set = 
+
+# IO.inspect(test_set)
+
+model
+|> Axon.serialize(%{model_state: model_state})
+|> then(&File.write!("elixir_conf/models/iris_classification.axon", &1))
+```
+
+```elixir
+{read_model, params} =
+  File.read!("elixir_conf/models/iris_classification.axon")
+  |> Axon.deserialize()
+```
+
+```elixir
+df
+|> Enum.each(fn {test_input, actual} ->
+  # predicted_mpg = predict(model, car_input)
+  IO.inspect(test_input, label: "test input")
+
+  predicted = Axon.predict(read_model, params, test_input)
+  actual = actual |> Nx.to_flat_list() |> List.first()
+  Logger.info("Actual: #{actual}. Predicted: #{predicted}")
+end)
+```
+
+```elixir
+Axon.predict(read_model, params, test_batch)
+```
