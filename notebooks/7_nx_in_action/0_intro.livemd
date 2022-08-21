@@ -18,8 +18,6 @@ After you've trained your model, test your model to look for over- or underfitti
 
 ## Review
 
-<!-- livebook:{"break_markdown":true} -->
-
 > <span style="font-size: 14px; font-style: italic;">"It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility"</span>
 > 
 > <span style="font-size: 14px;">Hans Moravec, 1988</span>
@@ -44,6 +42,8 @@ Use your problem and dataset to determine the best algorithms. The wrong model c
 
 <!-- livebook:{"break_markdown":true} -->
 
+
+
 ## The Plan
 
 1. Define the problem
@@ -54,11 +54,15 @@ Use your problem and dataset to determine the best algorithms. The wrong model c
 
 <!-- livebook:{"break_markdown":true} -->
 
+
+
 ## Define the problem
 
 Ask the right question.
 
 <!-- livebook:{"break_markdown":true} -->
+
+
 
 ## Prepare the data
 
@@ -176,3 +180,28 @@ TODO Add the advanced topics here
 * dropout rate
 
 <!-- livebook:{"break_markdown":true} -->
+
+
+## Go deep on loss function options in Axon
+
+Different loss functions can have input shape requirements. See [here](https://github.com/elixir-nx/axon/blob/main/lib/axon/losses.ex) for more details. 
+
+* :binary_cross_entropy
+  * Used in binary classification problems. 
+  * Expects targets to encode probabilities between 0 and 1. 
+  * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
+* :categorical_cross_entropy
+  * Used for multi-class classifcation problems.
+  * Expects target to encode a probability distribution along the last
+  axis. 
+  * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
+* :categorical_hinge
+* :hinge
+* :kl_divergence
+* :log_cosh
+* :margin_ranking
+* :soft_margin
+* :mean_absolute_error
+* :mean_squared_error
+* :poisson
+    
