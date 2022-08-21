@@ -1,4 +1,4 @@
-# Nx in Action/ Novice/ Iris / Classification
+# Nx in Action/ Novice/ Iris / Predict
 
 ```elixir
 Mix.install([
@@ -9,118 +9,114 @@ Mix.install([
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
   {:req, "~> 0.3.0"},
-  {:scidata, "~> 0.1.9"},
-  {:vega_lite, "~> 0.1.4"}
+  {:scidata, "~> 0.1.9"}
 ])
 ```
 
-## Question
+## Make Predictions with an Trained Model
 
-Can we predict Iris species using a classification model?
+## The Plan
 
-<!-- livebook:{"break_markdown":true} -->
+1. Define the problem
+2. Pepare the data
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
 
-### Classification Algorithm
+## Define the problem
 
-We will train a multiclass classification model on this dataset.
+Can we predict Iris species with our trained model?
 
-It will map the input values (`x`) to a discrete output variable (`y`) and makes predictions by categorizing data into classes based on independent variables.
-
-#### Outcome is CATEGORICAL: predicts a discrete (finite) class label.
-
-##### Multiclass classification (more than two outcome labels)
-
-* Iris species prediction  
-  * setosa / versicolor / virginica
-
-## Load
-
-Load the data from Scidata.
+## Prepare the data
 
 ```elixir
-{features, targets} = Scidata.Iris.download()
-```
+{inputs, targets} = Scidata.Iris.download()
+count = Enum.count(inputs)
 
-Normalize the data as we did in the last section.
-
-```elixir
-feature_max =
-  Nx.tensor(features)
+imax =
+  Nx.tensor(inputs)
   |> Nx.reduce_max(axes: [0], keep_axes: true)
 
 inputs =
-  Enum.map(features, fn feature ->
-    Nx.divide(Nx.tensor(feature), feature_max)
+  Enum.map(inputs, fn i ->
+    Nx.divide(Nx.tensor(i), imax)
   end)
 
 targets =
-  Enum.map(targets, fn t ->
-    Nx.tensor([t])
+  Enum.map(targets, fn i ->
+    Nx.divide(Nx.tensor([i]), 2)
   end)
 
-df = Enum.zip([inputs, targets])
+dataset = Enum.zip(inputs, targets) |> Enum.shuffle()
+ratio = 0.75
+split = fn d -> Enum.split(d, ceil(count * ratio)) end
+
+{_, test_set} = split.(dataset)
+:ok
 ```
 
-## Train
-
-### Define the Model
+## Load the model
 
 ```elixir
-epochs = 25
-learning_rate = 0.001
-optimizer = Axon.Optimizers.adamw(learning_rate)
-loss = :mean_absolute_error
+model_file = "elixir_conf/models/iris_nn_model.axon"
 
-dropout_rate = 0.1
-input_shape = {1, 4}
-```
-
-```elixir
-model =
-  Axon.input(input_shape, "inputs")
-  |> Axon.dense(75)
-  |> Axon.dropout(rate: dropout_rate)
-  |> Axon.dense(50)
-  |> Axon.dropout(rate: dropout_rate)
-  |> Axon.dense(5)
-
-model_state =
-  model
-  |> Axon.Loop.trainer(loss, optimizer)
-  |> Axon.Loop.metric(:accuracy)
-  |> Axon.Loop.run(df, %{}, epochs: epochs)
+File.read!(model_file)
+|> Axon.deserialize()
 ```
 
 ```elixir
-# set_size = Enum.count(df)
-# train_size = ceil(0.85 * set_size)
-# test_set = 
+model_file = "elixir_conf/models/iris_nn_model.axon"
 
-# IO.inspect(test_set)
+{model, %{model_state: model_state}} =
+  File.read!(model_file)
+  |> Axon.deserialize()
 
 model
-|> Axon.serialize(%{model_state: model_state})
-|> then(&File.write!("elixir_conf/models/iris_classification.axon", &1))
 ```
 
-```elixir
-{read_model, params} =
-  File.read!("elixir_conf/models/iris_classification.axon")
-  |> Axon.deserialize()
-```
+## Predict
 
 ```elixir
-df
-|> Enum.each(fn {test_input, actual} ->
-  # predicted_mpg = predict(model, car_input)
-  IO.inspect(test_input, label: "test input")
+acc = {0, 0}
 
-  predicted = Axon.predict(read_model, params, test_input)
-  actual = actual |> Nx.to_flat_list() |> List.first()
-  Logger.info("Actual: #{actual}. Predicted: #{predicted}")
-end)
-```
+{correct, incorrect} =
+  test_set
+  |> Enum.reduce(acc, fn {input, truth}, {a, b} ->
+    predicted =
+      Axon.predict(model, model_state, input)
+      |> Nx.to_flat_list()
+      |> List.first()
+      |> Float.ceil(1)
 
-```elixir
-Axon.predict(read_model, params, test_batch)
+    truth = List.first(Nx.to_flat_list(truth))
+
+    if truth == predicted do
+      IO.puts(
+        IO.ANSI.format([
+          :green,
+          "[x] prediction correct: #{predicted}"
+        ])
+      )
+
+      {a + 1, b}
+    else
+      IO.puts(
+        IO.ANSI.format([
+          :red,
+          "[ ] prediction incorrect: Actual #{truth} Predicted #{predicted}"
+        ])
+      )
+
+      {a, b + 1}
+    end
+  end)
+
+IO.puts(" ")
+IO.puts(IO.ANSI.format([:green, "#{correct} prediction correct"]))
+IO.puts(IO.ANSI.format([:red, "#{incorrect} prediction incorrect"]))
+
+success_rate = (correct / (incorrect + correct) * 100) |> Float.ceil(1)
+
+"Prediction Rate: #{success_rate}%"
 ```

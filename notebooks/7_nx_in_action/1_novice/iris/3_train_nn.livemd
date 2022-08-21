@@ -29,8 +29,6 @@ Can we predict Iris species?
 
 ## Prepare the data
 
-Load the data.
-
 ```elixir
 {inputs, targets} = Scidata.Iris.download()
 count = Enum.count(inputs)
@@ -79,17 +77,6 @@ split = fn d -> Enum.split(d, ceil(count * ratio)) end
 3. Loss - how best to measure **loss** (distance between prediction & target)
 4. Metric (optional) - choose metric to measure model's performance
 5. Learning rate (optional) - size of the optimization step at each iteration
-
-<!-- livebook:{"break_markdown":true} -->
-
-TODO divide the above sections into refinements of the model step by step
-
-play with optimizer
-play with loss
-
-### Experiment with Optimziers
-
-optimizer = :adamw
 
 ```elixir
 epochs = 25
@@ -222,12 +209,12 @@ Now that we've adjusted Metrics, Loss, Optimizer, and Activation to find our bes
 
 Experiment with all the variables. Add layers. Change layers' units. You can also assign a different learning rate. The default is `1.0e-3`.
 
-We will also save the run to a variaable so that when you find your best model, we can save it in the next block.
+We will also save the run to a variable so that when you find your best model, we can save it in a later block.
 
 ```elixir
 epochs = 70
 
-metric = :accuracy
+metric = :recall
 loss = :mean_squared_error
 first_layer_activation = :linear
 second_layer_activation = :relu
@@ -247,6 +234,18 @@ model_state =
   |> Axon.Loop.run(train_set, %{}, epochs: epochs)
 ```
 
+### Run and validate the model
+
+```elixir
+validated_model_state =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.validate(model, test_set)
+  |> Axon.Loop.run(train_set, model_state, epochs: epochs)
+```
+
+## Save the model
+
 ```elixir
 model_file = "elixir_conf/models/iris_nn_model.axon"
 
@@ -256,61 +255,8 @@ model
 ```
 
 ```elixir
-{read_model, params} =
-  File.read!(model_file)
-  |> Axon.deserialize()
-```
-
-```elixir
-model_state =
-  model
-  |> Axon.Loop.trainer(loss, optimizer)
-  |> Axon.Loop.validate(model, test_set)
-  |> Axon.Loop.run(train_set, model_state, epochs: epochs)
-```
-
-```elixir
-acc = {0, 0}
-
-{correct, incorrect} =
-  test_set
-  |> Enum.reduce(acc, fn {input, truth}, {a, b} ->
-    predicted =
-      Axon.predict(model, model_state, input)
-      |> Nx.to_flat_list()
-      |> List.first()
-      |> Float.ceil(1)
-
-    truth = List.first(Nx.to_flat_list(truth))
-
-    if truth == predicted do
-      IO.puts(
-        IO.ANSI.format([
-          :green,
-          "[x] prediction correct: #{predicted}"
-        ])
-      )
-
-      {a + 1, b}
-    else
-      IO.puts(
-        IO.ANSI.format([
-          :red,
-          "[0] prediction incorrect: Actual #{truth} Predicted #{predicted}"
-        ])
-      )
-
-      {a, b + 1}
-    end
-  end)
-
-IO.puts(" ")
-IO.puts(IO.ANSI.format([:green, "#{correct} prediction correct"]))
-IO.puts(IO.ANSI.format([:red, "#{incorrect} prediction incorrect"]))
-
-success_rate = (correct / (incorrect + correct) * 100) |> Float.ceil(1)
-
-"Prediction Rate: #{success_rate}%"
+File.read!(model_file)
+|> Axon.deserialize()
 ```
 
 ## Advanced
