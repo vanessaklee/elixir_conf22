@@ -1,6 +1,22 @@
 # Nx in Action / DIY Machine Learning in Elixir
 
-## Framework
+## Goal
+
+> <span style="font-size: 14px; font-style: italic;">"It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility"</span>
+> 
+> <span style="font-size: 14px;">Hans Moravec, 1988</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+### The Plan
+
+1. Define the problem
+2. Pepare the data
+3. Evaluate the algorithms
+4. Choose the model
+5. Make the predictions
+
+<!-- livebook:{"break_markdown":true} -->
 
 ### Define the Problem
 
@@ -12,68 +28,25 @@ That means taking the time to look at the big picture. It is easy to get excited
 
 We are humans asking machines to answer questions for us, but as humans our sensory percention evolved over billions of years of evolution.
 
-### Test
-
-After you've trained your model, test your model to look for over- or underfitting.
-
-## Review
-
-> <span style="font-size: 14px; font-style: italic;">"It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility"</span>
-> 
-> <span style="font-size: 14px;">Hans Moravec, 1988</span>
-
 <!-- livebook:{"break_markdown":true} -->
 
-### Gather the Data
+### Prepare the Data
 
-Find a relevant dataset.
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Prepare & Analyze
+Find a dataset relevent to the problem you are trying to solve.
 
 Take a good look at the data. Look for potential problems, patterns, classifications, correlations and comparisons. Turn “abnormal” data into “normalized” data. Normalizing includes extraction, loading, and data cleaning to identify aberrant, missing, or outliers.
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Model Data (Train)
+### Evaluate the Algorithm
 
-Use your problem and dataset to determine the best algorithms. The wrong model can lead to poor performance.
-
-<!-- livebook:{"break_markdown":true} -->
-
-
-
-## The Plan
-
-1. Define the problem
-2. Pepare the data
-3. Evaluate the algorithms
-4. Choose the model
-5. Make the predictions
+Try out different algorithms to find the best on to use in training the model. The wrong model can lead to poor performance.
 
 <!-- livebook:{"break_markdown":true} -->
 
+### Train the Model
 
-
-## Define the problem
-
-Ask the right question.
-
-<!-- livebook:{"break_markdown":true} -->
-
-
-
-## Prepare the data
-
-Find the best dataset to answer the question.
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Evaluate the algorithms
-
-Try out different algorithms to find the best on to use
-in training the model.
+Train and test the model. Tune hyperparameters.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -86,25 +59,25 @@ In Axon, that means making decisions about:
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Epochs
+##### Epochs
 
 An epoch refers to one complete pass of the training data through the algorithm. It is  a hyperparameter. The maximum epochs to run the Axon loop for. Must be non-negative integer (default is 1).
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Learning Rate
+##### Learning Rate
 
 Implementations of common gradient-based optimization algorithms. Customize the Optimizer by passing in a learning rate. The learning rate is the amount the weights are updated during training. It is a hyperparameter. Use hyperparameters to fine tune your model.
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Loss Function
+##### Loss Function
 
 The loss function measures how well a model fit the data set.The bigger the difference between the prediction and the ground truth (target or class), the higher the loss function value.
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Optimizer
+##### Optimizer
 
 Axon currently supports the following optimizers. Read about them [here](https://github.com/elixir-nx/axon/blob/main/lib/axon/optimizers.ex#L58).
 
@@ -122,19 +95,40 @@ Axon currently supports the following optimizers. Read about them [here](https:/
 
 The Axon optimization API does not depend on Axon models, so you are able to use the API to optimize any differentiable objective function.
 
-##### Learning Rate
-
 Customize the optimizer by passing in a learning rate. The learning rate is the amount the weights are updated during training. It is a hyperparameter.
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Loss Function
+##### Loss Function
 
 The loss function measures how well a model fit the data set.The bigger the difference between the prediction and the ground truth (target or class), the higher the loss function value.
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Metric
+Different loss functions can have input shape requirements in Axon. See [here](https://github.com/elixir-nx/axon/blob/main/lib/axon/losses.ex) for more details.
+
+* :binary_cross_entropy
+  * Used in binary classification problems.
+  * Expects targets to encode probabilities between 0 and 1.
+  * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
+* :categorical_cross_entropy
+  * Used for multi-class classifcation problems.
+  * Expects target to encode a probability distribution along the last
+    axis.
+  * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
+* :categorical_hinge
+* :hinge
+* :kl_divergence
+* :log_cosh
+* :margin_ranking
+* :soft_margin
+* :mean_absolute_error
+* :mean_squared_error
+* :poisson
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Metric
 
 Metrics are used to measure the performance of models.
 
@@ -172,36 +166,3 @@ The number of actual positive classes (`true_pos`) relative to the number of act
 | ------------------------ | ----------------- | ----------------- |
 | **Positive (Predicted)** | True Positive     | False Positive    |
 | **Negative (Predicted)** | True Negative     | False Negative    |
-
-<!-- livebook:{"break_markdown":true} -->
-
-TODO Add the advanced topics here
-
-* dropout rate
-
-<!-- livebook:{"break_markdown":true} -->
-
-
-## Go deep on loss function options in Axon
-
-Different loss functions can have input shape requirements. See [here](https://github.com/elixir-nx/axon/blob/main/lib/axon/losses.ex) for more details. 
-
-* :binary_cross_entropy
-  * Used in binary classification problems. 
-  * Expects targets to encode probabilities between 0 and 1. 
-  * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
-* :categorical_cross_entropy
-  * Used for multi-class classifcation problems.
-  * Expects target to encode a probability distribution along the last
-  axis. 
-  * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
-* :categorical_hinge
-* :hinge
-* :kl_divergence
-* :log_cosh
-* :margin_ranking
-* :soft_margin
-* :mean_absolute_error
-* :mean_squared_error
-* :poisson
-    
