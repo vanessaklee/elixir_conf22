@@ -3,8 +3,7 @@
 ## Series
 
 ```elixir
-alias Explorer.DataFrame
-alias Explorer.Series
+alias Explorer.{DataFrame, Series}
 
 s1 = Series.from_list([1, 2, 3])
 IO.inspect(s1, label: "series 1")

@@ -45,8 +45,7 @@ TODO
 With the use of Explorer, we can easily load the iris data into a dataframe.
 
 ```elixir
-alias Explorer.DataFrame
-alias Explorer.Series
+alias Explorer.{DataFrame, Series}
 ```
 
 ```elixir
@@ -699,9 +698,6 @@ IO.puts("Learned m: #{LinReg.scalar(m)}\tLearned b: #{LinReg.scalar(b)}")
 The Dataframe `shape/1` returns a tuple of shape of the data: `{rows, columns}`:
 
 ```elixir
-alias Explorer.DataFrame
-alias Explorer.Series
-
 df = Explorer.Datasets.iris()
 
 DataFrame.shape(df)

@@ -30,8 +30,7 @@ The dataset for this experiment is the [Haberman Dataset](https://archive.ics.uc
 
 ```elixir
 # df = Explorer.Datasets.iris()
-alias Explorer.DataFrame
-alias Explorer.Series
+alias Explorer.{DataFrame, Series}
 
 df = DataFrame.from_csv!("Projects/elixir_conf/data/haberman.csv")
 ```

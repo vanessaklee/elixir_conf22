@@ -24,8 +24,7 @@ Can we prediect Iris species?
 With the use of Explorer, we can easily load the iris data into a dataframe.
 
 ```elixir
-alias Explorer.DataFrame
-alias Explorer.Series
+alias Explorer.{DataFrame, Series}
 
 csv = "elixir_conf/data/iris/normalized/train.csv"
 df = DataFrame.from_csv!(csv)

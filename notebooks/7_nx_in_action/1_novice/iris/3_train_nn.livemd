@@ -247,6 +247,62 @@ File.read!(model_file)
 |> Axon.deserialize()
 ```
 
+## Make the predictions
+
+```elixir
+{model, %{model_state: model_state}} =
+  File.read!(model_file)
+  |> Axon.deserialize()
+
+model
+```
+
+## Predict
+
+```elixir
+acc = {0, 0}
+
+{correct, incorrect} =
+  test_set
+  |> Enum.reduce(acc, fn {input, truth}, {a, b} ->
+    predicted =
+      Axon.predict(model, model_state, input)
+      |> Nx.to_flat_list()
+      |> List.first()
+      |> Float.ceil(1)
+
+    truth = List.first(Nx.to_flat_list(truth))
+
+    if truth == predicted do
+      IO.puts(
+        IO.ANSI.format([
+          :green,
+          "[x] prediction correct: #{predicted}"
+        ])
+      )
+
+      {a + 1, b}
+    else
+      IO.puts(
+        IO.ANSI.format([
+          :red,
+          "[ ] prediction incorrect: Actual #{truth} Predicted #{predicted}"
+        ])
+      )
+
+      {a, b + 1}
+    end
+  end)
+
+IO.puts(" ")
+IO.puts(IO.ANSI.format([:green, "#{correct} prediction correct"]))
+IO.puts(IO.ANSI.format([:red, "#{incorrect} prediction incorrect"]))
+
+success_rate = (correct / (incorrect + correct) * 100) |> Float.ceil(1)
+
+"Prediction Rate: #{success_rate}%"
+```
+
 ## Advanced
 
 <hr style="background-color: #EED202; height: 5px;" />

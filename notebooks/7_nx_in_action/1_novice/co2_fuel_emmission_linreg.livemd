@@ -54,8 +54,7 @@ Iris. (1936). UCI Machine Learning Repository.
 With the use of Explorer, we can easily load the iris data into a dataframe.
 
 ```elixir
-alias Explorer.DataFrame
-alias Explorer.Series
+alias Explorer.{DataFrame, Series}
 
 df = Explorer.Datasets.iris()
 ```

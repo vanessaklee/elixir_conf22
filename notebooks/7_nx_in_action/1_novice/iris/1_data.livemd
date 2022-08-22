@@ -179,16 +179,42 @@ There are exactly 50 of each of the three Species features; we have a balanced d
 
 <!-- livebook:{"break_markdown":true} -->
 
-Change the x- and y-axis to experiment with visualizing other combinations. Here is a look at `petal_width` by `species` using color to indicate the count.
+We want to relate the Iris features to their species. The relationship does not necessarily imply that one variable causes the other, but that there is some significant association between the two variables.
 
-<!-- livebook:{"attrs":{"chart_title":null,"height":150,"layers":[{"chart_type":"point","color_field":null,"color_field_aggregate":null,"color_field_type":null,"data_variable":"expdf","x_field":"sepal_length","x_field_aggregate":null,"x_field_type":"quantitative","y_field":"sepal_width","y_field_aggregate":null,"y_field_type":"quantitative"}],"vl_alias":"Elixir.VegaLite","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+Charting can be helpful in determining the strength of the relationship between variables. If the chart shows trends, then fitting a linear regression model to the data may be a useful model.
+
+Compare petal length to sepal length trends among the species. Which features seems more strongly associated with species?
 
 ```elixir
-VegaLite.new(width: 750, height: 150)
-|> VegaLite.data_from_values(expdf, only: ["sepal_length", "sepal_width"])
-|> VegaLite.mark(:point)
-|> VegaLite.encode_field(:x, "sepal_length", type: :quantitative)
-|> VegaLite.encode_field(:y, "sepal_width", type: :quantitative)
+alias VegaLite, as: Vl
+
+Vl.new(width: 200, height: 200)
+|> Vl.data_from_values(expdf)
+|> Vl.mark(:arc)
+|> Vl.encode_field(:theta, "petal_length", type: :quantitative)
+|> Vl.encode_field(:color, "species", type: :nominal)
+|> Vl.config(view: [stroke: nil])
+```
+
+```elixir
+Vl.new(width: 200, height: 200)
+|> Vl.data_from_values(expdf)
+|> Vl.mark(:arc)
+|> Vl.encode_field(:theta, "sepal_length", type: :quantitative)
+|> Vl.encode_field(:color, "species", type: :nominal)
+|> Vl.config(view: [stroke: nil])
+```
+
+Change the x- and y-axis to experiment with visualizing other combinations. Here is a look at `petal_width` by `species` using color to indicate the count.
+
+<!-- livebook:{"attrs":{"chart_title":null,"height":150,"layers":[{"chart_type":"point","color_field":null,"color_field_aggregate":null,"color_field_type":null,"data_variable":"expdf","x_field":"sepal_length","x_field_aggregate":null,"x_field_type":"quantitative","y_field":"sepal_width","y_field_aggregate":null,"y_field_type":"quantitative"}],"vl_alias":"Elixir.Vl","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+Vl.new(width: 750, height: 150)
+|> Vl.data_from_values(expdf, only: ["sepal_length", "sepal_width"])
+|> Vl.mark(:point)
+|> Vl.encode_field(:x, "sepal_length", type: :quantitative)
+|> Vl.encode_field(:y, "sepal_width", type: :quantitative)
 ```
 
 ## Create a Training Set
