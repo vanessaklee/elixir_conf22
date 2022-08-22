@@ -6,6 +6,8 @@
 > 
 > <span style="font-size: 14px;">Hans Moravec, 1988</span>
 
+In this notebook we will go over the steps for Machine Learning and how we will perform them using Elixir's Nx ecosystem. We have covered this topics previously, but here we present them in the context of how we will put them to use to train, test, and use a ML model to make prediction in Elixir.
+
 <!-- livebook:{"break_markdown":true} -->
 
 ### The Plan
