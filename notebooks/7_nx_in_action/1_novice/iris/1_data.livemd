@@ -11,11 +11,20 @@ Mix.install([
 ])
 ```
 
-## Question
+## The Plan
 
-Can we prediect Iris species?
+1. Define the problem
+2. Pepare the data
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
 
-## Dataset
+## Define the problem
+
+Can we predict Iris species?
+
+## Prepare the data
 
 The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets held within the Nx ecosystem (`Explorer` and `Scidata`) so we can interact with it easily.
 
@@ -79,8 +88,10 @@ targets =
   end)
 ```
 
+Look closely at the targets above. The species looks to be grouped in order 0-2 within the dataset. If we were to split this dataset into a training set and a testing set without shuffling first, we would get two unbalanced sets.
+
 ```elixir
-df = Enum.zip([inputs, targets])
+df = Enum.zip([inputs, targets]) |> Enum.shuffle()
 ```
 
 ## Load: Explorer

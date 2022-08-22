@@ -16,8 +16,8 @@ Mix.install([
 
 ## The Plan
 
-1. Define the problem
-2. Pepare the data
+1. ~~Define the problem~~
+2. ~~Pepare the data~~
 3. Evaluate the algorithms
 4. Choose the model
 5. Enhance the model
@@ -32,9 +32,7 @@ Can we predict Iris species?
 ```elixir
 {inputs, targets} = Scidata.Iris.download()
 count = Enum.count(inputs)
-```
 
-```elixir
 imax =
   Nx.tensor(inputs)
   |> Nx.reduce_max(axes: [0], keep_axes: true)
@@ -51,16 +49,6 @@ targets =
     Nx.divide(Nx.tensor([i]), tmax)
   end)
 
-:ok
-```
-
-Shuffle to disperse the species. the dataset has them in order 0-2
-
-TODO Shuffle to disperse the species. Notice the dataset has them in order 0-2
-
-TODO add this to the previous section on data prep; notice it and solve it there too
-
-```elixir
 dataset = Enum.zip(inputs, targets) |> Enum.shuffle()
 ratio = 0.85
 split = fn d -> Enum.split(d, ceil(count * ratio)) end
@@ -261,6 +249,10 @@ File.read!(model_file)
 
 ## Advanced
 
+<hr style="background-color: #EED202; height: 5px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
 #### Dropout Rate
 
 The rate at which to randomly drop out nodes during training to 
@@ -298,3 +290,9 @@ loss =
     from_logits: true
   )
 ```
+
+<hr style="background-color: #EED202; height: 5px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+TODO add the link to the next section
