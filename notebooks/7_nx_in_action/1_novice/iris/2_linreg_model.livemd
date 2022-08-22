@@ -265,6 +265,8 @@ test_set
 end)
 ```
 
+<img src="https://static.thenounproject.com/png/350804-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+
 Overall, not great. Which indicates that a linear regression algorithm is not the best choice for our problem.
 
 In the next section we'll try others.
