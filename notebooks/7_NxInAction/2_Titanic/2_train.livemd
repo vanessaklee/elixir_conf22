@@ -1,4 +1,4 @@
-# Nx in Action / Titanic / Train
+# Nx in Action/ Titanic / Train
 
 ```elixir
 Mix.install([
@@ -9,7 +9,20 @@ Mix.install([
 ])
 ```
 
-## Question
+## The Plan
+
+1. ~~Define the problem~~
+2. ~~Pepare the data~~
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
+
+## Define the problem
+
+Can we predict passangers who will survive the Titanic disaster?
+
+## Prepare the data
 
 Can we predict passangers who will survive the Titanic disaster?
 
