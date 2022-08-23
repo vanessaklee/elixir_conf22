@@ -1,4 +1,4 @@
-# Nx in Action / DIY Machine Learning in Elixir
+# Nx in Action / DIY ML in Elixir
 
 ## Goal
 

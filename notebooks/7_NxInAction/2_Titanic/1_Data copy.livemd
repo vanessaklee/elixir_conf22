@@ -1,4 +1,4 @@
-# Nx in Action / Novice / Data
+# Nx in Action/ Titanic / Data
 
 ```elixir
 Mix.install([
@@ -6,15 +6,25 @@ Mix.install([
   {:explorer, "~> 0.2.0"},
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
+  {:scidata, "~> 0.1.9"},
   {:vega_lite, "~> 0.1.4"}
 ])
 ```
 
-## Question
+## The Plan
+
+1. Define the problem
+2. Pepare the data
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
+
+## Define the problem
 
 Can we predict passangers who will survive the Titanic disaster?
 
-## Dataset
+## Prepare the data
 
 The Titanic Distaster Dataset describes the survival status of individual passengers
 on the Titanic. It does not contain information from the crew.
@@ -60,20 +70,30 @@ Family relations are defined as:
 * Parent (`Parch`) = mother, father
 * Child (`Parch`) = daughter, son, stepdaughter, stepson
 
-## Load
+### Download
 
-With the use of Explorer, we can easily load the iris data into a dataframe.
+If you have a Kaggle account, you can download the train dataset [there](https://www.kaggle.com/competitions/titanic).
+
+If not, you can get them from [github](https://github.com/dsindy/kaggle-titanic/tree/master/data).
+
+Download `train.csv` to "elixir_conf/data/titanic/train.csv".
+
+We don't need the test dataset for this example. It's designed without the target ("Surivived").
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Load
+
+With the use of Explorer, we can easily load the Iris data into a dataframe.
 
 ```elixir
 alias Explorer.{DataFrame, Series}
 ```
 
 ```elixir
-csv_train = "elixir_conf/data/titanic/train.csv"
+# csv_train = "elixir_conf/data/titanic/train.csv"
+csv_train = "elixir_conf/data/titanic.csv"
 df = DataFrame.from_csv!(csv_train)
-
-csv_test = "elixir_conf/data/titanic/test.csv"
-df_test = DataFrame.from_csv!(csv_test)
 ```
 
 ```elixir
@@ -95,14 +115,6 @@ df
 
 ```elixir
 df["Survived"] |> Series.count()
-```
-
-```elixir
-df["Sex"] |> Series.count()
-```
-
-```elixir
-df_test["Sex"] |> Series.count()
 ```
 
 ### Data Analytics
@@ -164,19 +176,6 @@ Enum.each(DataFrame.names(df), fn name ->
 end)
 ```
 
-And the test dataset.
-
-```elixir
-Enum.each(DataFrame.names(df_test), fn name ->
-  cnt = df_test[name] |> Series.nil?() |> Series.to_list() |> Enum.frequencies()
-
-  case cnt do
-    %{false: _, true: n} -> IO.puts("#{name}: #{n}")
-    _ -> nil
-  end
-end)
-```
-
 #### What do to with Nil values
 
 We have options for handling nil values. We can fill the nil values with other values using different strategies.
@@ -189,7 +188,7 @@ We have options for handling nil values. We can fill the nil values with other v
 * min - replace nil with the series minimum
 * mean - replace nil with the series mean
 
-For the missing Age values we'll use the forward.
+For the missing Age values we'll use the forward. For the 1 missing Fare, mean.
 
 ```elixir
 df =
@@ -198,17 +197,10 @@ df =
       df["Age"]
       |> Series.fill_missing(:forward)
   )
-
-df_test =
-  Explorer.DataFrame.mutate(df_test,
-    Age:
-      df_test["Age"]
-      |> Series.fill_missing(:forward)
-  )
   |> Explorer.DataFrame.mutate(
     Fare:
-      df_test["Fare"]
-      |> Series.fill_missing(:forward)
+      df["Fare"]
+      |> Series.fill_missing(:mean)
   )
 ```
 
@@ -228,29 +220,13 @@ Review the new shape.
 DataFrame.shape(df)
 ```
 
-Do the same for the test dataset, but remember it will not contain the column for the target ("Surivived").
-
-```elixir
-DataFrame.shape(df_test)
-```
-
-```elixir
-df_test = DataFrame.select(df_test, ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare"])
-```
-
-We went from a shape of `{418, 11}` to `{418, 6}`.
-
-```elixir
-DataFrame.shape(df_test)
-```
-
 ## Transform
 
 ### Normalize
 
 <!-- livebook:{"break_markdown":true} -->
 
-Normalize the features toe values between 0 and 1. Start with our remaining `string`.
+Start with our remaining `string`.
 
 ```elixir
 s =
@@ -261,50 +237,19 @@ s =
 df = Explorer.DataFrame.mutate(df, Sex: s)
 ```
 
-Repeat for the test data.
+### Split the set
+
+<!-- livebook:{"break_markdown":true} -->
+
+Split the dataset into a training and a testing set.
 
 ```elixir
-s_test =
-  Series.transform(df_test["Sex"], fn v ->
-    if v == "female", do: 0, else: 1
-  end)
+num_examples = Explorer.DataFrame.n_rows(df)
+num_train = ceil(0.85 * num_examples)
+num_test = num_examples - num_train
 
-df_test = Explorer.DataFrame.mutate(df_test, Sex: s_test)
-```
-
-From the training set, create a data frame of features and another of just the target column.
-
-```elixir
-targets = DataFrame.select(df, &(&1 == "Survived"), :keep)
-features = DataFrame.select(df, &(&1 == "Survived"), :drop)
-```
-
-Convert them to tensors. Then zip them together.
-
-```elixir
-to_tensor = fn df ->
-  df
-  |> Explorer.DataFrame.names()
-  |> Enum.map(&(Explorer.Series.to_tensor(df[&1]) |> Nx.new_axis(-1)))
-  |> Nx.concatenate(axis: 1)
-end
-
-targets = to_tensor.(targets)
-features = to_tensor.(features)
-training_set = Stream.zip(features, targets)
-```
-
-Convert the test set.
-
-```elixir
-to_tensor = fn df_test ->
-  df_test
-  |> Explorer.DataFrame.names()
-  |> Enum.map(&(Explorer.Series.to_tensor(df_test[&1]) |> Nx.new_axis(-1)))
-  |> Nx.concatenate(axis: 1)
-end
-
-testing_set = to_tensor.(df_test)
+train_df = Explorer.DataFrame.slice(df, 0, num_train)
+test_df = Explorer.DataFrame.slice(df, num_train, num_test)
 ```
 
 ## Write to File
@@ -330,15 +275,15 @@ train_file = Kino.Input.read(train_filename)
 Write the data to the file.
 
 ```elixir
-DataFrame.to_csv(df, train_file)
+DataFrame.to_csv(train_df, train_file)
 ```
 
-Repeat the sames steps for the test data with a different file name:
+Repeat for the test set.
 
 `elixir_conf/data/titanic/normalized/test.csv`
 
 ```elixir
-test_filename = Kino.Input.text("Test Filename")
+test_filename = Kino.Input.text("Testing Filename")
 ```
 
 ```elixir
@@ -346,11 +291,11 @@ test_file = Kino.Input.read(test_filename)
 ```
 
 ```elixir
-DataFrame.to_csv(df_test, test_file)
+DataFrame.to_csv(test_df, test_file)
 ```
 
 Now it's time to train the models.
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](01_train.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](02_train.livemd)

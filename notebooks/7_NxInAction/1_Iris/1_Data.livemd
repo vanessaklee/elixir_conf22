@@ -1,4 +1,4 @@
-# Nx in Action/ Novice/ Iris / Data
+# Nx in Action/ Iris / Data
 
 ```elixir
 Mix.install([
@@ -360,7 +360,6 @@ inputs =
 
     Series.transform(feature_set[name], fn v ->
       Nx.divide(v, max)
-      |> IO.inspect(label: "n")
       |> Nx.to_flat_list()
       |> List.first()
     end)

@@ -1,4 +1,4 @@
-# Nx in Action/ Novice/ Iris / Train Linear Regression Model
+# Nx in Action/ Iris / Linear Regression Model
 
 ```elixir
 Mix.install([

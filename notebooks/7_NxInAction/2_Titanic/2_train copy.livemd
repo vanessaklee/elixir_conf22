@@ -87,9 +87,9 @@ train_cols = cols - 1
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Our problem is a binary classification problem. That means we want to classify passengers in one of two classes: survived or not survived. That means we want our neural network to predict a probability between 0 and 1. 
+Our problem is a binary classification problem. That means we want to classify passengers in one of two classes: survived or not survived. That means we want our neural network to predict a probability between 0 and 1.
 
-Probabilities closer to 1 indicate a higher confidence that the passenger survived. Probabilities closer to 0 represent a lower confidence that an example passenger survived. 
+Probabilities closer to 1 indicate a higher confidence that the passenger survived. Probabilities closer to 0 represent a lower confidence that an example passenger survived.
 
 `sigmoid` is an activation function which always returns a value between 0 and 1. Making it a good choice to return the probability we’re looking for.
 
@@ -115,14 +115,15 @@ model =
   |> Axon.global_avg_pool()
   |> Axon.dense(1, activation: :sigmoid)
 ```
+
 and then run it:
 
 ```elixir
 model
-  |> Axon.Loop.trainer(:binary_cross_entropy, :adam, log: 1)
-  |> Axon.Loop.metric(:accuracy)
-  |> Axon.Loop.validate(model, val_data)
-  |> Axon.Loop.run(train_set, epochs: 5)
+|> Axon.Loop.trainer(:binary_cross_entropy, :adam, log: 1)
+|> Axon.Loop.metric(:accuracy)
+|> Axon.Loop.validate(model, val_data)
+|> Axon.Loop.run(train_set, epochs: 5)
 
 model
 |> Axon.Loop.evaluator(model_state)
