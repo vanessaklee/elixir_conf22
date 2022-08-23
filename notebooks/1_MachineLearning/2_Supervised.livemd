@@ -90,6 +90,6 @@ Building a sufficiently large data set for training a supervised model might req
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_intro.livemd)
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_Intro.livemd)
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](3_unsupervised.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](3_Unsupervised.livemd)

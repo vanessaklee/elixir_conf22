@@ -2,54 +2,46 @@
 
 ## Course Contents
 
-1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Introduction to Machine Learning</span>](1_machine_learning/1_intro.livemd)
-   1. [Supervised Learning](1_machine_learning/1_supervised.livemd)
-   2. [Unsupervised Learning](1_machine_learning/2_unsupervised.livemd)
-   3. [Reinforcement Learning](1_machine_learning/3_reinforcement.livemd)
-2. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Algorithms and Models</span>](2_algorithms_models/1_intro.livemd)
+1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Introduction to Machine Learning</span>](1_MachineLearning/1_Intro.livemd)
+   1. [Supervised Learning](1_MachineLearning/1_supervised.livemd)
+   2. [Unsupervised Learning](1_MachineLearning/2_unsupervised.livemd)
+   3. [Reinforcement Learning](1_MachineLearning/3_reinforcement.livemd)
+2. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Algorithms and Models</span>](2_Algorithms/1_Intro.livemd)
    1. Supervised 
-      1. [Regression](2_algorithms_models/1_supervised_regression.livemd)
-      2. [Classification](2_algorithms_models/2_supervised_classification.livemd)
-   2. [Unsupervised](2_algorithms_models/3_unsupervised.livemd)
-   3. [Conclusion](2_algorithms_models/4_conclusion.livemd)
-3. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>](3_neural_networks/1_neural_networks.livemd)
-   1. [Deep Learning](3_neural_networks/2_deep_learning.livemd)
-   2. [Tools of the Trade](3_neural_networks/3_tools_of_trade.livemd)
+      1. [Regression](2_Algorithms/1_supervised_regression.livemd)
+      2. [Classification](2_Algorithms/2_Supervised_classification.livemd)
+   2. [Unsupervised](2_Algorithms/3_Unsupervised.livemd)
+   3. [Conclusion](2_Algorithms/4_conclusion.livemd)
+3. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>](3_NeuralNetworks/1_neural_networks.livemd)
+   1. [Deep Learning](3_NeuralNetworks/2_DeepLearning.livemd)
+   2. [Tools of the Trade](3_NeuralNetworks/3_Tools.livemd)
 4. <span style="color: #800080; font-size: 24px; font-weight: bold;">Statistics</span>
-   1. [Introduction to Machine Learning Statistics](4-statistics/1_intro.livemd)
-5. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>](5_nx/1_overview.livemd)
-   1. [Tensors](5_nx/2_tensors.livemd)
-   2. [Defn](5_nx/1_defn.livemd)
+   1. [Introduction to Machine Learning Statistics](4-Statistics/1_Intro.livemd)
+5. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>](5_Nx/1_overview.livemd)
+   1. [Tensors](5_Nx/2_Tensors.livemd)
+   2. [Defn](5_Nx/1_defn.livemd)
 6. <span style="color: #800080; font-size: 24px; font-weight: bold;">Elixir Explorer & Axon</span>
-   1. [Explorer](6_nx_plus/1_explorer.livemd)
-      1. [Series](6_nx_plus/2_explorer_series.livemd)
-      2. [Dataframes ](6_nx_plus/3_explorer_dataframes.livemd)
-   2. [Axon](6_nx_plus/4_axon.livemd)
+   1. [Explorer](6_NxPlus/1_Explorer.livemd)
+      1. [Series](6_NxPlus/2_Series.livemd)
+      2. [Dataframes ](6_NxPlus/3_Dataframes.livemd)
+   2. [Axon](6_NxPlus/4_Axon.livemd)
 7. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span>
-   1. [Ask the Right Questions](7_nx_in_action/0_intro.livemd)
+   1. [Ask the Right Questions](7_NxInAction/0_Intro.livemd)
    2. Model: Data, Train, Test, Predict
-      1. Novice 
-         1. Iris Dataset
-            1. [Data](7_nx_in_action/iris/1_data.livemd)
-            1. [Train](7_nx_in_action/iris/2_train.livemd)
-            1. [Predict](7_nx_in_action/iris/3_test.livemd)
-         1. Titanic Dataset
-            1. [Data](7_nx_in_action/titanic/1_data.livemd)
-            1. [Train](7_nx_in_action/titanic/2_train.livemd)
-            1. [Predict](7_nx_in_action/titanic/3_test.livemd)
-      2. Intermediate (cc fraud? disease detection [heart, cancer]?)
-         1. Data
-         2. Train
-         3. Predict
-      3. Advanced (stock market?)
+      1. Iris 
+         1. [Data](7_NxInAction/Iris/1_Data.livemd)
+         1. [Train](7_NxInAction/Iris/2_LinearRegression.livemd)
+         1. [Predict](7_NxInAction/Iris/3_NeuralNet.livemd)
+      1. Titanic
+         1. [Data](7_NxInAction/titanic/1_Data.livemd)
+         1. [Train](7_NxInAction/titanic/2_Train.livemd)
+      2. Intermediate (cc fraud? stock market?)
          1. Data
          2. Train
          3. Predict
 8. What's Next for Nx?
-   1. [ML in production](8_whats_next/3_prod.livemd)
-   1. [Revoew](8_whats_next/4_future.livemd)
-9. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Review</span>](8_review/1_review.livemd)
-   1. [Review](9_review/1_review.livemd)
+   1. [ML in production](9_WhatsNext/1_Prod.livemd)
+   1. [Revoew](9_WhatsNext/2_Future.livemd)
 
 <!-- livebook:{"break_markdown":true} -->
 

@@ -26,6 +26,6 @@ Once we have trained a model we need to make it available for use in testing or 
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](4_unsupervised.livemd)
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](4_Unsupervised.livemd)
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Neural Networks ></span>](../3_neural_networks/1_intro.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Neural Networks ></span>](../3_NeuralNetworks/1_Intro.livemd)

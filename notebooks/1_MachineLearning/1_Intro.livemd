@@ -8,14 +8,19 @@ Mix.install([
 
 ## Goal
 
-After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available 
-dataset. We will then employ the model to make predictions. This lesson services as an introduction fto and an overview of machine learning.
+<!-- Breadcrumbs -->
+
+<span style="color: #800080; font-size: 14px; font-family: FreeMono, monospace">
+ElixirConf 2022 > Machine Learning > <span style="font-style: italic; color: black;"> Introduction</span></span>
+
+After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available dataset. We will then employ the model to make predictions. This lesson serves as an introduction fto and an overview of machine learning.
+</span>
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Introduction
 
-Machine learning (ML) is a type of artifical intelligence (AI), and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions, and get better over time with exposure to data. They become increasingly accurate at predicting outcomes without being explicitly programmed. Historical data is given as training input. Through training and testing, the machine learning algrithms are able to predict new, unseen output values.
+Machine learning (ML) is a type of artificial intelligence (AI), and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions, and get better over time with exposure to data. They become increasingly accurate at predicting outcomes without being explicitly programmed. Historical data is given as training input. Through training and testing, the machine learning algorithms are able to predict new, unseen output values.
 
 #### Common uses
 
@@ -74,7 +79,7 @@ The goal of ML is to make a **prediction**.
 
 Once a prediction is made it is compared to the **Ground Truth** (the expected result).
 
-The **Loss Function** gives a quantity to the distance between the prediction and the groudn truth.
+The **Loss Function** gives a quantity to the distance between the prediction and the ground truth.
 
 Regression algorithms typically use Mean Square Error (MSE), which determines loss as the average squared difference between the prediction and the ground truth.
 
@@ -95,15 +100,15 @@ graph TD;
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Algorithms
+### ML Algorithms
 
-An algorithm is a mathematical method designed to find patterns in data. ML algorithms draw on linear algebra, statistics, and, calculus. They can be implemented in a range of different programming lanagagues.
+An algorithm is a mathematical process upon which following specific steps lead to an expected outcome. In Machine Learning, algorithms draw upon linear algebra, statistics and calculus to weigh the probability of multiple outcomes. They can be implemented in a variety of different languages.
 
-Basically, algorithms are procedures run on data. Models are output by algorithms and are made up of model data and a prediction algorithm.
+Essentially, ML algorithms are functions with an input of data and an output of predictive models.
 
 Examples of well-known algorithms are:
 
-* Regression
+* Regression (linear, logistic, etc.)
 * Classification
 * Clustering
 * Decision Trees
@@ -115,15 +120,19 @@ Examples of well-known algorithms are:
 
 ![](images/decision_tree.png)
 
+<span style="float: right; font-size: 12px;">
+_Decision Tree_
+</span>
+
 <!-- livebook:{"break_markdown":true} -->
 
 ### Models
 
-If a machine learning _model_ is the output of an algorithm, at its most basic it is a file. The file has been trained to recognize patterns by a set of data. An algorithm is used to reason over and learn from the data. During training, the algorithm is optimized to find certain patterns in the dataset resulting in a file called a machine learning model.
+If a machine learning model is the output of an algorithm, at its most basic it is a file. The file has been trained to recognize patterns by a set of data. An algorithm is used to reason over and learn from the data. During training, the algorithm is optimized to find certain patterns in the dataset resulting in a file called a machine learning model.
 
-It represents what's been __learned__ from the algorithm using a trainging dataset, and it contains a prediction algorithm. So an algorithm like linear regression will produce a model made of a vector of coefficients with specific values. Whereas a decision tree algorithm will result in a model made of a tree of conditions with specific values.
+It represents what's been learned from the algorithm using a training dataset, and it contains a prediction algorithm. So an algorithm like linear regression will produce a model made of a vector of coefficients with specific values. Whereas a decision tree algorithm will result in a model made of a tree of conditions with specific values.
 
-Once trained, the model can reason over data it hasn't seen before and make preditions. If its been trained well, it can make accurate predictions on similar but previously unseen data.
+Once trained, the model can reason over data it hasn't seen before and make predictions. If it's been trained well, it can make accurate predictions on similar but previously unseen data.
 
 For example, machine learning models can be used for natural language processing (NLP). Those models parse and correctly recognize the intent or sentiment of combinations of words. Image recognition machine learning models can learn to recognize and discern objects.
 
@@ -135,17 +144,15 @@ Model training is the process of running a machine learning algorithm on a datas
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<!-- livebook:{"break_markdown":true} -->
+## Brain Break!
 
-<span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
-Brain Break!
+<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+Time for some Elixir
 </span>
 
-<!-- livebook:{"break_markdown":true} -->
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
 
-<img src="https://static.thenounproject.com/png/506914-200.png" alt="Brain icon" style="width: 95px; float: left; margin-right: 40px;" />
-
-Fingers on the keyboard for some Elixir. Let's play with an Elixir library.
+Let's get some fingers on the keyboard and explore an Elixir library.
 
 Gibran is an early Elixir library that experimented with natural language processor. It can convert a string into a list of tokens using different strategies.
 
@@ -179,13 +186,13 @@ Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 
 <img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 95px; float: left; margin-right: 50px;" />
 
-It is easy to think that more data is better. More data generally leads to increased accuracy. It also leads to descreased performace in addition to difficulty in visualizing the data.
+It is easy to think that more data is better. More data generally leads to increased accuracy. It also leads to decreased performance in addition to difficulty in visualizing the data.
 
 ### Generalization
 
-The goal of traning a model is to make that model perform accurately on data its never seen before. The is called Generalization. The generalization of a model to new data is what makes machine learning useful in solving everyday problems that require predictions or classification.
+The goal of training a model is to make that model perform accurately on data it has never seen before. This is called Generalization. The generalization of a model to new data is what makes machine learning useful in solving everyday problems that require predictions or classification.
 
-Say you train a model to classify images in to two groups: "dogs" or "not dogs". If the dataset you used to train the model contains only two breeds of dogs it may perform very accurately. Will it generalize to a dataset containing more dog breeds? Or one with cats and wolves? Unlikely. In this case you might see the testing dataset with 90% accuraccy. That accuracy is likely to drop to the 70s for the other dog breeds and below 40 for the mix of animals.
+Say you train a model to classify images into two groups: "dogs" or "not dogs". If the dataset you used to train the model contains only two breeds of dogs it may perform very accurately. Will it generalize to a dataset containing more dog breeds? Or one with cats and wolves? Unlikely. In this case you might see the testing dataset with 90% accuracy. That accuracy is likely to drop to the 70s for the other dog breeds and below 40 for the mix of animals.
 
 The problem in this example is a lack of data diversity. Let's look at two other problems we can run into with training data: overfitting and underfitting.
 
@@ -197,9 +204,13 @@ The problem in this example is a lack of data diversity. Let's look at two other
 
 ### Overfitting
 
-Overfitting is when a model too closely matches, or fits, its training data. This means the model will not predict unseen data accurately, or not generalize. The can happen with a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevent information in the dataset and fit the trainingset too closely
+Overfitting is when a model too closely matches, or fits, its training data. This means the model will not predict unseen data accurately, or not generalize. This can happen when a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevant information in the dataset and fit the training set too closely
 
 Low error rates are good indicators of overfitting. In order to prevent this type of behavior, part of the training dataset is typically set aside as the *Test Set* to check for overfitting. Overfitting is indicated when the training data has a low error rate and the test data has a high error rate.
+
+![](images/overfit.png)
+
+<!-- livebook:{"break_markdown":true} -->
 
 ![](images/overfit.png)
 
@@ -213,6 +224,8 @@ Underfitting is when a model produces inaccurate prediction outcomes because it 
 
 <!-- livebook:{"break_markdown":true} -->
 
-<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">
-[next](02_supervised.livemd) >
-</span>
+![](images/underfit.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Supervised.livemd)

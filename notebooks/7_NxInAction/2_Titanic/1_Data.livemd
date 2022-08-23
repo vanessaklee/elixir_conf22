@@ -70,16 +70,6 @@ Family relations are defined as:
 * Parent (`Parch`) = mother, father
 * Child (`Parch`) = daughter, son, stepdaughter, stepson
 
-### Download
-
-If you have a Kaggle account, you can download the train dataset [there](https://www.kaggle.com/competitions/titanic).
-
-If not, you can get them from [github](https://github.com/dsindy/kaggle-titanic/tree/master/data).
-
-Download `train.csv` to "elixir_conf/data/titanic/train.csv".
-
-We don't need the test dataset for this example. It's designed without the target ("Surivived").
-
 <!-- livebook:{"break_markdown":true} -->
 
 ### Load
@@ -91,7 +81,7 @@ alias Explorer.{DataFrame, Series}
 ```
 
 ```elixir
-csv_train = "elixir_conf/data/titanic/train.csv"
+csv_train = "elixir_conf/data/titanic.csv"
 df = DataFrame.from_csv!(csv_train)
 ```
 
@@ -187,7 +177,7 @@ We have options for handling nil values. We can fill the nil values with other v
 * min - replace nil with the series minimum
 * mean - replace nil with the series mean
 
-For the missing Age values we'll use the forward.
+For the missing Age values we'll use the forward. For the 1 missing Fare, mean.
 
 ```elixir
 df =
@@ -195,6 +185,11 @@ df =
     Age:
       df["Age"]
       |> Series.fill_missing(:forward)
+  )
+  |> Explorer.DataFrame.mutate(
+    Fare:
+      df["Fare"]
+      |> Series.fill_missing(:mean)
   )
 ```
 
@@ -220,7 +215,7 @@ DataFrame.shape(df)
 
 <!-- livebook:{"break_markdown":true} -->
 
-Normalize the features toe values between 0 and 1. Start with our remaining `string`.
+Start with our remaining `string`.
 
 ```elixir
 s =
@@ -231,26 +226,19 @@ s =
 df = Explorer.DataFrame.mutate(df, Sex: s)
 ```
 
-From the training set, create a data frame of features and another of just the target column.
+### Split the set
+
+<!-- livebook:{"break_markdown":true} -->
+
+Split the dataset into a training and a testing set.
 
 ```elixir
-targets = DataFrame.select(df, &(&1 == "Survived"), :keep)
-features = DataFrame.select(df, &(&1 == "Survived"), :drop)
-```
+num_examples = Explorer.DataFrame.n_rows(df)
+num_train = ceil(0.85 * num_examples)
+num_test = num_examples - num_train
 
-Convert them to tensors. Then zip them together.
-
-```elixir
-to_tensor = fn df ->
-  df
-  |> Explorer.DataFrame.names()
-  |> Enum.map(&(Explorer.Series.to_tensor(df[&1]) |> Nx.new_axis(-1)))
-  |> Nx.concatenate(axis: 1)
-end
-
-targets = to_tensor.(targets)
-features = to_tensor.(features)
-training_set = Stream.zip(features, targets)
+train_df = Explorer.DataFrame.slice(df, 0, num_train)
+test_df = Explorer.DataFrame.slice(df, num_train, num_test)
 ```
 
 ## Write to File
@@ -261,7 +249,7 @@ Save the normalized sets to use to train our model in the next section. Use Kino
 
 Using `Kino.Input`, evaluate the code block and then put the file location in the resulting input area below the code block. For example:
 
-`elixir_conf/data/titanic/normalized/train.csv`
+`elixir_conf/data/titanic_train.csv`
 
 After you enter the input, evaluate the next code block. You should see the filname printed out.
 
@@ -276,11 +264,27 @@ train_file = Kino.Input.read(train_filename)
 Write the data to the file.
 
 ```elixir
-DataFrame.to_csv(df, train_file)
+DataFrame.to_csv(train_df, train_file)
+```
+
+Repeat for the test set.
+
+`elixir_conf/data/titanic_test.csv`
+
+```elixir
+test_filename = Kino.Input.text("Testing Filename")
+```
+
+```elixir
+test_file = Kino.Input.read(test_filename)
+```
+
+```elixir
+DataFrame.to_csv(test_df, test_file)
 ```
 
 Now it's time to train the models.
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](01_train.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](02_train.livemd)
