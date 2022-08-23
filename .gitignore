@@ -27,8 +27,7 @@ elixir_conf-*.tar
 .DS_Store
 
 # Large data files
-/data/
-*.csv
+
 
 # Models
 /models/
