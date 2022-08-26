@@ -1,4 +1,4 @@
-# Machine Learning: Introduction
+# Machine Learning / Introduction
 
 ```elixir
 Mix.install([
@@ -8,13 +8,7 @@ Mix.install([
 
 ## Goal
 
-<!-- Breadcrumbs -->
-
-<span style="color: #800080; font-size: 14px; font-family: FreeMono, monospace">
-ElixirConf 2022 > Machine Learning > <span style="font-style: italic; color: black;"> Introduction</span></span>
-
 After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available dataset. We will then employ the model to make predictions. This lesson serves as an introduction fto and an overview of machine learning.
-</span>
 
 <!-- livebook:{"break_markdown":true} -->
 

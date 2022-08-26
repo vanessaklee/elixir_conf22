@@ -1,14 +1,8 @@
-# Unsupervised Learning
+# Machine Learning / Unsupervised Learning
 
 ## Goal
 
-<!-- Breadcrumbs -->
-
-<span style="color: #800080; font-size: 14px; font-family: FreeMono, monospace">
-ElixirConf 2022 > Machine Learning > <span style="font-style: italic; color: black;"> Unsupervised Learning</span></span>
-
 This lesson covers the unsupervised learning type of machine learning. After this lesson you will have an overview and example of supervised learning, including applications and challenges.
-</span>
 
 ## Introduction
 

@@ -1,14 +1,8 @@
-# Reinforcement Learning
+# Machine Learning / Reinforcement Learning
 
 ## Goal
 
-<!-- Breadcrumbs -->
-
-<span style="color: #800080; font-size: 14px; font-family: FreeMono, monospace">
-ElixirConf 2022 > Machine Learning > <span style="font-style: italic; color: black;"> Reinforcement Learning</span></span>
-
 This lesson covers the reinforcement learning type of machine learning. After this lesson you will have an overview and example of supervised learning, including its applications and challenges.
-</span>
 
 ## Introduction
 
@@ -42,4 +36,4 @@ Reinforcement Learning isn't the best choice if the cost of using trial and erro
 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_Unsupervised.livemd)
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](../2_Algorithms/1_Intro.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](../3_Algorithms/1_Intro.livemd)

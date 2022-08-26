@@ -1,0 +1,95 @@
+# Machine Learning /Algorithms & Models
+
+## Goal
+
+The sections in this lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+
+## Overview
+
+In the last section we learned that ML algorithms are basically procedures run on data, and they output models. We identified several well-known algorithms. Let's look at each of them a bit more closely to see how and why they are best put to use to solve particular problems.
+
+## Supervised and Unsupervised Learning Algorithms
+
+This lesson will cover algorithms and models used in both supervised and unsupervised machine learning.
+
+### Supervised
+
+Supervised Learning is the type of machine learning where the target outcome is known or labeled. Most supervised machine learning can be divided as either **Classification** or **Regression**.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![classification_regression](images/classification_regression.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Classification Algorithm
+
+Maps the input value (`x`) to the discrete output variable (`y`) and makes predictions by categorizing data into classes based on independent variables.
+
+#### Outcome is CATEGORICAL: predicts a discrete (finite) class label.
+
+##### Binary classification (two discrete outcome labels)
+
+* Cancer cell detection
+  * true / false
+* Email spam detection
+  * "spam" / "not spam"
+
+##### Multiclass classification (more than two outcome labels)
+
+* weather prediction  
+  * "sunny" / "cloudy" / "rainy"
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Regression Algorithm
+
+Maps the input value (`x`) to the continuous output variable (`y`) and makes predictions based on correlations between dependent and independent variables
+
+#### Outcome is CONTINUOUS: predicts a continuous (infinite) quantity
+
+* House prices
+  * _what is the value of my home?_
+* Weather patterns
+  * _what will the temperature be tomorrow?_
+* Gas prices 
+  * _will gas prices drop next month?_
+
+## Review
+
+### Classification
+
+| Output   | Predicts by finding the ... | Loss function      |
+| -------- | --------------------------- | ------------------ |
+| discrete | best fit line               | Cross Entropy Loss |
+
+| Question                  | Answer                                   |
+| ------------------------- | ---------------------------------------- |
+| what will the weather be? | a discrete `sunny`, `cloudy`, or `rainy` |
+
+### Regression
+
+| Predicts by finding the ...       | Output     | Loss function      |
+| --------------------------------- | ---------- | ------------------ |
+| decision boundary between classes | continuous | Mean Squared Error |
+
+| Question               | Answer                            |
+| ---------------------- | --------------------------------- |
+| what will the temp be? | a value between -20°F and 120°F |
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph TD;
+  ML([Machine Learning])-->PD([Prediction]);
+  PD-->LF([Loss Function]);
+  GT([Ground Truth])-->LF;
+  LF-->RG([Regression]);
+  LF-->CL([Classification]);
+  RG-->MSE([Mean Squared Error]);
+  CL-->CEL([Cross Entropy Loss]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](2_Regression.livemd)

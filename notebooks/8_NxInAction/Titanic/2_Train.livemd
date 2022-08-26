@@ -1,0 +1,329 @@
+# Nx in Action/ Titanic / Train
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.1.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.2.1"},
+  {:explorer, "~> 0.2.0"}
+])
+```
+
+## The Plan
+
+1. ~~Define the problem~~
+2. ~~Pepare the data~~
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
+
+## Define the problem
+
+Can we predict passangers who will survive the Titanic disaster?
+
+## Prepare the data
+
+Can we predict passangers who will survive the Titanic disaster?
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/titanic.png)
+
+## Load
+
+With the use of Explorer, load the normalized training set you saved in the last section.
+
+```elixir
+alias Explorer.{DataFrame, Series}
+
+csv = "elixir_conf/data/titanic/normalized/train.csv"
+test_csv = "elixir_conf/data/titanic/normalized/train.csv"
+train_df = DataFrame.from_csv!(csv)
+test_df = DataFrame.from_csv!(csv)
+```
+
+#### Normalize the rest
+
+In the previous notebook we normalized a few inputs. Now we need to take care of the rest.
+
+```elixir
+inputs = DataFrame.select(train_df, &(&1 == "Survived"), :drop)
+targets = DataFrame.select(train_df, &(&1 == "Survived"), :keep)
+
+test_inputs = DataFrame.select(test_df, &(&1 == "Survived"), :drop)
+test_targets = DataFrame.select(test_df, &(&1 == "Survived"), :keep)
+```
+
+```elixir
+to_tensor = fn df ->
+  df
+  |> Explorer.DataFrame.names()
+  |> Enum.map(&(Explorer.Series.to_tensor(df[&1]) |> Nx.new_axis(-1)))
+  |> Nx.concatenate(axis: 1)
+end
+
+train_inputs = to_tensor.(inputs)
+train_targets = to_tensor.(targets)
+test_inputs = to_tensor.(test_inputs)
+test_targets = to_tensor.(test_targets)
+
+batch_size = 100
+
+batched_train_inputs = Nx.to_batched_list(train_inputs, batch_size)
+batched_train_targets = Nx.to_batched_list(train_targets, batch_size)
+batched_train = Stream.zip(batched_train_inputs, batched_train_targets)
+
+batched_test_inputs = Nx.to_batched_list(test_inputs, batch_size)
+batched_test_targets = Nx.to_batched_list(test_targets, batch_size)
+batched_test = Stream.zip(batched_test_inputs, batched_test_targets)
+```
+
+```elixir
+train_max = Nx.reduce_max(train_inputs, axes: [0], keep_axes: true)
+
+normalize = fn {batch, target} ->
+  {Nx.divide(batch, train_max), target}
+end
+
+train_set = batched_train |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
+test_set = batched_test |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
+```
+
+## Train
+
+Define the necessary values.
+
+```elixir
+{_rows, cols} = DataFrame.shape(train_df)
+train_cols = cols - 1
+
+epochs = 50
+loss = :mean_absolute_error
+learning_rate = 0.001
+dropout_rate = 0.1
+optimizer = Axon.Optimizers.adamw(learning_rate)
+
+model =
+  Axon.input({batch_size, train_cols}, "inputs")
+  |> Axon.dense(10)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(1)
+```
+
+```elixir
+model =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+```elixir
+model =
+  Axon.input({batch_size, train_cols}, "inputs")
+  |> Axon.dense(25)
+  |> Axon.dropout(rate: dropout_rate)
+  |> Axon.dense(5)
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:accuracy)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+## Binary Cross Entropy
+
+Our problem is a binary classification problem. That means we want to classify passengers in one of two classes: survived or not survived. That means we want our neural network to predict a probability between 0 and 1.
+
+Probabilities closer to 1 indicate a higher confidence that the passenger survived. Probabilities closer to 0 represent a lower confidence that an example passenger survived.
+
+`sigmoid` is an activation function which always returns a value between 0 and 1. Making it a good choice to return the probability we’re looking for.
+
+```elixir
+model =
+  Axon.input({batch_size, train_cols}, "Titantic Inputs")
+  |> Axon.dense(16)
+  |> Axon.relu()
+  |> Axon.dense(16)
+  |> Axon.relu()
+  |> Axon.dropout()
+  |> Axon.dense(1)
+  |> Axon.sigmoid()
+```
+
+![scales](images/scales.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Check the balance of the target
+
+```elixir
+survived = Nx.sum(train_targets) |> Nx.to_number()
+perished = Nx.size(train_targets) - survived
+
+IO.puts("Survived: #{survived} / #{(survived / Nx.size(train_targets) * 100) |> Float.ceil()}%")
+IO.puts("Perished: #{perished} / #{(perished / Nx.size(train_targets) * 100) |> Float.ceil()}%")
+```
+
+We have an slighly imbalanced dataset. When you have a very imbalanced dataset, you'll want to tell your model to make proportional updates.
+
+Axon loss functions like `binary_cross_entropy/3` let you send weight parameters for each class. We'll send them as proportional to the overall number of occurrences in the training set.
+
+```elixir
+proportional_survived = 1 / survived
+```
+
+```elixir
+proportional_perished = 1 / perished
+```
+
+```elixir
+loss =
+  &Axon.Losses.binary_cross_entropy(
+    &1,
+    &2,
+    negative_weight: proportional_perished,
+    positive_weight: proportional_survived,
+    reduction: :mean
+  )
+```
+
+This assigns the proprotional value for "Surivived" to the positive weight. There are fewer examples of the "Survived" class in the dataset, which means it has the larger of the two proportional values.
+
+If the model guesses "postive", that the passenger "Surivived", the loss function resturns a bigger penalty for __incorrectly__ classifying that a passenger "Survived" is larger than for incorrectly classifying a passenger as "Perished".
+
+```elixir
+optimizer = Axon.Optimizers.adam(1.0e-3)
+
+model_state =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(:precision)
+  |> Axon.Loop.metric(:recall)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+## Test
+
+```elixir
+model
+```
+
+```elixir
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
+test_set
+|> Enum.each(fn {input, truth} ->
+  predicted =
+    Axon.predict(model, model_state, input)
+    |> scalar.()
+
+  rounded =
+    predicted
+    |> round()
+
+  truth = truth |> scalar.()
+
+  if rounded == truth do
+    IO.puts(
+      IO.ANSI.format([
+        :green,
+        "Actual: #{truth} Predicted: #{rounded} / #{predicted}"
+      ])
+    )
+  else
+    IO.puts("Actual: #{truth} Predicted: #{rounded} / #{predicted}")
+  end
+end)
+```
+
+Save the model.
+
+```elixir
+model
+|> Axon.serialize(%{model_state: model_state})
+|> then(&File.write!("elixir_conf/models/titanic_model.axon", &1))
+```
+
+#### Validate the model
+
+```elixir
+model
+|> Axon.Loop.evaluator()
+|> Axon.Loop.metric(:true_positives, "true_survived", :running_sum)
+|> Axon.Loop.metric(:true_negatives, "true_perished", :running_sum)
+|> Axon.Loop.metric(:false_positives, "false_survived", :running_sum)
+|> Axon.Loop.metric(:false_negatives, "false_perished", :running_sum)
+|> Axon.Loop.run(test_set, model_state)
+```
+
+## Linear Regression
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+
+  @learning_rate 0.01
+
+  defn predict({weight, bias}, input) do
+    weight * input + bias
+  end
+
+  defn loss({weight, bias}, input, target) do
+    prediction = predict({weight, bias}, input)
+    Nx.mean(Nx.power(target - prediction, 2))
+  end
+
+  defn update({weight, bias} = params, input, target) do
+    {gradient_weight, grad_bias} = grad(params, &loss(&1, input, target))
+
+    {
+      weight - gradient_weight * @learning_rate,
+      bias - grad_bias * @learning_rate
+    }
+  end
+
+  defn init_params do
+    weight = Nx.random_normal({100, 6}, 0.0, 0.1)
+    bias = Nx.random_normal({1, 1}, 0.0, 0.1)
+    {weight, bias}
+  end
+
+  def train(epochs, data) do
+    for _ <- 1..epochs, reduce: init_params() do
+      acc ->
+        data
+        |> Enum.reduce(
+          acc,
+          fn {input, target}, current_params ->
+            update(current_params, input, target)
+          end
+        )
+    end
+  end
+end
+```
+
+```elixir
+model = LinReg.train(10, train_set)
+
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
+test_set
+|> Enum.each(fn {input, target} ->
+  prediction =
+    LinReg.predict(model, input)
+    |> scalar.()
+
+  truth = scalar.(target)
+  IO.inspect("Actual: #{truth} Predicted: #{prediction}")
+end)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_Data.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx in Action - Advanced ></span>](../Advanced/1_Intro.livemd)

@@ -1,0 +1,178 @@
+# Nx / Axon
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.1.0"},
+  {:nx, "~> 0.2.1"}
+])
+```
+
+## Goal
+
+To provide an overview of the Axon library, which provides Nx-powered Neural Networks for Elixir.
+
+Credit: this notebook is influenced by the [Axon repo](https://github.com/elixir-nx/axon) and the creators [blog](https://seanmoriarity.com/).
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/basic_nn.png)
+
+## Overview
+
+Axon was developed with the specific goal of providing programmers with zero deep learning experience an easy-to-use easy to learn and use library. At the same time, Axon has the goal of giving those with experience a functional take on deep learning and the tools to be up and running fast. 
+
+Axon has 4 main components:
+
+* Functional API – A low-level API of Elixir defn of which all other APIs build on.
+* Model Creation API – A high-level model creation API which manages model initialization and application.
+* Optimization API – An API for creating and using first-order optimization techniques.
+* Training API – An API for quickly training models.
+
+<!-- livebook:{"break_markdown":true} -->
+
+## Defining the Model
+
+Axon enters our machine learning process when we have already preprocessed our data and are ready to train a model.
+
+In the next chapter we will put Axon to use in our own Neural Network example. Here is a sneak peek of what that will look like.
+
+```elixir
+model =
+  Axon.input({nil, 1, 28, 28}, "input")
+  |> Axon.flatten()
+  |> Axon.dense(128, activation: :relu)
+  |> Axon.dense(10, activation: :softmax)
+```
+
+All `Axon` models start with an input layer to tell subsequent layers what shapes to expect. We then use `Axon.flatten/2` which flattens the previous layer by squeezing all dimensions but the first dimension into a single dimension. Our model consists of 2 fully connected layers with 128 and 10 units respectively. The first layer uses `:relu` activation which returns `max(0, input)` element-wise. The final layer uses `:softmax` activation to return a probability distribution over the 10 labels [0 - 9].
+
+<!-- livebook:{"break_markdown":true} -->
+
+## Training
+
+Axon boils the task of training down to defining a training step and passing the step to a training loop. You can use `Axon.Training.step/3` to create a generic training step with a model, a loss function, and an optimizer. In this example, we'll use *categorical cross-entropy* and the *Adam* optimizer. You can then pass this to a training loop with your training data to train the final model. `Axon.Training.train/4` lets you specify some additional options as well, such as the `Nx` compiler to use.
+
+Following is a non-functional example that trains for 10 epochs using the `EXLA` compiler. It will log Accuracy metrics every 100 training steps.
+
+```
+model
+|> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+|> Axon.Loop.metric(:accuracy, "Accuracy")
+|> Axon.Loop.run(data, %{}, epochs: 10, compiler: EXLA)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/training_sp.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+## Prediction
+
+Once you have the parameters from the training step, you can use them to make predictions using `Axon.predict`:
+
+````
+Axon.predict(model, params, first_batch)```
+````
+
+<!-- livebook:{"break_markdown":true} -->
+
+## Concepts
+
+Neural Networks concepts in Axon.
+
+### Activation Functions
+
+An activation function decides whether a neuron should be activated or not. This means that it will decide whether the neuron’s input to the network is important or not in the process of prediction. The role of the Activation Function is to derive output from a set of input values fed to a layer.
+
+The Activation Functions are typically divided into 2 types: linear and non-linear. A linear function graphs as a line; a non-linear graphs as a non-line or curve. Non-linear activation function are more popular because they make it easy for the model to generalize or adapt to a variety of data.
+
+The activation function helps the neural network to use important data points and supress irrelevant ones.
+
+Axon provides options for activation: `:linear`, `:sigmoid`, `:tanh`, `:relu`, and more.
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Linear
+
+With linear activation function the activation is proportional to the input. The function doesn't do anything to the weighted sum of the input, it simply passes on the input it was given.
+
+![](images/linear_activation.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Sigmoid
+
+Maps logistic or multinomial regression output to probabilities, returning a value between 0 and 1.
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Tanh
+
+Similar to sigmoid in shape, but with the advantage that the negative inputs will be mapped strongly negative and the zero inputs will be mapped near zero in the tanh graph. Its mainly used classification between two classes. Usually used in hidden layers of a neural network because it helps in centering the data and makes learning for the next layer much easier.
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Relu
+
+ReLU (Rectified Linear Unit) is common in convolutional neural networks or deep learning. It allows for backpropagation while simultaneously making it computationally efficient. It does not activate all the neurons at the same time so is far more computationally efficient when compared to the sigmoid and tanh functions.
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Softmax
+
+The softmax activation function takes in a vector of raw outputs of the neural network and returns a vector of probability scores. It is usually the last layer of a neural network.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/parfait.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Layers
+
+Axon's `dense` is a functional implementation of a dense layer. It performs linear transformation on the input. It takes these paramters in these shapes:
+
+* `input` - `{batch_size, * input_features}`
+* `kernel` - `{input_features, output_features}`
+* `bias` - `{}` or `{output_features}`
+
+Like this: `Axon.Layers.dense(input, kernel, bias)`
+
+The input is transformed by computing the kernel matrix parameter and bias parameter:
+
+`Nx.dot(input, kernel) + bias`
+
+It returns `{batch_size, *, output_features}`
+
+Since `kernel` and `bias` are typically learnable parameters, they are trained using a gradient method for optimization.
+
+A gradient method is a type of algorithm to solve problems of form, in our class a slope. In this lesson we will see use a gradient descent method to determine the loss function.
+
+Gradient descent is used to find the minimum value for a function. You begin with randam values for the parameters and then take small steps in the direction of the slope at each iteration.
+
+Typically you will call `dense/3` in a pipe, like this:
+
+`Axon.input(input_shape, "Input")`
+`|> Axon.dense(5)`
+`
+
+where `5` is the `units`, which specifies the number of output units.
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Convolutional & Pooling Layers
+
+Axon provides a functional implementation of a general dimensional convolutional layer, which are commonly used in computer vision or when working with sequences and other input signals. Pooling is applied to the spatial dimension of the input tensor, often after convolutional layers.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Dropout
+
+Dropout helps prevent overfitting. It does this by preventing the model from relying too much on certain connections. It takes a dropout `rate` to use to determine the probability `rate` and then scales the input tensor based on it.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_Dataframes.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx in Action ></span>](../8_NxInAction/1_Intro.livemd)

@@ -1,0 +1,486 @@
+# Nx / Multi-Dimensional Data with Nx Tensors
+
+```elixir
+Mix.install([
+  {:nx, "~> 0.2.1"}
+])
+
+import IEx.Helpers
+```
+
+## Goal
+
+To gain an understand of and experience with tensors in Nx.
+
+Credit: this notebook is influenced by examples in the [Nx repo](https://github.com/elixir-nx/nx/blob/main/nx/guides/intro-to-nx.livemd).
+
+## Numerical Elixir, alias: Nx
+
+[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a road block when it comes to deep nesting or random access. Thy also lack optimization for use cases such as problem the require millions of calculations.
+
+Nx brings typed, multidimensional data, called tensors.
+
+## Tensors
+
+Tensors hold typed data. Types like:
+
+* unsigned integers (u8, u16, u32, u64)
+* signed integers (s8, s16, s32, s64)
+* floats (f32, f64), brain floats (bf16)
+* and complex (c64, c128)
+
+The typed data is held in multiple, named dimensions. Tensors have a predetermined shape and type. Here is two dimensional array:
+
+$$
+\begin{bmatrix}
+  1 & 2 \\\\
+  3 & 4
+\end{bmatrix}
+$$
+
+You may have written something similar using a list of lists.
+
+```elixir
+[
+  [1, 2],
+  [3, 4]
+]
+```
+
+### Make a tensor
+
+We can access the main API for tensors using IEx helpers, like this:
+
+```elixir
+h(Nx.tensor())
+```
+
+Tensors can be made from raw Elixir lists of numbers.
+
+```elixir
+tensor =
+  1..4
+  |> Enum.chunk_every(2)
+  |> Nx.tensor(names: [:y, :x])
+```
+
+As you can see, tensors are made of:
+
+* Data, the list of lists `[[1, 2], [3, 4]]`
+* Type, a signed integer 64 bits long `s64`
+* Shape, left to right with the outside dimensions first
+* Names
+
+To access any cell of the tensor, use:
+
+```elixir
+tensor[0][1]
+```
+
+Try getting the first row of the tensor:
+
+<!--
+ Possible answer
+tensor[0]
+-->
+
+```elixir
+# ...your code here...
+```
+
+We can also get a whole dimension or a range
+
+```elixir
+tensor[x: 1] |> IO.inspect()
+tensor[y: 0..1] |> IO.inspect()
+:ok
+```
+
+## Challenge
+
+### Make your own tensors
+
+* make a `{4, 4}` tensor with named dimensions (:x & :y)
+* then return a `{2, 2}` tensor containing the first two columns
+  of the first two rows
+
+The code box below demonstrates how IEx helpers provide details about the last term used.
+
+Add your own new "Code" cells to work through this challenge. Hover over the space below the code box and select "+ Code".
+
+HINT: if you need to test the shape of your tensor, use `Nx.shape(tensor)`; we'll cover shape more in the next section
+
+<!--
+ possible answer:
+challenge_tensor =
+  1..16
+  |> Enum.chunk_every(4)
+  |> Nx.tensor(names: [:x, :y])
+  |> IO.inspect(label: "4X4 tensor")
+
+(Nx.shape(challenge_tensor) == {4,4}) |> IO.inspect(label: "tensor shape {4,4}?")
+
+challenge_tensor2 = challenge_tensor[green: 0..1, bean: 0..1]
+|> IO.inspect(label: "first 2 columns of the first 2 rows as a {2,2} tensor")
+
+(Nx.shape(challenge_tensor2) == {2,2}) |> IO.inspect(label: "second tensor shape {2,2}?")
+:ok 
+-->
+
+<!-- livebook:{"disable_formatting":true} -->
+
+```elixir
+i tensor
+```
+
+## Tensor Shape
+
+Did you use `Nx.shape/1` to view the shape of your challenge tensors?
+
+```elixir
+Nx.shape(tensor)
+```
+
+`Nx.reshape/2` will make a new tensor with a new shape:
+
+```elixir
+Nx.reshape(tensor, {1, 4}, names: [:batches, :values])
+```
+
+This operation reuses all of the tensor data, merely alters the metadata so that the new tensor has the same type with a new shape.
+
+Can you reeshape the tensor so it has 3 dimensions with one batch, one row, and four columns?
+
+<!--
+ Possible answer
+Nx.reshape(tensor, {1, 1, 4}, names: [:batches, :row, :values]) 
+-->
+
+```elixir
+# ...your code here...
+```
+
+A dimension is called an _axis_. Axes can have names. Following is a tensor with the data values specified along with options for dimension names and type:
+
+```elixir
+Nx.tensor([[1, 2, 3]], names: [:rows, :cols], type: {:u, 8})
+```
+
+We created a tensor of the shape `{1, 3}`, with the type `u8`,
+the values `[1, 2, 3]`, and two axes named `rows` and `cols`.
+
+Now that we've created tensors, what can we do with them?
+
+## Tensor aware functions
+
+Let's first take a close look at the tensor we created above:
+
+```elixir
+tensor
+```
+
+`IEx.Helpers.exports/1` or code completion will reveal some of the functions we have to operate on tensors.
+
+<!-- livebook:{"disable_formatting":true} -->
+
+```elixir
+exports Nx
+```
+
+The terms used in these function names suggest they could work with scalars, which means a tensor can be a scalar:
+
+```elixir
+pi = Nx.tensor(3.1415, type: {:f, 32})
+```
+
+We can then take the cosine of `pi` or on the whole tensor:
+
+```elixir
+Nx.cos(pi) |> IO.inspect(label: "cosine of pi")
+Nx.cos(tensor) |> IO.inspect(label: "cosine of tensor")
+:ok
+```
+
+Sometimes you need to aggregate the contents of a tensor, such as getting the sum:
+
+```elixir
+Nx.sum(tensor)
+```
+
+This use of `sum/1` went across the mutiple dimensions, in this case `1 + 2 + 3 + 4`. You can also specify axes. To sum the `x` axis, such as the code cell below, we get the sum for the x dimension: `1 + 2` in row one and `3 + 4` in row 2. Evaluate the cell and then see what happens when you change to the `y` axis.
+
+```elixir
+Nx.sum(tensor, axes: [:x])
+```
+
+### Challenge
+
+#### Operate on Tensors
+
+* create a `{2, 2, 2}` tensor
+* with the values `1..8`
+* with dimension names `[:z, :y, :x]`
+* calculate the sums along the `y` axis
+
+<!-- possible answer
+challenge_tensor3 = 1..8 
+  |> Enum.chunk_every(2)
+  |> Enum.chunk_every(2)
+  |> Nx.tensor(names: [:z, :y, :x])
+
+(challenge_tensor3 |> Nx.shape == {2,2,2}) |> IO.inspect(label: "shape matches {2,2,2}?")
+(challenge_tensor3 |> Nx.names == [:z, :y, :x]) |> IO.inspect(label: "names match [:z, :y, :x]?")
+
+Nx.sum(challenge_tensor3, axes: [:y]) |> IO.inspect(label: "sum of `y` axis")
+:ok
+-->
+
+```elixir
+# your code here
+```
+
+## Combining Tensors
+
+We are able to combine tensors using an operator. For example, we can subtract one tensor from another:
+$$
+\begin{bmatrix}
+  5 & 6 \\\\
+  7 & 8
+\end{bmatrix} -
+\begin{bmatrix}
+  1 & 2 \\\\
+  3 & 4
+\end{bmatrix} =
+\begin{bmatrix}
+  4 & 4 \\\\
+  4 & 4
+\end{bmatrix}
+$$
+
+```elixir
+tensor2 = Nx.tensor([[5, 6], [7, 8]])
+Nx.subtract(tensor2, tensor)
+```
+
+The result is the expected `{2, 2}` shaped tensor of all fours.
+
+What if our tensors did not share the same shape? The subtraction wouldn't work. That's when we reach for _broadcasting_.
+
+## Broadcasts
+
+Often, the dimensions of tensors in an operator don't match.
+For example, you might want to subtract a `1` from every
+element of a `{2, 2}` tensor, like this:
+
+$$
+\begin{bmatrix}
+  1 & 2 \\\\
+  3 & 4
+\end{bmatrix} - 1 =
+\begin{bmatrix}
+  0 & 1 \\\\
+  2 & 3
+\end{bmatrix}
+$$
+
+Mathematically, it's the same as this:
+
+$$
+\begin{bmatrix}
+  1 & 2 \\\\
+  3 & 4
+\end{bmatrix} -
+\begin{bmatrix}
+  1 & 1 \\\\
+  1 & 1
+\end{bmatrix} =
+\begin{bmatrix}
+  0 & 1 \\\\
+  2 & 3
+\end{bmatrix}
+$$
+
+That means we need a way to convert `1` to a `{2, 2}` tensor.
+`Nx.broadcast/2` solves that problem. This function takes
+a tensor or a scalar and a shape.
+
+```elixir
+Nx.broadcast(1, {2, 2})
+```
+
+This broadcast takes the scalar `1` and translates it
+to a compatible shape by copying it.  Sometimes, it's easier
+to provide a tensor as the second argument, and let `broadcast/2`
+extract its shape:
+
+```elixir
+Nx.broadcast(1, tensor)
+```
+
+The code broadcasts `1` to the shape of `tensor`. In many operators
+and functions, the broadcast happens automatically:
+
+```elixir
+Nx.subtract(tensor, 1)
+```
+
+This result is possible because Nx broadcasts _both tensors_
+in `subtract/2` to compatible shapes. That means you can provide
+scalar values as either argument:
+
+```elixir
+Nx.subtract(10, tensor)
+```
+
+Or subtract a row or column. Mathematically, it would look like this:
+
+$$
+\begin{bmatrix}
+  1 & 2 \\\\
+  3 & 4
+\end{bmatrix} -
+\begin{bmatrix}
+  1 & 2
+\end{bmatrix} =
+\begin{bmatrix}
+  0 & 0 \\\\
+  2 & 2
+\end{bmatrix}
+$$
+
+which is the same as this:
+
+$$
+\begin{bmatrix}
+  1 & 2 \\\\
+  3 & 4
+\end{bmatrix} -
+\begin{bmatrix}
+  1 & 2 \\\\
+  1 & 2
+\end{bmatrix} =
+\begin{bmatrix}
+  0 & 0 \\\\
+  2 & 2
+\end{bmatrix}
+$$
+
+This rewrite happens in Nx too, also through a broadcast. We want to
+broadcast the tensor `[1, 2]` to match the `{2, 2}` shape, like this:
+
+```elixir
+Nx.broadcast(Nx.tensor([1, 2]), {2, 2})
+```
+
+The `subtract` function in `Nx` takes care of that broadcast
+implicitly, as before:
+
+```elixir
+Nx.subtract(tensor, Nx.tensor([1, 2]))
+```
+
+The broadcast worked as advertised, copying the `[1, 2]` row
+enough times to fill a `{2, 2}` tensor.  A tensor with a
+dimension of `1` will broadcast to fill the tensor:
+
+```elixir
+[[1], [2]] |> Nx.tensor() |> Nx.broadcast({1, 2, 2})
+```
+
+```elixir
+[[[1, 2, 3]]]
+|> Nx.tensor()
+|> Nx.broadcast({4, 2, 3})
+```
+
+Both of these examples copy parts of the tensor enough
+times to fill out the broadcast shape. You can check out the
+Nx broadcasting documentation for more details:
+
+<!-- livebook:{"disable_formatting":true} -->
+
+## Numerical definitions (defn)
+
+The `defn` macro simplifies the expression of mathematical formulas
+containing tensors. Numerical definitions have two primary benefits
+over classic Elixir functions.
+
+* They are _tensor-aware_. Nx replaces operators like `Kernel.-/2`
+  with the `Defn` counterparts &mdash; which in turn use `Nx` functions
+  optimized for tensors &mdash; so the formulas we express can use
+  tensors out of the box.
+
+* `defn` definitions allow for building computation graph of all the
+  individual operations and using a just-in-time (JIT) compiler to emit
+  highly specialized native code for the desired computation unit.
+
+We don't have to do anything special to get access to
+get tensor awareness beyond importing `Nx.Defn` and writing
+our code within a `defn` block.
+
+To use Nx in a Mix project or a notebook, we need to include
+the `:nx` dependency and import the `Nx.Defn` module. The
+dependency is already included, so import it in a Code cell,
+like this:
+
+```elixir
+import Nx.Defn
+```
+
+Just as the Elixir language supports `def`, `defmacro`, and `defp`,
+Nx supports `defn`. There are a few restrictions. It allows only
+numerical arguments in the form of primitives or tensors as arguments
+or return values, and has a subset of the language within
+the `defn` block.
+
+The subset of Elixir allowed within `defn` is quite broad, though. We can
+use macros, pipes, and even conditionals, so we're not giving up
+much when you're declaring mathematical functions.
+
+Additionally, despite these small concessions, `defn` provides huge benefits.
+Code in a `defn` block uses tensor aware operators and types, so the math
+beneath your functions has a better chance to shine through. Numerical
+definitions can also run on accelerated numerical processors like GPUs and
+TPUs. Here's an example numerical definition:
+
+```elixir
+defmodule TensorMath do
+  import Nx.Defn
+
+  defn subtract(a, b) do
+    a - b
+  end
+end
+```
+
+This module has a numerical definition that will be compiled.
+
+Now, it's your turn. Add a `defn` to `TensorMath`
+that accepts two tensors representing the lengths of sides of a
+right triangle and uses the pythagorean theorem to return the
+[length of the hypotenuse](https://www.mathsisfun.com/pythagoras.html).
+Add your function directly to the previous Code cell.
+
+The last major feature we'll cover is called auto-differentiation, or autograd.
+
+## Automatic differentiation (autograd)
+
+An important mathematical property for a function is the
+rate of change, or the gradient. These gradients are critical
+for solving systems of equations and building probabilistic
+models. In advanced math, derivatives, or differential equations,
+are used to take gradients. Nx can compute these derivatives
+automatically through a feature called automatic differentiation,
+or autograd.
+
+<!-- livebook:{"disable_formatting":true} -->
+
+```elixir
+h Nx.Defn.grad
+```
+
+There are many more features to Nx that we cannot cover in this training. See the [documentation](https://hexdocs.pm/nx/Nx.html) as you continue experimenting on your own.
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_Intro.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx Plus ></span>](../7_NxPlus/1_Explorer.livemd)

@@ -1,0 +1,34 @@
+# Numerical Elixir / Introduction
+
+## Goal
+
+To provide a thorough overview of the Numerical Elixir (Nx) ecosystem followed by step-by-step guides for using the tools available in the ecosystem libraries to solve problems with machine learning.
+
+## Overview
+
+There are several libraries that make up the Numerical Elixir ecosystem. Each of them specializes in a different tool for machine learning similar to the Python libraries like PyTorch and Numpy.
+
+### Nx Ecosystem
+
+The Nx ecosystem is made up of several quickly developing libraries. Keep an eye on the [Numerical Elixir parent repo](https://github.com/elixir-nx) for new libraries to emerge.
+
+| [Nx](https://github.com/elixir-nx/nx)                 | Multi-dimensional arrays (tensors) and numerical definitions for Elixir; Numpy with a touch of PyTorch & Tensorflow |
+| [Explorer](https://github.com/elixir-nx/explorer)     | Series (one-dimensional) and dataframes (two-dimensional) for fast data exploration in Elixir                       |
+| [Axon](https://github.com/elixir-nx/axon)             | Nx-powered Neural Networks (definition, training, and evaluation); similar to Keras                                 |
+| [Axon ONNX](https://github.com/elixir-nx/axon_onnx)   | Easily convert models between ONNX and Axon; example use [here](https://github.com/thehaigo/live_onnx)              |
+| [XLA](https://github.com/elixir-nx/xla)               | Pre-compiled XLA extension                                                                                          |
+| [Scidata](https://github.com/elixir-nx/scidata)       | Download and normalize datasets related to science                                                                  |
+| [Scholar](https://github.com/elixir-nx/scholar)       | Machine learning tools built on top of Nx                                                                           |
+| [Tokenizers](https://github.com/elixir-nx/tokenizers) | Elixir bindings for Hugging Face 🤗 Tokenizers                                                                    |
+| [Complex](https://github.com/elixir-nx/complex)       | Elixir library for types and mathematical functions for complex numbers                                             |
+| [STB Image](https://github.com/elixir-nx/stb_image)   | A tiny image library using stb_image as the backend                                                                 |
+| [Livebook](https://livebook.dev/)                     | Interactive & collaborative Elixir code notebooks similar to Jupyter Notebooks                                      |
+
+#### Livebook and Data Visualization Libraries
+
+This training course uses Livebook for lesson content as well as for writing and experimenting with Elixir code. There are a few libraries we will be using to enhance our use of Livebook.
+
+| [Kino](https://github.com/livebook-dev/kino)          | Client-driven interactive widgets for Livebook to render rich and interactive outputs |
+| [VegaLite](https://github.com/livebook-dev/vega_lite) | Elixir bindings to Vega-Lite grammar for composing interactive graphics               |
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Tensors.livemd)

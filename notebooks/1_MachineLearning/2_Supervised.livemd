@@ -1,14 +1,8 @@
-# Supervised Learning
+# Machine Learning / Supervised Learning
 
 ## Goal
 
-<!-- Breadcrumbs -->
-
-<span style="color: #800080; font-size: 14px; font-family: FreeMono, monospace">
-ElixirConf 2022 > Machine Learning > <span style="font-style: italic; color: black;"> Supervised Learning</span></span>
-
 This lesson covers the supervised learning type of machine learning. After this lesson you will have an overview and example of supervised learning, including common applications and challenges.
-</span>
 
 ## Introduction
 
