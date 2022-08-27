@@ -1,4 +1,4 @@
-# Neural Networks / Introduction
+# Neural Networks: Introduction
 
 ## Goal
 
@@ -26,27 +26,31 @@ After introducing machine learning we’ll dive into Neural Networks which, them
 
 ## Neural Networks
 
-### What are Neural Networks?
-
 Neural networks are fundamentally composed of artificial neurons which are in turn modeled from biological neurons – cells in the brain that are excited by sensory input. For example the perceptron, the first artificial neuron, abstracts biological neurons by taking a set of weighted inputs (X1,X2,X3), processes them through an activation threshold (bias) and produces a binary output of 0 or 1.
 
 ![](images/neuron.png)
 
-Therefore, a neural network is a collection of artificial neurons separated by “layers”. Each layer can process the input of another providing a rich feature set for prediction. Mathematically this can be described as “a neural networks take an input vector of p variables X = (X1, X2, … Xp) and creates a nonlinear function f(X) to predict response Y”.
+Therefore, a neural network is a collection of artificial neurons separated by “layers”. Each layer can process the input of another providing a rich feature set for prediction. Mathematically this can be described as “neural networks take an input vector of p variables X = (X1, X2, … Xp) and creates a nonlinear function f(X) to predict response Y”.
 
-![](images/Screen%20Shot%202022-08-20%20at%205.22.23%20PM.png)
+![](images/neural_network.png)
 
-In modern neural networks the preferred choice of activation function within an artificial neuron is the ReLU (rectified linear unit) and, although more common in earlier neural networks, sigmoid activation functions. The key reasons for further development of artificial neurons, and key differences from perceptrons, is that perceptron output is fixed at either 0 or 1. Modern neurons output values between 0 and 1 which provides smaller changes in the overall network when hyperparameter tuning.
+In modern applications of neural networks both the rectified linear unit (ReLU) and sigmoid activation functions are preferred over perceptrons. The key reason for further development of artificial neurons, and a key difference from perceptrons, is that modern activation functions output values between 0 and 1 while a perceptron’s output is binary, either 0 or 1. This makes tuning neural networks easier as small changes in the hyperparameters won’t cause large changes throughout the network.
 
-### TODO: Do we need this section? Should we add a definition section?
+<!-- livebook:{"break_markdown":true} -->
 
-### Inputs, Weights, and Biases
+<hr style="background-color: #800080;height: 5.0px;" />
 
-An artificial neuron is a basic building block of the neural network. The  components are inputs, weights, and biases.
+<img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
 
-#### Inputs
+##### Definitions
 
-Inputs are the set of values for which we need to predict the output value. They can be viewed as features or attributes in a dataset.
+* _Features_ - Input from data that we are interested in as predictors
+* _Weights_ - Values attributed to features which indicates the importance as a predictor
+* _Biases_ - A measure of how easy it is to get neuron to fire
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+## Multilayer Neural Networks
 
 #### Weights
 
@@ -71,12 +75,6 @@ Biases are constant values added to the product of inputs and weights to offset 
 
 By including biases we can reduce the variance and get better generalization. Biases shift the result of the activation function toward the left or right, the positive or negative.
 
-<!-- livebook:{"break_markdown":true} -->
-
-#### Deep Learning
-
-Deep learning refers to extracting and transforming data through multiple layers of neural networks where each layer takes inputs from the previous layer and refines it progressively. Algorithms train the layers to minimize errors and increase accuracy.
-
 ## Conclusion
 
 Neural Networks learn through the process of **Backpropagation**
@@ -89,6 +87,3 @@ graph TD;
   P-->ME(Measure of Error);
   ME-- Backpropagation -->NN;
 ```
-<!-- livebook:{"break_markdown":true} -->
-
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_DeepLearning.livemd)
