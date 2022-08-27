@@ -56,6 +56,8 @@ In modern applications of neural networks both the rectified linear unit (ReLU) 
 * _Features_ - Input from data that we are interested in as predictors
 * _Weights_ - Values attributed to features which indicates the importance as a predictor
 * _Biases_ - A measure of how easy it is to get neuron to fire
+* _Parameters_ - Internal values of a neural network (weights, biases, features, etc)
+* _Hyperparameters_ - External values of a neural network (epochs, learning rate, etc)
 
 <hr style="background-color: #800080;height: 5.0px;" />
 
@@ -110,7 +112,6 @@ targets =
 model =
   Axon.input("input", shape: {nil, 1, 28, 28})
   |> Axon.flatten()
-  # |> Axon.dense(128, activation: :relu)
   |> Axon.dense(10, activation: :softmax)
 
 images =
@@ -128,41 +129,35 @@ As with most things in machine learning, our goal is to minimize the error (or t
 
 ## Multilayer Neural Networks
 
-#### Weights
+Modern neural networks typically have multiple hidden layers. This helps improve the learning task by allowing n-dimensional computation that captures more aspects of complex datasets. It’s also important to note that the name “hidden layer” is a bit of a misnomer. It is not hidden or doing special secret computation – it literally means “the layers that are not the input or output layers”.
 
-A weight is a value associated with a feature which indicates the importance of that feature in predicting the final value. The closer to zero a feature's weight, the less importance it has. Weight also tells us the relationship between a particular feature in the dataset and the target value.
+![](images/multi_neural_network.png)
 
-Consider the example of predicting the likelihood of purchasing a vehicle with a dataset made of two input features: vehicle price and vehicle popularity.
-Then consider the example as a line equation:
+<!-- livebook:{"break_markdown":true} -->
 
-`w1 * (Vehicle Cost) + w2 (Vehicle Popularity) + b = 0`
+As a multi-layer model is trained each previous output from a hidden layer is use as the input for the next. In other words, each activation of a hidden layer is used as the input vector of the next. Therefore, as more layers are added, more nuance in the data can be captured. Mathematically we can think of this as taking our initial input vector and applying n transformations to the data.
 
-When the vehicle cost goes up, the expression value goes up. If that expression value goes up, that means the likelihood of purchase goes up. That is the opposite of what we want!
+Finally, unlike a single-layer network, a multi-layer network will have multiple outputs rather than one. For example, our MNIST dataset will output 10 probabilities (the numbers 0-9). We then assign an image with a number that has the highest likelihood of being the number we are looking for. To guarantee the output is a valid probability (remember probabilities must sum up to 1 and cannot be negative) we typically use the special softmax activation function.
 
-This indicates to us that we need to invert the weight. The w1 value should be inverted from a positive to negative value. A negative weight value produces a negative product and the value of the expression decreases. That is the outcome we want: the higher the cost, the less the likelihood of purchase.
+Let's revisit our code from above - what happens when we add more layers? Does our accuracy increase - does the model improve? Feel free to tune parameters/hyperparameters to discover what helps decrease our error rate.
 
-If a positive weight is associated with a feature there is a direct relationship between that feature and the target value. If a negative weight is associated with a feature there is an inverse relationship between the feature and the target value.
+```elixir
+multi_layer_model =
+  Axon.input("input", shape: {nil, 1, 28, 28})
+  |> Axon.flatten()
+  # |> Axon.dense(128, activation: :relu)
+  |> Axon.dense(10, activation: :softmax)
 
-That is how weights help.
-
-#### Biases
-
-Biases are constant values added to the product of inputs and weights to offset the result. Without biases, a neural network is only doing matrix multiplication on inputs and weights. This leads to overfitting the data set.
-
-By including biases we can reduce the variance and get better generalization. Biases shift the result of the activation function toward the left or right, the positive or negative.
+params =
+  multi_layer_model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+  |> Axon.Loop.metric(:accuracy, "Accuracy")
+  |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 5, compiler: EXLA)
+```
 
 ## Conclusion
 
-Neural Networks learn through the process of **Backpropagation**
-
-```mermaid
-graph TD;
-  FP{{Forward Pass}}-->In([Input data]);
-  In-->NN([Neural Network]);
-  NN-->P[[Prediction]];
-  P-->ME(Measure of Error);
-  ME-- Backpropagation -->NN;
-```
+Overall, neural networks are simply a collection of artificial neurons. At their core each neuron is simple a function that takes an input, processes that input on an activation function, and outputs a value between 0 and 1. An entire neural network, while mathematically complex, can be thought of, itself, as a function taking input and giving an output. Most of the complexity comes from the number of neurons in a network, the number of layers, and the different activation functions we have at our disposal. And while these networks can be large and complex it is easier to think of them as functions that gives us probabilistic outputs.
 
 <!-- livebook:{"break_markdown":true} -->
 
