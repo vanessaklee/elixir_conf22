@@ -1,0 +1,96 @@
+# What's Next for NX?
+
+```elixir
+Mix.install([
+  # {:scholar, git: "https://github.com/msluszniak/scholar", branch: "k_means"}
+  {:scholar, git: "https://github.com/elixir-nx/scholar", branch: "main"}
+])
+```
+
+## Goal
+
+To look toward the possible future of the Nx ecosystem and machine learning with Elixir.
+
+## The Future
+
+Most of the libraries we've explored in the Nx ecosystem are barely two years old. Development is fast. What's next for Nx?
+
+## Gradient Boosting & Decision Trees
+
+The most popular algorithms at use in the Python ML ecosystem is gradient boosting and decision tree. These particular algorithms outperform deep learning if you're using tabular or time-series data. They are also easier  to train and deploy.
+
+The algorithms are currently being developed in the Elixir ecosystem. Sean Moriarity [reported on July 12, 2022](https://dockyard.com/blog/2022/07/12/elixir-versus-python-for-data-science) that he expects them to start showing up at the end of the year.
+
+## Scholar / Scikit-learn
+
+The Scholar library in the Nx Ecosystem is still relatively new. A recent issue describes the roadmap as generally to provide APIs similar to scikit-learn ("ML minus the neural networks bits"). But as it is, Scholar is not yet a comparable alternative to sklearn.
+
+A current (as of 08/22) open issue describes the intention of the Scholar library to offer an API for training and using estimators similar to sklearn (`fit` and `predict`).
+
+`model = LinearRegression()`
+`model.fit(X, y)`
+`model.predict(X_test)`
+
+The Scholar library plans to offer an equally predictable API along the lines of a protocol with a predict function:
+
+`model = Scholar.SVM.fit(...)`
+`Scholar.predict(model, data)`
+
+<!-- livebook:{"break_markdown":true} -->
+
+Here is a recently merged option for determining a Jaccard similarity metric.
+
+```elixir
+x = Nx.tensor([1, 2, 3, 5, 7])
+y = Nx.tensor([1, 2, 4, 8, 9])
+Scholar.Metrics.Similarity.jaccard(x, y)
+```
+
+As of a week ago, there is an approved PR waiting on a notebook to add the [K-Means aglorithm](https://github.com/elixir-nx/scholar/pull/21) to Scholar.
+
+You don't have to wait to try it out. Simply scroll up to the Notebook dependencies and setup section. Comment out the first dep and uncomment the second to pull directly from the creators fork of Scholar. (Although it may be merged into the main Scholar repo by the time of training; you can try the code block out first.)
+
+```elixir
+model =
+  Scholar.Cluster.KMeans.fit(Nx.tensor([[1, 2], [2, 4], [1, 3], [2, 5]]),
+    num_clusters: 2,
+    random_state: 42
+  )
+
+Scholar.Cluster.KMeans.predict(model, Nx.tensor([[1.9, 4.3], [1.1, 2.0]]))
+```
+
+With weights.
+
+```elixir
+model =
+  Scholar.Cluster.KMeans.fit(Nx.tensor([[1, 2], [2, 4.25], [1, 3], [2, 5]]),
+    num_clusters: 2,
+    random_state: 42,
+    weights: [1, 2, 3, 4]
+  )
+
+Scholar.Cluster.KMeans.predict(model, Nx.tensor([[1.9, 4.3], [1.1, 2.0]]))
+```
+
+## Huggingface
+
+### Sharing Axon Models on Huggingface
+
+An [article](https://alongtheaxon.com/blog/axon_models_on_huggingface). They got permission to store Axon models in the Huggingface public repository. [Stefano Falsetto](https://github.com/stefkohub) developed a HuggingfaceHub Elixir library to access and interact with the repo. The have settled on a good source of ONNX libraries (see existing models [here](https://github.com/onnx/models)) and a path to convert the libraries to Axon. They are inviting others to share.
+
+> The Axon community was looking for techniques to share models. What if we used Huggingface’s Hub as a model repository? I knew that the Hub is designed to be model framework agnostic. How agnostic are they really?
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/Screen%20Shot%202022-08-26%20at%2012.36.19%20AM.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### What is Huggingface?
+
+> Huggingface Hub is kind of like GitHub, but focused on machine learning concerns like models and shared datasets. Their Hub model repository is built around the concept of a model card. The card contains documentation about the model, its intended uses, limitations, along with other descriptive information. The objective of the card is to help Hub users identify whether the model will fit their needs. The Hub might work for us.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](../1_Prod.livemd)

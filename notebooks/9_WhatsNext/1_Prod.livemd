@@ -1,0 +1,93 @@
+# What's Next? / Nx in Production
+
+## Goal
+
+What do think about before you put machine learning into your production environment.
+
+## TBD
+
+### Concerns
+
+* Performance
+* Cost
+* Versioning
+* Workflow automation
+* Monitor for model decay
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Workflow
+
+Developing an ML model includes evaluating its performance.
+
+```mermaid
+flowchart TB
+    hd(Historical Data)-->m(Model)
+    m<-->me(Model evaluation)
+    d-->p(Production)
+    ld(Live unseen data)-->p 
+    p<-->pe(Production evaluation)
+    m-->d(Deployment)
+    style hd fill:#000,stroke:#333,color:#fff,stroke-width:4px
+    style ld fill:#000,stroke:#333,color:#019EFE,stroke-width:4px
+    style m fill:#808,stroke:#333,color:#fff,stroke-width:4px
+    style me fill:#bbf,stroke:#808,stroke-width:2px,color:#000,stroke-dasharray: 5 5
+    style d fill:#bbf,stroke:#000,stroke-width:2px,color:#000
+    style p fill:#019EFE,stroke:#000,stroke-width:2px,color:#000
+    style pe fill:#B7D7EB,stroke:#019EFE,stroke-width:2px,color:#000,stroke-dasharray: 5 5
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Evaluation
+
+Models may require different evaluation at different points in the development cycle. During model evaluation you may evaluate on accuracy. Production evaluation may consider value of the data to customers. The distribution of the data may change over time. Detect distribution drift through continuous model monitoring.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart TB
+    hd(Historical Data)-->tr(Train data)
+    hd-->te(Test data)
+    tr-->mt(Model training)
+    hp(Hyperparameters)-->mt
+    te-->m(Model)
+    m-->me(Evaluation)
+    mt-->tre(Evaluation)
+    me-->hp
+    tre-->hp
+    style hd fill:#000,stroke:#333,color:#fff,stroke-width:4px
+    style te fill:#000,stroke:#333,color:#fff,stroke-width:4px
+    style tr fill:#000,stroke:#333,color:#fff,stroke-width:4px
+    style hp fill:#019EFE,stroke:#000,stroke-width:2px,color:#000
+    style mt fill:#019EFE,stroke:#000,stroke-width:2px,color:#000
+    style m fill:#019EFE,stroke:#000,stroke-width:2px,color:#000
+    style me stroke:#808,stroke-width:2px,color:#000,stroke-dasharray: 5 5
+    style tre stroke:#808,stroke-width:2px,color:#000,stroke-dasharray: 5 5
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Deployment
+
+* on-demand prediction  
+  * close to real-time
+  * cluster or cloud services
+  * available through API
+* batch prediction
+* embedded models
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Storage
+
+If you will be using your own data to get predictions from your model, such as in the case of sentiment analysis of customer inquiries, you will need to thinking about:
+
+* how to store the dataset
+* how big it will be
+* how to get it out for training
+* how to get it out for predicting
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Future.livemd)

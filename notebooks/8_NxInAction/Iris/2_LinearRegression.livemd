@@ -1,0 +1,285 @@
+# Nx in Action/ Iris / Linear Regression Model
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.1.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.2.1"},
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"},
+  {:req, "~> 0.3.0"},
+  {:scidata, "~> 0.1.9"},
+  {:vega_lite, "~> 0.1.4"}
+])
+```
+
+## Goal
+
+To experiment with linear regression using Nx.
+
+Credit: this example is influenced by Sean Moriarity [Dockyard post](https://dockyard.com/blog/2022/01/11/getting-started-with-axon), "Getting Started with Axon"].
+
+
+## The Plan
+
+1. ~~Define the problem~~
+2. ~~Pepare the data~~
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
+
+## Define the problem
+
+Can we predict Iris species?
+
+## Prepare the data
+
+```elixir
+{inputs, targets} = Scidata.Iris.download()
+count = Enum.count(inputs)
+
+imax =
+  Nx.tensor(inputs)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+
+tmax = 2
+
+inputs =
+  Enum.map(inputs, fn i ->
+    Nx.divide(Nx.tensor(i), imax)
+  end)
+
+targets =
+  Enum.map(targets, fn i ->
+    Nx.divide(Nx.tensor([i]), tmax)
+  end)
+
+dataset = Enum.zip(inputs, targets) |> Enum.shuffle()
+ratio = 0.85
+split = fn d -> Enum.split(d, ceil(count * ratio)) end
+
+{train_set, test_set} = split.(dataset)
+```
+
+## Evaluate the algorithms
+
+### Linear Regression
+
+A linear regression algorithms to plot a line of best fit calculated through the method of least squares in order to model the relationship the relationship between variables and forecasting.
+
+In our case, we want to relate the Iris features to their species. The relationship does not necessarily imply that one variable causes the other, but that there is some significant association between the two variables. We saw in our data notebook for the dataset that there may be a significant association.
+
+A linear regression line uses the equation of a straight line:
+
+`y = m * x + b`
+
+* x - input (a feature of the dataset)
+* y - target (what we want to predict)
+* b - bias (the value of y when x = 0)
+* m - weight (slope of the line)
+
+`target = weights * input + bias`
+
+Let's see it using one of the Iris features:
+
+`species = weight * sepal_width + bias`
+
+But we don't have just **one** input; we have several. That is why scalar numbers are not enough. We need more dimensions. We need matrices. We need Nx Tensors.
+
+### Nx Module
+
+We will create a Numerical Elixir module to calculate the linear regression based on a [blog post](https://dockyard.com/blog/2022/07/12/elixir-versus-python-for-data-science)  by one of the Nx ecosystem's authors, Sean Moriarity.
+
+Define a module named `LinReg` and import `Defn` from Nx. If you recall, `defn` is a macro for declaring numerical definitions. They work just like regular Elixir functions but favor JIT compilation over accelerators such as GPUs.
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+end
+```
+
+When we first discussed ML models, we defined them most simply as a parameterized function that maps inputs to outputs. In our case that function is linear regression:
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+
+  defn predict({weight, bias}, input) do
+    weight * input + bias
+  end
+end
+```
+
+Now we need a loss function to compare predictions to the ground truth. We'll calculate loss with mean-squared error since it is the most common loss function for linear regression problems. It measures the average squared difference between our targets and predictions:
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+
+  defn predict({weight, bias}, input) do
+    weight * input + bias
+  end
+
+  defn loss({weight, bias}, input, target) do
+    prediction = predict({weight, bias}, input)
+    Nx.mean(Nx.power(target - prediction, 2))
+  end
+end
+```
+
+We need our loss function to tell us how much to alter the weight and bias values to better fit our function. We do this using gradient descent. Gradient descent calculates the gradient of a loss function with respect to the inputs and returns information on how to update the weight and bias, often referred to as the parameters, of the model.
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+
+  @learning_rate 0.01
+
+  defn predict({weight, bias}, input) do
+    weight * input + bias
+  end
+
+  defn loss({weight, bias}, input, target) do
+    prediction = predict({weight, bias}, input)
+    Nx.mean(Nx.power(target - prediction, 2))
+  end
+
+  defn update({weight, bias} = params, input, target) do
+    {gradient_weight, grad_bias} = grad(params, &loss(&1, input, target))
+
+    {
+      weight - gradient_weight * @learning_rate,
+      bias - grad_bias * @learning_rate
+    }
+  end
+end
+```
+
+`update` returns the updated parameters, `weight` and `bias`.
+
+So as our predictions are made, the parameter values will change, but we need to start off with some inital values for them. The initial values have to match the dimensions (shape) of our inputs {4, 1} & targets {1}. Basically, we have to start somewhere:
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+
+  @learning_rate 0.01
+
+  defn predict({weight, bias}, input) do
+    weight * input + bias
+  end
+
+  defn loss({weight, bias}, input, target) do
+    prediction = predict({weight, bias}, input)
+    Nx.mean(Nx.power(target - prediction, 2))
+  end
+
+  defn update({weight, bias} = params, input, target) do
+    {gradient_weight, grad_bias} = grad(params, &loss(&1, input, target))
+
+    {
+      weight - gradient_weight * @learning_rate,
+      bias - grad_bias * @learning_rate
+    }
+  end
+
+  defn init_params do
+    weight = Nx.random_normal({4, 1}, 0.0, 0.1)
+    bias = Nx.random_normal({1, 1}, 0.0, 0.1)
+    {weight, bias}
+  end
+end
+```
+
+The last function we need is a training loop:
+
+```elixir
+defmodule LinReg do
+  import Nx.Defn
+
+  @learning_rate 0.01
+
+  defn predict({weight, bias}, input) do
+    weight * input + bias
+  end
+
+  defn loss({weight, bias}, input, target) do
+    prediction = predict({weight, bias}, input)
+    Nx.mean(Nx.power(target - prediction, 2))
+  end
+
+  defn update({weight, bias} = params, input, target) do
+    {gradient_weight, grad_bias} = grad(params, &loss(&1, input, target))
+
+    {
+      weight - gradient_weight * @learning_rate,
+      bias - grad_bias * @learning_rate
+    }
+  end
+
+  defn init_params do
+    weight = Nx.random_normal({4, 1}, 0.0, 0.1)
+    bias = Nx.random_normal({1, 1}, 0.0, 0.1)
+    {weight, bias}
+  end
+
+  def train(epochs, data) do
+    for _ <- 1..epochs, reduce: init_params() do
+      acc ->
+        data
+        |> Enum.reduce(
+          acc,
+          fn {input, target}, current_params ->
+            update(current_params, input, target)
+          end
+        )
+    end
+  end
+end
+```
+
+That's it. That is our Linear Regression module written in Elixir using Nx.
+
+Train it on the `train_set` we split from the Iris dataset:
+
+```elixir
+learned_params = LinReg.train(100, train_set)
+{weight, bias} = model = learned_params
+
+scalar = fn tensor ->
+  tensor |> Nx.to_flat_list() |> List.first()
+end
+
+IO.puts("Learned weight: #{scalar.(weight)}\tLearned bias: #{scalar.(bias)}")
+```
+
+Use the `test_set` to make predictions using the learned parameters--the model:
+
+```elixir
+test_set
+|> Enum.each(fn {input, target} ->
+  prediction =
+    LinReg.predict(model, input)
+    |> scalar.()
+    |> Float.ceil(1)
+
+  truth = scalar.(target)
+  accurate = if truth == prediction, do: "[x]", else: "[ ]"
+  loss = (truth - prediction) |> Float.ceil(1)
+  IO.inspect("#{accurate}: Actual: #{truth} Predicted: #{prediction} Loss: #{loss}")
+end)
+```
+
+<img src="https://static.thenounproject.com/png/350804-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+
+Overall, not great. Which indicates that a linear regression algorithm is not the best choice for our problem.
+
+In the next section we'll try others.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_Data.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](3_NeuralNet.livemd)

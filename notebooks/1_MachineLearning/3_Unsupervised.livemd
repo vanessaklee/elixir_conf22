@@ -1,0 +1,67 @@
+# Machine Learning / Unsupervised Learning
+
+## Goal
+
+This lesson covers the unsupervised learning type of machine learning. After this lesson you will have an overview and example of supervised learning, including applications and challenges.
+
+## Introduction
+
+Unsupervised learning uses algorithms to analyze and cluster unlabeled datasets. It discovers patterns in data without explicit feedback or labeled examples like those in supervised learning. Clustering is a common unsupervised learning task; find a way to group a large collection of things into subsets that share important similarities.
+
+For example, categorizing people into two groups is clustering using unsupervised learning to identify the two types.
+
+Unsupervised learning algorithms discover hidden patterns or data groupings without the need for human intervention. Its ability to discover similarities and differences in information make it well-suited for exploratory data analysis and tasks like image recognition.
+
+![](images/brain.png)
+
+## Example
+
+Unsupervised learning is useful for predicting the best retail promotions. If an online retail business has two million customers, designing two million promotions to appeal to each customer is untenable. Instead, we could find four main types of customers according to features in their buying preferences. From those resulting four groups we could then design four promotions.
+
+Unsupervised Learning works by defining a method of measuring the distance or difference between items in your data set (i.e. between customers in our example). An algorithm defines clusters in which the items in a cluster are closer to each other than other items.
+
+Clustering is frequently just the first level analysis done in unsupervised processing of data. If an additional input is added (such as how many clusters you'd like or or hints about what features you want to use to calculate the distance between objects) you can reduce the time it takes to process the clusters when compared to a completely unsupervised process. This is called semi-supervised learning.
+
+Semi-supervised learning is unsupervised learning with some human guidance to improve its performance. A semi-supervised learning process with human intervention could improve a clustering algorithm by providing feedback on the number of clusters or on the features used for clustering.
+
+## Applications
+
+Applications of clustering include: customer segmentation, anomaly detection, social network analysis and anything involving the discovery of patterns and large amounts of data.
+
+Clustering analyzes and clusters data into the most common topics. That means you can use unsupervised learning to discover the most common patterns of sensor data produced by a manufacturing process, for instance. Then look for outliers which might suggest something is going wrong in the process.
+
+Additional applications unsupervised learning include:
+
+- anomaly detection
+- social network analysis
+- recommending new groups after discovering what groups to which an object belongs
+- discovering products likely to be purchased together
+- topic analysis
+
+![](images/anomoly_detection.png)
+
+## Challenges
+
+While unsupervised learning has many benefits, some challenges can occur when it allows machine learning models to execute without any human intervention. In order to place the items into clusters the algorithm has to decide which features are best for determining the clustering. Depending on what features are available, it may be hard to distinguish between two items and to decide which cluster they belong in.
+
+Other challenges include:
+
+- longer training times
+- large datasets lead to computational complexity
+- greater risk of inaccurate results
+- human required to validate output variables
+- no insight into the basis on which data was clustered
+
+## Unsupervised & Semi-supervised Learning
+
+Unlike supervised learning, unsupervised learning uses unlabeled data. From that data it discovers patterns that help solve clustering or association problems. This is particularly useful when you are unsure of the common properties within a data set. Common clustering algorithms are hierarchical, k-means, and Gaussian mixture models.
+
+Semi-supervised learning means only part of the input data is labeled. Unsupervised and semi-supervised learning can be more appealing alternatives as it can be time-consuming and costly to create and label your own datasets if they don't already exist. A level of domain expertise is required to label data appropriately for supervised learning.
+
+We will go in-depth on different algorithms used in unsupervised learning in the Algorithms & Models chapter.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](2_Supervised.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](4_Reinforcement.livemd)

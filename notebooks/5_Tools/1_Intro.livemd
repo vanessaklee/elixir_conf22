@@ -1,0 +1,95 @@
+# Machine Learning / Traditional Tools
+
+## Goal
+
+A brief introduction to the traditional tools used to solve problems with machine learning.
+
+### Python
+
+Python is intended for general use and to be easy to learn compared to most languages; it is often the first language students encounter in US schools. It is a go-to choice for machine learning because you can easily integrate your machine learning and its results into other Python applications.
+
+![](images/python.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+The Python ecosystem includes many established, well-maintained libraries. The popular machine learning libraries are:
+
+1. [NumPy](https://numpy.org/) - Comprehensive support for large, multi-dimensional arrays and matrices and mathematical functions to operate on them
+2. [Pandas](https://pandas.pydata.org/) - Data Analysis
+3. [Matplotlib]() - comprehensive library for creating data visualizations in Python
+4. [PyTorch](https://pytorch.org/) - Accelerates the path from research prototyping to deployment
+5. [TensorFlow](https://www.tensorflow.org/) - End-to-end source platform for ML
+6. [Keras](https://keras.io/) - Deep Learning API
+7. [Scikit-learn]() - Algorithms for scientific and technical computing
+8. [SciPy](https://scipy.org/) - Fundamental algorithms for scientific computing in Python
+9. [Jupyter Notebooks]() - web application for creating and sharing computational documents
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Elixir Numerical Elixir (Nx) Ecosystem
+
+Given Python's dominance, why even consider Elixir for machine learning? Python has its faults. Python can be slow, especially for complex routines like preprocessing your data. Python's Global Interpreter Lock (GIL) is known to be a headache for those who want to use multithreading. GIL allows only one thread to be in a state of execution at any point in time. From this point of view, Elixir is a reasonable contender. Along with multithreading, Elixir also brings the BEAM and  immutability, concurrency, error handling, easy testing.
+
+![](images/nx.png)
+
+We can map the Python tools to the tools currently available in the Nx ecosystem:
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+  NumPy[NumPy]-->Nx([Numerical Elixir]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+  Pandas[Pandas]-->Explorer([Explorer]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+  Matplotlib[Matplotlib]-->VegaLite([VegaLite]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+  PyTorch[PyTorch]-->Axon([Axon]);
+  TensorFlow/Keras[TensorFlow/Keras]-->Axon([Axon]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+  Scikit[Scikit]-->Scholar([Scholar]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+  SciPy[SciPy]-->???([???]);
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+graph LR;
+   J[Jupyter Notebooks]-->Livebook([Livebook])
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Now to explore the Numerical Elixir (Nx) ecosystem upclose.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](4_Unsupervised.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx ></span>](../6_Nx/1_Intro.livemd)

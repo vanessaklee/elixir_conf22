@@ -2,53 +2,57 @@
 
 Repository for ElixirConf 2022 Machine Learning with NX Training
 
-Download and install the Elixir [Livebook App](https://livebook.dev/#install). Run the app. Open the localhost location in a browser. Navigate to the `notebooks` directory. Begin with Lesson 01.
+Download and install the Elixir [Livebook App](https://livebook.dev/#install). Run the app. Open the localhost location in a browser. Navigate to the `notebooks` directory. Begin with Lesson 1: Machine Learning.
 
 ## Contents
 
-- Datasets? Or use Explorer
-- Livebook Lessons
-  - Add challenges
-  - Should challenge solutions in be in separate branch? or in a solutions folder nested in the lesson?
-- Codebase
-- Hexdocs?
+TODO
 
-TODO: finish setup slides beyond the "notebooks" selection once the chater names are prettier
+Boomer, are you able to finish these?
+- [ ] Deep Learning lesson? 4_NeuralNetworks/2_DeepLearning.livemd 
+- [ ] Statistics lesson? 4_Statistics/1_Intro.livemd 
+- [ ] Intermediate/Advanced example? 8_NxInAction/x_Advanced.livemd 
 
-## TODO
-ExToDo found the following TODOs (8/7/2022)
+If not, I have an idea for a replacement of the advanced example -- a sort of DIY livebook setup with instructions for them to find a dataset on Kaggle and use it sort of fill-in-the-blank style. Not sure what to do about the Deep Learning and Stats; I can't do those justice in time for the training.
 
-`notebooks/lesson_01_ml/01_intro.livemd`
-  - line 107  TODO    This section needs more detail
+- [ ] Can we update notebooks to Axon 0.2.0 and Nx 0.3.0?
+- [ ] Add Production section - not even started yet, but cover how to version a model? saving a model?
+- [ ] Tighten both DateFrames and Series sections
+- [ ] Add more "brain breaks" using [Paassaa](https://github.com/minibikini/paasaa), [Woolly](https://github.com/pjhampton/woolly), etc.
+- [ ] Finish setup slides beyond the "notebooks" selection once the lessons are set
+- [x] Review the Axon section for redundancy in other chapters (intro in 7, etc.)
+- [x] Add "next" and "previous" links to the bottom of each lesson
+- [x] Finish Tools of the trade section 
+- [x] Tighten the Future section, add images
+- [x] Give credit to tensor chapter, datafames, series, axon
 
-`notebooks/lesson_02_nn/02_neural_networks.livemd`
-  - line 79   TODO    probably need more here
+Spellcheck
 
-`notebooks/lesson_02_nn/04_tools_of_trade.livemd`
-  - line 9    TODO    finish this section
-  - line 25   TODO    overview of NLP
-  - line 29   TODO    history of NLP
-  - line 33   TODO    alogrithms
-
-`notebooks/lesson_03_nx/01_overview.livemd`
-  - line 9    TODO    Smooth and flesh this lesson out; needs work
-
-`notebooks/lesson_07_predictions_in_production/03_future.livemd`
-  - line 5    TODO    finish this section
-
-`notebooks/wip_model_training_example_3.livemd`
-  - line 244  TODO    define regression vs classification
-  - line 349  todo    description of the Axon evaluator, metrics, and run
-  - line 406  TODO    define prediction
-
-`notebooks/wip_model_training_example_3_backup.livemd`
-  - line 244  TODO    define regression vs classification
-  - line 335  todo    description
-  - line 345  todo    description
-
-`notebooks/wip_penrose_fraud_example_2.livemd`
-  - line 182  TODO    visualize the results
-
-### ExTodo Scan Summary
-`TODO`: 12        
-`todo`: 3          
+- [x] ML Intro
+- [x] ML Supervised
+- [x] ML Unsupervised
+- [x] ML Reinforcement
+- [x] Algorithms & Models / Intro
+- [x] Algorithms & Models / Regression
+- [x] Algorithms & Models / Classification
+- [x] Algorithms & Models / Unsupervised
+- [x] Algorithms & Models / Tools
+- [ ] Neural Networks / Intro
+- [ ] Neural Networks / Deep Learning
+- [ ] Nx / Intro
+- [ ] Nx / Tensors
+- [ ] Nx Plus / Explorer
+- [ ] Nx Plus / Series
+- [ ] Nx Plus / Dataframes
+- [ ] Nx Plus / Axon
+- [ ] Nx in Action / Intro
+- [ ] Nx in Action / Iris / Data
+- [ ] Nx in Action / Iris / Lin Reg
+- [ ] Nx in Action / Iris / Neural Net
+- [ ] Nx in Action / Titantic / Data
+- [ ] Nx in Action / Titantic / Train
+- [ ] Nx in Action / Advanced?
+- [ ] What's Next / Production
+- [ ] What's Next / Future
+- [ ] TOC
+- [ ] Glossary

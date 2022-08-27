@@ -2,47 +2,49 @@
 
 ## Course Contents
 
-1. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Introduction to Machine Learning</span>](01-machine_learning/00_intro.livemd)
-   1. [Supervised Learning](01-machine_learning/01_supervised.livemd)
-   2. [Unsupervised Learning](01-machine_learning/02_unsupervised.livemd)
-   3. [Reinforcement Learning](01-machine_learning/03_reinforcement.livemd)
-2. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Algorithms and Models</span>](02-algorithms_and_models/00_intro.livemd)
-   1. Supervised 
-      1. [Regression](02-algorithms_and_models/01_supervised_regression.livemd)
-      2. [Classification](02-algorithms_and_models/02_supervised_classification.livemd)
-   2. [Unsupervised](02-algorithms_and_models/03_unsupervised.livemd)
-   3. [Conclusion](02-algorithms_and_models/04_conclusion.livemd)
-3. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>](03-neural_networks/01_neural_networks.livemd)
-   1. [Deep Learning](03-neural_networks/02_deep_learning.livemd)
-   2. [Tools of the Trade](03-neural_networks/03_tools_of_trade.livemd)
-4. <span style="color: #800080; font-size: 24px; font-weight: bold;">Statistics</span>
-   1. [Introduction to Machine Learning Statistics](04-statistics/01_intro.livemd)
-5. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>](05-elixir_nx/01_overview.livemd)
-   1. [Tensors](05-elixir_nx/02_tensors.livemd)
-   2. [Defn](05-elixir_nx/01_defn.livemd)
-6. <span style="color: #800080; font-size: 24px; font-weight: bold;">Elixir Explorer & Axon</span>
-   1. [Explorer](06-nx_plus/01_explorer.livemd)
-      1. [Series](06-nx_plus/02_explorer_series.livemd)
-      2. [Dataframes ](06-nx_plus/03_explorer_dataframes.livemd)
-   2. [Axon](06-nx_plus/04_axon.livemd)
-7. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span>
-   1. [Ask the Right Questions](07-nx_in_action/01_intro.livemd)
-   2. [Model: Train, Test, Predict](07-nx_in_action/02-models_intro.livemd)
-      1. Novice (titanic? CO2 vehicle emmissions?)
-         1. [Train: Data, Algorithm, Model](07-nx_in_action/models/01-novice/01-train.livemd)
-         2. [Test](07-nx_in_action/models/01-novice/02-test.livemd)
-         3. [Predict](07-nx_in_action/models/01-novice/03-predict.livemd)
-      2. Intermediate (cc fraud? disease detection [heart, cancer]?)
-         1. Train: Data, Algorithm, Model
-         2. Test
+1. <span style="color: #800080; font-size: 24px; font-weight: bold;">Machine Learning</span>
+   1. [Introduction](1_MachineLearning/1_Intro.livemd)
+   2. [Supervised Learning](1_MachineLearning/2_Supervised.livemd)
+   3. [Unsupervised Learning](1_MachineLearning/3_Unsupervised.livemd)
+   4. [Reinforcement Learning](1_MachineLearning/4_Reinforcement.livemd)
+2. <span style="color: #800080; font-size: 24px; font-weight: bold;">Statistics</span>
+   1. [Introduction to Machine Learning Statistics](2_Statistics/1_Intro.livemd)
+3. <span style="color: #800080; font-size: 24px; font-weight: bold;">Algorithms and Models</span>
+   1. [Introduction to Algorithms and Models](3_Algorithms/1_Intro.livemd)
+   2. [Supervised - Regression](3_Algorithms/2_Regression.livemd)
+   3. [Supervised - Classification](3_Algorithms/3_Classification.livemd)
+   4. [Unsupervised](3_Algorithms/4_Unsupervised.livemd)
+   5. [Tools of the Trade](3_Algorithms/5_Tools.livemd)
+4. <span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>
+   1. [Introduction to Neural Networks](4_NeuralNetworks/1_Intro.livemd)
+   2. [Deep Learning](4_NeuralNetworks/2_DeepLearning.livemd)
+5. <span style="color: #800080; font-size: 24px; font-weight: bold;">Tools of the Trade</span>
+   1. [Tools for Machine Learning](5_Tools/1_Intro.livemd)
+6. <span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>
+   1. [Introduction to Nx](6_Nx/1_Intro.livemd)
+   2. [Tensors](6_Nx/2_Tensors.livemd)
+7. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx Plus: Explorer & Axon</span>
+   1. [Explorer](7_NxPlus/1_Explorer.livemd)
+      1. [Series](7_NxPlus/2_Series.livemd)
+      2. [Dataframes ](7_NxPlus/3_Dataframes.livemd)
+   2. [Axon](7_NxPlus/4_Axon.livemd)
+8. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span>
+   1. [Ask the Right Questions](8_NxInAction/1_Intro.livemd)
+   2. Data, Train, Test, Predict
+      1. Iris 
+         1. [Data](8_NxInAction/Iris/1_Data.livemd)
+         2. [Train](8_NxInAction/Iris/2_LinearRegression.livemd)
+         3. [Predict](8_NxInAction/Iris/3_NeuralNet.livemd)
+      2. Titanic
+         1. [Data](8_NxInAction/titanic/1_Data.livemd)
+         2. [Train](8_NxInAction/titanic/2_Train.livemd)
+      3. Advanced (cc fraud? stock market?)
+         1. Data
+         2. Train
          3. Predict
-      3. Advanced (stock market?)
-         1. Train: Data, Algorithm, Model
-         2. Test
-         3. Predict
-   3. [ML in production](07-nx_in_action/03_prod.livemd)
-   4. [The Future of Nx](07-nx_in_action/04_future.livemd)
-8. [<span style="color: #800080; font-size: 24px; font-weight: bold;">Review</span>](08-review/01_review.livemd)
+9. What's Next for Nx?
+   1. [ML in Production](9_WhatsNext/1_Prod.livemd)
+   2. [Revoew](9_WhatsNext/2_Future.livemd)
 
 <!-- livebook:{"break_markdown":true} -->
 

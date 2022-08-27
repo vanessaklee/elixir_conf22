@@ -1,0 +1,66 @@
+# Machine Learning / Algorithms & Models / Classification
+
+## Goal
+
+This lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+
+## Overview
+
+In the last section we learned that ML algorithms are basically procedures run on data, and they output models. We identified several well-known algorithms. Let's look at each of them a bit more closely to see how and why they are best put to use to solve particular problems.
+
+## Supervised Learning Algorithms: Classification
+
+In machine learning, classification assigns an object as a member of a category or group. For example, classifiers are used to detect if an email is spam, or if a transaction is fraudulent.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Naive Bayes
+
+A naive bayes model uses probability to classify objects based on features. It is a classification approach that employs the Bayes Theorem (principle of class conditional independence). The presence of one feature does not impact the presence of another in the probability of a given outcome.
+
+### Uses
+
+* text classification
+* spam detection
+* recommendation engines
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Decision Trees & Random Forest
+
+Decision trees are classifiers that determine which category an input belongs to by traversing the leaf’s and nodes of a tree. They are like a flow chart where the class of an object is determined step-by-step using certain known conditions.
+
+A Random Forest is a collection of several decision trees from random subsets of the data. The result is a combination of trees that may make more accurate predictions than a single decision tree.
+
+TODO: brain break needed here? data analysis task? The haberman dataset analysis for an unbalanced dataset? Smartcell bar chart? 
+
+### Uses
+
+* classification
+* regression
+
+<!-- livebook:{"break_markdown":true} -->
+
+### k Nearest Neighbors
+
+K nearest neighbors (KNN) classifies data points based on their proximity and association to other available data to discover the most frequent or average characteristics shared among the objects. It assumes that similar data points can be found near each other and therefore calculates the distance between data points.
+
+### Uses
+
+* problems with smaller datasets because the processing time grows as the size of the data grows
+* recommendation engines
+* image recognition
+
+TODO: brain break needed here? data analysis task? The haberman dataset analysis for unbalanced dataset? Smartcell bar chart? Normalization function Boomer wrote? Or the fuel economy example from a few years ago.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 15.0px;" />
+
+<hr style="background-color: #800080;height: 15.0px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](2_Regression.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](4_Unsupervised.livemd)

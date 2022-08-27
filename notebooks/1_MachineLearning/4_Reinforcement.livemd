@@ -1,0 +1,39 @@
+# Machine Learning / Reinforcement Learning
+
+## Goal
+
+This lesson covers the reinforcement learning type of machine learning. After this lesson you will have an overview and example of supervised learning, including its applications and challenges.
+
+## Introduction
+
+Reinforcement learning is learning through trial and error. Reinforcement learning is a way for machine learning in an unknown environment with only sensory input combined with rewards and punishments. Humans learn through reinforcement; when an action is rewarded, the action is reinforced. When an action is punished, the action is not reinforced.
+
+![](images/mousemaze.png)
+
+## Example
+
+A machine can learn to play a video game. The sensory inputs are the graphics and the rewards are the points. Reinforcement Learning problems are closed-loop problems. Inputs are not provided like with Supervised Learning. The learning is discovered by trying out all the available options and learning which actions lead to the highest reward.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### How It Works
+
+For a machine, Reinforcement Learning means a set of actions must be available. As each action is tried it is observed whether it was successful (reward) or not (punishment). If a sequence of actions leads to success, then the individual steps are linked to part of the success. If a long sequence of actions is necessary before the feedback is received, it can take a long time for learning to happen. It is preferable for more frequent feedback to occur along the sequence of actions so the machine can learn and make corrections more frequently.
+
+![](images/rewards.png)
+
+## Applications
+
+The most common applications for Reinforcement Learning involve mechanical systems. This includes robotics, flight simulation, and autonomous driving. Thinking of the videos of robots learning to maneuver in a new environment and learn all over again if they are damaged.
+
+![](images/robot.png)
+
+## Challenges
+
+Reinforcement Learning isn't the best choice if the cost of using trial and error is too high or if it takes too long to try the actions before getting feedback. For example, Reinforcement Learning is not a good choice for stock market forecasting. Each bad choice costs money.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_Unsupervised.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](../3_Algorithms/1_Intro.livemd)
