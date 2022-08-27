@@ -71,7 +71,7 @@ Let's get some fingers on the keyboard and explore a simple neural network.
 
 <!-- livebook:{"break_markdown":true} -->
 
-Our first neural network will be the "hello, world" of datascience - the MNIST dataset. This dataset is a collection of handwritten digits that can be fed into a neural network. Then, once trained, we can feed in images of numbers and the neural network can tell us what it is!
+Our first neural network will be the "hello, world" of datascience - the MNIST dataset. This dataset is a collection of handwritten digits that can be fed into a neural network. Then, once trained, we can feed in images of numbers and the neural network can tell us what it is! Let's first download the dataset and get a sense of what it looks like.
 
 ```elixir
 # Don't worry about learning this code - its just boilerplate to download our
@@ -93,13 +93,9 @@ images =
 images[[images: 0..4]] |> Nx.to_heatmap()
 ```
 
-Next we do some stuff
+Next let's collect our images and train them on our single layer neural network
 
 ```elixir
-# images =
-#   images
-#   |> Nx.to_batched_list(32)
-
 targets =
   labels
   |> Nx.from_binary({:u, 8})
@@ -110,14 +106,21 @@ targets =
 model =
   Axon.input("input", shape: {nil, 1, 28, 28})
   |> Axon.flatten()
-  |> Axon.dense(128, activation: :relu)
+  # |> Axon.dense(128, activation: :relu)
+  |> Axon.dense(10, activation: :softmax)
 
-# params =
-#   model
-#   |> Axon.loop.trainer(:categorical_cross_entropy, :adam)
-#   |> Axon.Loop.metric(:accuracy, "Accuracy")
-#   |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 10, compiler: EXLA)
+images =
+  images
+  |> Nx.to_batched(32)
+
+params =
+  model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+  |> Axon.Loop.metric(:accuracy, "Accuracy")
+  |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 5, compiler: EXLA)
 ```
+
+Next
 
 ## Multilayer Neural Networks
 
@@ -156,3 +159,9 @@ graph TD;
   P-->ME(Measure of Error);
   ME-- Backpropagation -->NN;
 ```
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Algorithms</span>](../3_Algorithms/4_Unsupervised.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Tools ></span>](../5_Tools/1_Intro.livemd)
