@@ -6,11 +6,11 @@ This lesson will provide a brief introduction to some of the most common machine
 
 ## Overview
 
-In the last section we learned that ML algorithms are basically procedures run on data, and they output models. We identified several well-known algorithms. Let's look at each of them a bit more closely to see how and why they are best put to use to solve particular problems.
+In the last section we learned that ML algorithms are basically procedures run on data that output models. We also identified several well-known algorithms; let's look at each of them a bit more closely to see how and why they are best put to use to solve particular problems.
 
 ## Supervised Learning Algorithms: Classification
 
-In machine learning, classification assigns an object as a member of a category or group. For example, classifiers are used to detect if an email is spam, or if a transaction is fraudulent.
+In machine learning, classification assigns an object as a member of a category or group. For example, classifiers are used to detect if an email is spam or if a transaction is fraudulent.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -20,24 +20,24 @@ A naive bayes model uses probability to classify objects based on features. It i
 
 ### Uses
 
-* text classification
-* spam detection
-* recommendation engines
+- text classification
+- spam detection
+- recommendation engines
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Decision Trees & Random Forest
 
-Decision trees are classifiers that determine which category an input belongs to by traversing the leaf’s and nodes of a tree. They are like a flow chart where the class of an object is determined step-by-step using certain known conditions.
+Decision trees are classifiers that determine which category an input belongs to by traversing the leaves and nodes of a tree. They are like a flow chart where the class of an object is determined step-by-step using certain known conditions.
 
 A Random Forest is a collection of several decision trees from random subsets of the data. The result is a combination of trees that may make more accurate predictions than a single decision tree.
 
-TODO: brain break needed here? data analysis task? The haberman dataset analysis for an unbalanced dataset? Smartcell bar chart? 
+TODO: brain break needed here? data analysis task? The haberman dataset analysis for an unbalanced dataset? Smartcell bar chart?
 
 ### Uses
 
-* classification
-* regression
+- classification
+- regression
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -47,9 +47,9 @@ K nearest neighbors (KNN) classifies data points based on their proximity and as
 
 ### Uses
 
-* problems with smaller datasets because the processing time grows as the size of the data grows
-* recommendation engines
-* image recognition
+- problems with smaller datasets because the processing time grows as the size of the data grows
+- recommendation engines
+- image recognition
 
 TODO: brain break needed here? data analysis task? The haberman dataset analysis for unbalanced dataset? Smartcell bar chart? Normalization function Boomer wrote? Or the fuel economy example from a few years ago.
 

@@ -43,29 +43,29 @@ Then,
 The K-means algorithm comes with a few difficulties:
 
 1. they often make clusters of a similar size
-2. a human as to chose the value of K and getting the optimal number can be difficult
+2. a human must chose the value of K and getting the optimal number can be difficult
 
 #### Uses
 
-* clustering IT alerts
-* optimizing delivery of goods
-* document clustering
-* image segmentation
-* identifying location of police activity
-* call record detail analysis
+- clustering IT alerts
+- optimizing delivery of goods
+- document clustering
+- image segmentation
+- identifying location of police activity
+- call record detail analysis
 
 <!-- livebook:{"break_markdown":true} -->
 
 #### Hierarchical Clustering
 
-Hierarchical clustering builds a tree of nested clusters without having to specify the number of clusters. Hierarchical clustering starts with k = N clusters. It then merges the two closest into one cluster, obtaining k = N-1 clusters. The process of merging two clusters to obtain k-1 clusters is repeated until the desired number of clusters K is reached. Euclidean distance is used to determine which clusters to merge. Hierarchical clustering is deterministic, which means it is reproducible..
+Hierarchical Clustering builds a tree of nested clusters without having to specify the number of clusters. Hierarchical clustering starts with k = N clusters. It then merges the two closest into one cluster, obtaining k = N-1 clusters. The process of merging two clusters to obtain k-1 clusters is repeated until the desired number of clusters K is reached. Euclidean distance is used to determine which clusters to merge. Hierarchical clustering is deterministic, which means it is reproducible..
 
-Nodes are compared with one another based on their similarity. Larger groups are built by joining groups of nodes based on their similarity. A criterion is introduced to compare nodes based on their relationship.Distance scores are defined between every pair of points. The clustering algorithm proceeds by iteratively identifying subclusters. The procedure can be top down or bottom up.
+Nodes are compared with one another based on their similarity. Larger groups are built by joining groups of nodes based on their similarity. A criterion is introduced to compare nodes based on their relationship. Distance scores are defined between every pair of points. The clustering algorithm proceeds by iteratively identifying subclusters. The procedure can be top down or bottom up.
 
 #### Uses
 
-* biological data analysis
-* social network data
+- biological data analysis
+- social network data
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -82,16 +82,16 @@ Time series forecasting models are typically made of these four components:
 
 #### Uses
 
-* forecasting 
-  * the spread of COVID-19
-  * the daily generation of wind power
-  * an avalanche in a famous ski resort
+- forecasting
+  - the spread of COVID-19
+  - the daily generation of wind power
+  - an avalanche in a famous ski resort
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Deep Learning
 
-A class of ML models that imitate more closely human information processing. The word "deep" comes from how the model is made up of many layers of processing to extract features from the input. Each layer of processing passes on a more abstract representation of the data to the next layer. Unlike the other models we've discussed, deep learning models don't need the input data to be labeled. They handle unstructured data and can tackle more human-like problems such as facial recognition or natural language processing.
+A class of ML models that imitate more closely to human information processing. The word "deep" comes from how the model is made up of many layers of processing to extract features from the input. Each layer of processing passes on a more abstract representation of the data to the next layer. Unlike the other models we've discussed, deep learning models don't need the input data to be labeled. They handle unstructured data and can tackle more human-like problems such as facial recognition or natural language processing.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -107,7 +107,7 @@ In the next section we will go into a more detailed look at deep learning and ne
 
 ## Choosing the Right Model
 
-The best suited model depends on the outcome you want. For example, to predict the gas mileage of a vehicle from historical data, a good choice would be a supervised learning model like linear regression. The desired outcome is to predict the relationship between variables to forecast on outcome. Remember, linear regression was defined above as:
+The best suited model depends on the outcome you want. For example, to predict the gas mileage of a vehicle from historical data a good choice would be a supervised learning model like linear regression. The desired outcome is to predict the relationship between variables to forecast on outcome. Remember, linear regression was defined above as:
 
 > best for finding out the relationship between variables and forecasting
 
@@ -126,4 +126,3 @@ Once we have trained a model we need to make it available for use in testing or 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_Classification.livemd)
 
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Neural Networks ></span>](../4_NeuralNetworks/1_Intro.livemd)
-

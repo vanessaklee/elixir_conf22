@@ -14,7 +14,7 @@ After an introduction to machine learning we will define, train, and test a mach
 
 ### Introduction
 
-Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions and get better over time with exposure to data. In some types of machince learning these predictions can become increasingly accurate over time without human intervention. Historical data is given as training input. Through training and testing, the machine learning algorithms are able to predict new, unseen output values.
+Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions and get better over time with exposure to data. In some types of machine learning these predictions can become increasingly accurate over time without human intervention. Historical data is given as training input. Through training and testing, the machine learning algorithms are able to predict new, unseen output values.
 
 #### Common Uses
 
