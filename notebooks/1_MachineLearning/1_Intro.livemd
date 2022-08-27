@@ -8,20 +8,20 @@ Mix.install([
 
 ## Goal
 
-After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available dataset. We will then employ the model to make predictions. This lesson serves as an introduction fto and an overview of machine learning.
+After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available dataset. We will then employ the model to make predictions. This lesson serves as an introduction to and an overview of machine learning.
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Introduction
 
-Machine learning (ML) is a type of artificial intelligence (AI), and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions, and get better over time with exposure to data. They become increasingly accurate at predicting outcomes without being explicitly programmed. Historical data is given as training input. Through training and testing, the machine learning algorithms are able to predict new, unseen output values.
+Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions and get better over time with exposure to data. In some types of machince learning these predictions can become increasingly accurate over time without human intervention. Historical data is given as training input. Through training and testing, the machine learning algorithms are able to predict new, unseen output values.
 
-#### Common uses
+#### Common Uses
 
-* classification of images
-* recommendation engines
-* fraud and threat detection
-* business process automation
+- classification of images
+- recommendation engines
+- fraud and threat detection
+- business process automation
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -31,13 +31,13 @@ Machine learning (ML) is a type of artificial intelligence (AI), and is the proc
 
 ### Types of Machine Learning
 
-Machine learning types are broken down by how an algorithm learns prediction accuracy. Growing your knowledge of ML means knowing the question you are asking and how to choose the algorithm based on the type of data you want to predict.
+Machine learning types are broken down by how an algorithm learns prediction accuracy. The practice of Machine Learning means knowing the right question to ask and how to choose the algorithm based on the type of data you want to predict.
 
 There are three main types of machine learning
 
-* Supervised learning
-* Unsupervised learning
-* Reinforcement learning
+- Supervised learning
+- Unsupervised learning
+- Reinforcement learning
 
 We will cover each of the 3 types in the next section.
 
@@ -62,7 +62,7 @@ graph TD;
   TST-->UD[New, unseen input data];
   UD-->M;
   M-->P[[Prediction, a.k.a best guess]]
-  
+
 ```
 
 <!-- livebook:{"break_markdown":true} -->
@@ -77,7 +77,7 @@ The **Loss Function** gives a quantity to the distance between the prediction an
 
 Regression algorithms typically use Mean Square Error (MSE), which determines loss as the average squared difference between the prediction and the ground truth.
 
-CLassification algorithms typically use Cross Entropy Loss (aka softmax), which measures loss as the difference between probabilities that a model assigns to classes
+Classification algorithms typically use Cross Entropy Loss (aka softmax), which measures loss as the difference between probabilities that a model assigns to classes.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -102,13 +102,13 @@ Essentially, ML algorithms are functions with an input of data and an output of 
 
 Examples of well-known algorithms are:
 
-* Regression (linear, logistic, etc.)
-* Classification
-* Clustering
-* Decision Trees
-* Random Forest
-* k-Nearest Neighbors
-* Artificial neural networks
+- Regression (linear, logistic, etc.)
+- Classification
+- Clustering
+- Decision Trees
+- Random Forest
+- k-Nearest Neighbors
+- Artificial neural networks (ANN)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -122,17 +122,17 @@ _Decision Tree_
 
 ### Models
 
-If a machine learning model is the output of an algorithm, at its most basic it is a file. The file has been trained to recognize patterns by a set of data. An algorithm is used to reason over and learn from the data. During training, the algorithm is optimized to find certain patterns in the dataset resulting in a file called a machine learning model.
+If a machine learning model is the output of an algorithm then it is effectively a file. This file has been trained to recognize patterns by a set of data. An algorithm is used to reason over and learn from this data. During training, the algorithm is optimized to find certain patterns in the dataset resulting in a file called a machine learning model.
 
-It represents what's been learned from the algorithm using a training dataset, and it contains a prediction algorithm. So an algorithm like linear regression will produce a model made of a vector of coefficients with specific values. Whereas a decision tree algorithm will result in a model made of a tree of conditions with specific values.
+The machine learning model represents what's been learned from the algorithm using a training dataset through the prediction algorithm it produces; an algorithm like linear regression will produce a model made of a vector of coefficients with specific values whereas a decision tree algorithm will result in a model made of a tree of conditions with specific values.
 
-Once trained, the model can reason over data it hasn't seen before and make predictions. If it's been trained well, it can make accurate predictions on similar but previously unseen data.
+Once trained, the model can reason over and make predictions upon data it hasn't seen before. If the model has been trained well these predictions can be accurate.
 
-For example, machine learning models can be used for natural language processing (NLP). Those models parse and correctly recognize the intent or sentiment of combinations of words. Image recognition machine learning models can learn to recognize and discern objects.
+Examples include machine learning models that can be used for natural language processing (NLP) which recognize the intent or sentiment of combinations of words. Another is image recognition; machine learning models can learn to recognize and discern objects.
 
 ## Model Training
 
-Model training is the process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns is called model training. The data set is referred to as the training data. The result is the model, a function made of rules and data structures.
+Model training is the process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns. The data set is referred to as the training data. The result is the model; a function made of rules and data structures.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -148,7 +148,7 @@ Time for some Elixir
 
 Let's get some fingers on the keyboard and explore an Elixir library.
 
-Gibran is an early Elixir library that experimented with natural language processor. It can convert a string into a list of tokens using different strategies.
+![Gibran](https://github.com/abitdodgy/gibran) is an early Elixir library that experimented with natural language processor. It can convert a string into a list of tokens using different strategies.
 
 ```elixir
 str = "Tomorrow, and tomorrow, and tomorrow, Creeps in this petty pace from day to day"
@@ -167,8 +167,8 @@ Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 |> Enum.uniq()
 |> IO.inspect(label: "unique tokens > 10")
 
-# idea for a little challenge; have them count the tokens in the first two 
-# and add the uniq in the final? No need for a solution, but it could be hidden 
+# idea for a little challenge; have them count the tokens in the first two
+# and add the uniq in the final? No need for a solution, but it could be hidden
 # in a markdown section
 
 :ok
@@ -180,11 +180,11 @@ Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 
 <img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 95px; float: left; margin-right: 50px;" />
 
-It is easy to think that more data is better. More data generally leads to increased accuracy. It also leads to decreased performance in addition to difficulty in visualizing the data.
+It is easy to think that more data is better because more data generally leads to increased accuracy but it also leads to decreased performance and difficulty in visualizing the data.
 
 ### Generalization
 
-The goal of training a model is to make that model perform accurately on data it has never seen before. This is called Generalization. The generalization of a model to new data is what makes machine learning useful in solving everyday problems that require predictions or classification.
+The goal of Generalization is training a model to make it perform accurately on data it has never seen before. This is what makes machine learning useful in solving everyday problems that require predictions or classification.
 
 Say you train a model to classify images into two groups: "dogs" or "not dogs". If the dataset you used to train the model contains only two breeds of dogs it may perform very accurately. Will it generalize to a dataset containing more dog breeds? Or one with cats and wolves? Unlikely. In this case you might see the testing dataset with 90% accuracy. That accuracy is likely to drop to the 70s for the other dog breeds and below 40 for the mix of animals.
 
@@ -198,9 +198,9 @@ The problem in this example is a lack of data diversity. Let's look at two other
 
 ### Overfitting
 
-Overfitting is when a model too closely matches, or fits, its training data. This means the model will not predict unseen data accurately, or not generalize. This can happen when a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevant information in the dataset and fit the training set too closely
+Overfitting is when a model too closely matches, or fits, its training data. This means the model will not generalize; it will not predict unseen data accurately. This can happen when a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevant information in the dataset and fit the training set too closely.
 
-Low error rates are good indicators of overfitting. In order to prevent this type of behavior, part of the training dataset is typically set aside as the *Test Set* to check for overfitting. Overfitting is indicated when the training data has a low error rate and the test data has a high error rate.
+Low error rates are good indicators of overfitting. In order to prevent this type of behavior, part of the training dataset is typically set aside as the _Test Set_ to check for overfitting. Overfitting is indicated when the training data has a low error rate and the test data has a high error rate.
 
 ![](images/overfit.png)
 
