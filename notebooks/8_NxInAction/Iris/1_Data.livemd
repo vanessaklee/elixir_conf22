@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:nx, "~> 0.2.1"},
+  {:nx, "~> 0.3.0", override: true},
   {:explorer, "~> 0.2.0"},
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
@@ -14,7 +14,7 @@ Mix.install([
 ## The Plan
 
 1. Define the problem
-2. Pepare the data
+2. Prepare the data
 3. Evaluate the algorithms
 4. Choose the model
 5. Enhance the model
@@ -129,7 +129,7 @@ expdf
 |> DataFrame.table(limit: 3)
 ```
 
-Verify there are 3 distict species of Irises in the dataset.
+Verify there are 3 distinct species of Irises in the dataset.
 
 ```elixir
 expdf
@@ -172,7 +172,7 @@ There are exactly 50 of each of the three Species features; we have a balanced d
 
 * _Quantitative_ - numerical data
 * _Nominal_ - categorical data without a set order or scale
-* _Ordinal_ - categorial data with a set order or scale
+* _Ordinal_ - categorical data with a set order or scale
 * _Temporal_ - data which represents a state in time
 
 <hr style="background-color: #800080;height: 5.0px;" />
@@ -183,7 +183,7 @@ We want to relate the Iris features to their species. The relationship does not 
 
 Charting can be helpful in determining the strength of the relationship between variables. If the chart shows trends, then fitting a linear regression model to the data may be a useful model.
 
-Compare petal length to sepal length trends among the species. Which features seems more strongly associated with species?
+Compare petal length to sepal length trends among the species. Which features seem more strongly associated with species?
 
 ```elixir
 alias VegaLite, as: Vl
@@ -241,7 +241,7 @@ train_df = DataFrame.slice(expdf, 0, train_size)
 <img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 50px; display: block; margin-left: auto; margin-right: auto;" />
 
 <span style="font-size: 16px; font-style: italic;">
-This is a novice exercise meant as a warm up to putting the Nx ecosystem into action. You'll note the Iris dataset is very small.This method we are using is not suggestd for real world problems since splitting the dataset into a training and testing set reduces the size even more.
+This is a beginner exercise meant as a warm up to putting the Nx ecosystem into action. You'll note the Iris dataset is very small.This method we are using is not suggested for real world problems since splitting the dataset into a training and testing set reduces the size even more.
 
 Since the goal is to predict iris species using a dataset the model has not seen before, ideally we would have a much larger training and testing set. Remember back in an earlier lesson when we discussed the challenges of machine learning. Here we are at risk of **overfitting** the training data.
 </span>
@@ -265,10 +265,6 @@ target_set =
   train_df
   |> DataFrame.select(&(&1 == "species"), :keep)
 ```
-
-![](images/binary.png)
-
-<!-- livebook:{"break_markdown":true} -->
 
 ### Feature Normalization
 
@@ -312,7 +308,7 @@ end)
 
 Now we use the maximum value of the feature to normalize each of the values.
 
-Do do that, we want to transform the orignal Series into the value of the original value divided by the maximum value.
+To do that, we want to transform the original Series into the value of the original value divided by the maximum value.
 
 Nx division results in a tensor. We need a `float`. Convert the tensor to a flat list and take the only element.
 
@@ -406,8 +402,6 @@ input_targets =
   |> Series.to_tensor()
   |> Nx.new_axis(-1)
 ```
-
-<!-- livebook:{"break_markdown":true} -->
 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](../1_Intro.livemd)
 

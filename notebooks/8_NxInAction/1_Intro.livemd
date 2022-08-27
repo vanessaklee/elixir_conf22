@@ -13,7 +13,7 @@ In this notebook we will go over the steps for Machine Learning and how we will 
 ### The Plan
 
 1. Define the problem
-2. Pepare the data
+2. Prepare the data
 3. Evaluate the algorithms
 4. Choose the model
 5. Make the predictions

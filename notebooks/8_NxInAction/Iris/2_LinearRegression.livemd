@@ -24,7 +24,7 @@ Credit: this example is influenced by Sean Moriarity [Dockyard post](https://doc
 ## The Plan
 
 1. ~~Define the problem~~
-2. ~~Pepare the data~~
+2. ~~Prepare the data~~
 3. Evaluate the algorithms
 4. Choose the model
 5. Enhance the model
