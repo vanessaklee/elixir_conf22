@@ -31,7 +31,7 @@ Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the proce
 
 ### Types of Machine Learning
 
-Machine learning types are broken down by how an algorithm learns prediction accuracy. The practice of Machine Learning means knowing right question to ask and how to choose the algorithm based on the type of data you want to predict.
+Machine learning types are broken down by how an algorithm learns prediction accuracy. The practice of Machine Learning means knowing the right question to ask and how to choose the algorithm based on the type of data you want to predict.
 
 There are three main types of machine learning
 
