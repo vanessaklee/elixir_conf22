@@ -17,12 +17,12 @@ After introducing machine learning we’ll dive into Neural Networks which, them
 
 #### Big Picture
 
-* Made up of layers of neurons that are the core processing units
+* Made up of layers of artificial neurons (units) that activate on input
   * Input layer (receives the input)
   * Hidden layers (perform most of the computations)
   * Output layer (predicts final output)
-* Channels connect layers 
-  * Each channel is assigned a numerical value: weight
+* Input from one layer is passed to the next 
+  * Each unit is assigned a numerical value: weight
   * Each *input* is multiplied by its weight and the result is sent as input to the *hidden layers*
   * Each of the neurons that receive that data have a corresponding numerical value called the *bias*
   * the bias is added to the *weight*
