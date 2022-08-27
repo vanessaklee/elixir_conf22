@@ -16,7 +16,7 @@ In the last section we learned that ML algorithms are basically procedures run o
 
 ## Supervised Learning Algorithms
 
-Supervised Learning is the type of machine learning where the target outcome is known or labeled. Classification and Regression are examples of supervised learning algorithms. Classification is used when  the outcome is finite (a customer purchased an item). Regression is used when the outcome is infinite (the value of the purchase).
+Supervised Learning is the type of machine learning where the target outcome is known or labeled. Classification and Regression are examples of supervised learning algorithms. Classification is used when the outcome is finite (a customer purchased an item). Regression is used when the outcome is infinite (the value of the purchase).
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -32,17 +32,17 @@ Regression in data science and machine learning is a statistical method that ena
 
 #### Linear & Logistic Regression
 
-Linear regression targets a prediction value based on independent variables to discover the relationship between variables and forecasting. Regression algorithms differ based on the relationship between dependent and independent variables and the number of independent variables. Linear regression seeks to plot a line of best fit calculated through the method of least squares.
+Linear regression targets a prediction value based on independent variables to discover the relationship between variables and forecasting. Regression algorithms differ based on the relationship between dependent and independent variables as well as the number of independent variables. Linear regression seeks to plot a line of best fit calculated through the method of least squares.
 
-Logistical regression estimates the probability of an event occurring based on a given dataset of independent variables. It's also used to estimate the relationship between a dependent variable and one or more independent variables, but it makes a prediction about a categorical variable versus a continuous one: true or false, yes or no, 1 or 0, etc.
+Logistical regression estimates the probability of an event occurring based on a given dataset of independent variables. It's also used to estimate the relationship between a dependent variable and one or more independent variables but it makes a prediction about a categorical variable versus a continuous one: true or false, yes or no, 1 or 0, etc.
 
-Both linear and logistic regression are among the most popular algorithms within data science. Both are used to make predictions about future outcomes, linear regression is typically easier to understand. Linear regression also does not require as large of a sample size as logistic regression. Logistic regression needs a larger number of examples to represent values across all the response categories or the model may not have sufficient statistical power to detect a significant effect.
+Both linear and logistic regression are among the most popular algorithms within data science. While both are used to make predictions about future outcomes, linear regression is typically easier to understand. Linear regression also does not require as large of a sample size as logistic regression. Logistic regression needs a larger number of examples to represent values across all the response categories or the model may not have sufficient statistical power to detect a significant effect.
 
 #### Uses
 
-* fraud detection
-* disease prediction
-* binary classification problems like spam identification
+- fraud detection
+- disease prediction
+- binary classification problems like spam identification
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -121,13 +121,13 @@ IO.puts("---------------------------------------------------")
 
 <!-- livebook:{"break_markdown":true} -->
 
-All eyes are on you. You need to predict next month’s sales number for your pet supply store. But how can anyone predict the future?
+All eyes are on you. You need to predict next month’s sales number for your pet supply store...but how can anyone predict the future?
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Variables
 
-Dozens of factors from the weather to a competitor’s promotion to the newest pet food trend can impact the number. Your gut tells you the weather is the most important variable. You've experienced it yourself:
+Dozens of factors from the weather, to a competitor’s promotion, to the newest pet food trend can impact the number. Your gut tells you the weather is the most important variable. You've experienced it yourself:
 
 > When it rains, you sell more.
 
@@ -155,7 +155,7 @@ These are the factors that **might** impact your dependent variable.
 
 ### Data
 
-So you gather your monthly sales numbers and the average monthly rainfall for the last three years. Plotted on a chart, the data looks like this:
+Using this knowledge, you gather your monthly sales numbers and the average monthly rainfall for the last three years. When plotted on a chart, the data looks like this:
 
 ![plot](images/shop_reg1.png)
 
@@ -167,7 +167,7 @@ It sure looks like your gut was right: the more rainfall, the higher your sales.
 
 But how much does it have to rain to make a difference?
 
-Put a line through the middle of the data points on our chart. This is an example of a __regression line__.
+Put a line through the middle of the data points on our chart. This is an example of a **regression line**.
 
 ![regression_line](images/regression_line.png)
 
@@ -181,7 +181,7 @@ This formula explains the slope of the line: `y = 200 + 5x + error term`
 
 `y = 200`
 
-Historically when there was no rain, your sales averaged 200. Assuming other variables stay the same, you can expect future sales to be the same.
+Historically when there was no rain your sales averaged 200. Assuming other variables stay the same you can expect future sales to be the same.
 
 `5x`
 
@@ -189,7 +189,7 @@ Historically for every additional inch of rain you made an average of five more 
 
 `error term`
 
-It is tempting to stop here. Rain __clearly__ has the biggest impact on sales, but we need the `error term` to tell us whether rainfall is a variable __worth your attention__.
+It is tempting to stop here. Rain **clearly** has the biggest impact on sales, but we need the `error term` to tell us whether rainfall is a variable **worth your attention**.
 
 A regression line has an `error term` because independent variables are not perfect predictors of dependent variables. The line is an estimate. The larger the `error term`, the less confident you should be in your regression line. We could add additional variables until the `error term` decreases.
 
@@ -215,7 +215,7 @@ y == actual_sales
 
 A major advantage of regression is the ability to discover the impact of multiple variables at once (Multiple Regression). For example, you could add data about promotions, competitors, and local pet events.
 
-Regression helps determine which independent variable has the most influence over the dependent variable. But remember, __correlation is not causation__.
+Regression helps determine which independent variable has the most influence over the dependent variable. But remember, **correlation is not causation**.
 
 <img src="https://imgs.xkcd.com/comics/correlation.png" alt="Correlation" />
 
@@ -223,7 +223,7 @@ Regression helps determine which independent variable has the most influence ove
 [Image Source: xkcd](https://imgs.xkcd.com/comics/correlation.png)
 </span>
 
-We used regression to prove there is definitely a correlation between rain and monthly sales. We **cannot** confidently claim rain __caused__ the sales. We're selling pet supplies, not umbrellas after all.
+We used regression to prove there is definitely a correlation between rain and monthly sales. We **cannot** confidently claim rain **caused** the sales. We're selling pet supplies, not umbrellas after all.
 
 <!-- livebook:{"break_markdown":true} -->
 
