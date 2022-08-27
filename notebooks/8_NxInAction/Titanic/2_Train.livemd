@@ -2,9 +2,9 @@
 
 ```elixir
 Mix.install([
-  {:axon, "~> 0.1.0"},
+  {:axon, "~> 0.2.0"},
   {:exla, "~> 0.2.2"},
-  {:nx, "~> 0.2.1"},
+  {:nx, "~> 0.3.0", override: true},
   {:explorer, "~> 0.2.0"}
 ])
 ```
@@ -37,10 +37,10 @@ With the use of Explorer, load the normalized training set you saved in the last
 ```elixir
 alias Explorer.{DataFrame, Series}
 
-csv = "elixir_conf/data/titanic/normalized/train.csv"
-test_csv = "elixir_conf/data/titanic/normalized/train.csv"
+csv = "elixir_conf/data/titanic_train.csv"
+test_csv = "elixir_conf/data/titanic_train.csv"
 train_df = DataFrame.from_csv!(csv)
-test_df = DataFrame.from_csv!(csv)
+test_df = DataFrame.from_csv!(test_csv)
 ```
 
 #### Normalize the rest
@@ -81,13 +81,14 @@ batched_test = Stream.zip(batched_test_inputs, batched_test_targets)
 
 ```elixir
 train_max = Nx.reduce_max(train_inputs, axes: [0], keep_axes: true)
+test_max = Nx.reduce_max(test_inputs, axes: [0], keep_axes: true)
 
-normalize = fn {batch, target} ->
-  {Nx.divide(batch, train_max), target}
+normalize = fn {batch, target}, max ->
+  {Nx.divide(batch, max), target}
 end
 
-train_set = batched_train |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
-test_set = batched_test |> Stream.map(&Nx.Defn.jit(normalize, [&1], compiler: EXLA))
+train_set = batched_train |> Stream.map(&normalize.(&1, train_max))
+test_set = batched_test |> Stream.map(&normalize.(&1, test_max))
 ```
 
 ## Train
@@ -105,7 +106,7 @@ dropout_rate = 0.1
 optimizer = Axon.Optimizers.adamw(learning_rate)
 
 model =
-  Axon.input({batch_size, train_cols}, "inputs")
+  Axon.input("inputs", shape: {batch_size, train_cols})
   |> Axon.dense(10)
   |> Axon.dropout(rate: dropout_rate)
   |> Axon.dense(1)
@@ -115,7 +116,7 @@ model =
 model =
   model
   |> Axon.Loop.trainer(loss, optimizer)
-  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+  |> Axon.Loop.run(train_set)
 ```
 
 ```elixir
@@ -139,7 +140,7 @@ Probabilities closer to 1 indicate a higher confidence that the passenger surviv
 
 ```elixir
 model =
-  Axon.input({batch_size, train_cols}, "Titantic Inputs")
+  Axon.input("Titanic Inputs", shape: {batch_size, train_cols})
   |> Axon.dense(16)
   |> Axon.relu()
   |> Axon.dense(16)
@@ -242,7 +243,7 @@ Save the model.
 ```elixir
 model
 |> Axon.serialize(%{model_state: model_state})
-|> then(&File.write!("elixir_conf/models/titanic_model.axon", &1))
+|> then(&Fil# e.write!("elixir_conf/models/titanic_model.axon", &1))
 ```
 
 #### Validate the model
@@ -321,8 +322,6 @@ test_set
   IO.inspect("Actual: #{truth} Predicted: #{prediction}")
 end)
 ```
-
-<!-- livebook:{"break_markdown":true} -->
 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_Data.livemd)
 

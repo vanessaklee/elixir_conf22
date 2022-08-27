@@ -15,6 +15,7 @@ Boomer, are you able to finish these?
 
 If not, I have an idea for a replacement of the advanced example -- a sort of DIY livebook setup with instructions for them to find a dataset on Kaggle and use it sort of fill-in-the-blank style. Not sure what to do about the Deep Learning and Stats; I can't do those justice in time for the training.
 
+- [ ] Can we update notebooks to Axon 0.2.0 and Nx 0.3.0?
 - [ ] Add Production section - not even started yet, but cover how to version a model? saving a model?
 - [ ] Tighten both DateFrames and Series sections
 - [ ] Add more "brain breaks" using [Paassaa](https://github.com/minibikini/paasaa), [Woolly](https://github.com/pjhampton/woolly), etc.
