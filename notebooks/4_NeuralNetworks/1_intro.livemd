@@ -1,5 +1,14 @@
 # Neural Networks: Introduction
 
+```elixir
+Mix.install([
+  {:req, "~> 0.3.0"},
+  {:axon, "~> 0.2.0"},
+  {:exla, "~> 0.3.0"},
+  {:nx, "~> 0.3.0"}
+])
+```
+
 ## Goal
 
 After introducing machine learning we’ll dive into Neural Networks which, themselves, are just another probabilistic method of learning about data. We’ll begin by first describing neural networks and then solving the simple problem of X using Y dataset.
@@ -49,6 +58,66 @@ In modern applications of neural networks both the rectified linear unit (ReLU) 
 * _Biases_ - A measure of how easy it is to get neuron to fire
 
 <hr style="background-color: #800080;height: 5.0px;" />
+
+## Brain Break!
+
+<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+Time for some Elixir
+</span>
+
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+
+Let's get some fingers on the keyboard and explore a simple neural network.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Our first neural network will be the "hello, world" of datascience - the MNIST dataset. This dataset is a collection of handwritten digits that can be fed into a neural network. Then, once trained, we can feed in images of numbers and the neural network can tell us what it is!
+
+```elixir
+# Don't worry about learning this code - its just boilerplate to download our
+# dataset
+url = "https://storage.googleapis.com/cvdf-datasets/mnist/"
+%{body: train_images} = Req.get!(url <> "train-images-idx3-ubyte.gz")
+%{body: train_labels} = Req.get!(url <> "train-labels-idx1-ubyte.gz")
+
+<<_::32, n_images::32, n_rows::32, n_cols::32, images::binary>> = train_images
+<<_::32, n_labels::32, labels::binary>> = train_labels
+
+images =
+  images
+  |> Nx.from_binary({:u, 8})
+  |> Nx.reshape({n_images, 1, n_rows, n_cols}, names: [:images, :channels, :height, :width])
+  |> Nx.divide(255)
+
+# Visualization of the images so we can get a idea of what it looks like
+images[[images: 0..4]] |> Nx.to_heatmap()
+```
+
+Next we do some stuff
+
+```elixir
+# images =
+#   images
+#   |> Nx.to_batched_list(32)
+
+targets =
+  labels
+  |> Nx.from_binary({:u, 8})
+  |> Nx.new_axis(-1)
+  |> Nx.equal(Nx.tensor(Enum.to_list(0..9)))
+  |> Nx.to_batched(32)
+
+model =
+  Axon.input("input", shape: {nil, 1, 28, 28})
+  |> Axon.flatten()
+  |> Axon.dense(128, activation: :relu)
+
+# params =
+#   model
+#   |> Axon.loop.trainer(:categorical_cross_entropy, :adam)
+#   |> Axon.Loop.metric(:accuracy, "Accuracy")
+#   |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 10, compiler: EXLA)
+```
 
 ## Multilayer Neural Networks
 
