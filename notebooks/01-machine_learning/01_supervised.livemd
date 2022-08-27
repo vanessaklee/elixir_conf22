@@ -12,15 +12,15 @@ This lesson covers the supervised learning type of machine learning. After this 
 
 ## Introduction
 
-Supervised learning is like learning by example. Defined by its use of labeled datasets to train algorithms that to classify data or predict outcomes accurately. As input data is fed into the model, it adjusts its weights until the model has been fitted appropriately. The data used to train a supervised learning model includes inputs and correct outputs. The algorithm measures its accuracy through the loss function, adjusting until the error has been sufficiently minimized. This is how the model learns.
+Supervised learning is like learning by example in that it is defined by its use of labeled datasets to train algorithms that classify data or predict outcomes. As input data is fed into the model it adjusts its weights until the model has been fitted appropriately. The data used to train a supervised learning model includes inputs and correct outputs. The algorithm measures its accuracy through the loss function, adjusting until the error has been sufficiently minimized. This is how the model learns.
 
-Supervised learning uses labeled training data to learn a model or a function which is able to produce the correct output given an input. Supervised learning can be used for classification tasks and regression tasks. Feature engineering, identifying the characteristics in your input data that are most likely related to the output is crucial.
+Supervised learning uses labeled training data to learn a model or a function which is able to produce the correct output given an input. Supervised learning can be used for classification tasks and regression tasks. Feature engineering, the practice of identifying the characteristics in your input data that are most likely related to the output, is a crucial application of supervised learning.
 
 With enough examples the goal is to learn to produce appropriate outputs, even for new inputs.
 
 ## Example
 
-Real estate is a good example. The history of home sales in a particular area could be expressed as a collection of number pairs. The square footage of each home and its sales price. From these pairs of numbers, a machine can learn a model that calculates the expected sales price given the square footage.
+Real estate is a good example of supervised learning. The history of home sales in a particular area could be expressed as a collection of number pairs; the square footage of each home and its sales price. From these pairs of numbers a machine can learn a model that calculates the expected sales price given the square footage.
 
 ![](images/house.png)
 
@@ -28,11 +28,11 @@ Real estate is a good example. The history of home sales in a particular area co
 
 ### How It Works
 
-The above example is a simple model, one input variable and one output. Square footage is only one factor that influences the price of a home, of course. The price of apartments can be influenced also by attributes such as what floor an apartment is on, the neighborhood that it's in, whether the building has a doorman or not, and so on. Given a sales history containing those attributes, plus sales prices, you can use machine learning to learn a more complex and realistic model that takes all of these attributes as inputs and predicts a sales price.
+The above example is a simple model: one input variable and one output. Square footage is only one factor that influences the price of a home, of course. The price of apartments can be influenced also by attributes such as what floor an apartment is on, the neighborhood that it's in, whether the building has a doorman or not, and so on. Given a sales history containing those attributes and including others such as sales prices, machine learning can be used to learn a more complex and realistic model that takes all of these attributes as inputs and predicts a sales price.
 
 What makes this supervised learning? We used labeled data to train the model. In this example, the labels are prices. Machine learning experts talk about how important feature engineering is in developing machine learning models.
 
-Finding the most discriminating features of the pairs of information that we're using in the training data. Discriminating features mean the features that are most likely related somehow to the labeled data.
+Feature engineering means finding the most discriminating features of the pairs of information that we're using in the training data. Discriminating features mean the features that are most likely related somehow to the labeled data.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -43,10 +43,10 @@ Supervised learning can perform two main tasks:
 
 Other examples include:
 
-* Image and object recognition
-* Predictive analytics
-* Sentiment analysis
-* Fraud and spam detection
+- Image and object recognition
+- Predictive analytics
+- Sentiment analysis
+- Fraud and spam detection
 
 We will go much deeper into Regression and Classification in a later chapter.
 
@@ -56,21 +56,21 @@ We will go much deeper into Regression and Classification in a later chapter.
 
 ## Applications
 
-Applications of supervised learning include forecasting, image and handwriting recognition, text classification, and so on.
+Applications of supervised learning include forecasting, image and handwriting recognition, text classification, and more.
 
-There are a lot of domains where there's already a large set of very rich training data that can be used to train classification and regression models. For example, in the domain of personal health. These types of datasets can help predictive analytics tell a lot about what's likely to happen with a person's health based on predictive models over all of the individuals whose records have been used as training data.
+Many domains already have a large set of rich training data for training classification and regression models. In the domain of personal health, for example, these types of datasets can help predictive analytics tell a lot about might happen with a person's health based on predictive models over all of the individuals whose records have been used as training data.
 
 #### Algorithms
 
-Some of the most commonly used learning methods, which will be discussed in more detail over the next lesson, include:
+Some of the most commonly used learning methods which will be discussed in more detail over the next lesson include:
 
-* Regression
-* Classification
-* Naive Bayes
-* Decision Trees
-* k Nearest Neighbors
-* Random Forest
-* Boosting
+- Regression
+- Classification
+- Naive Bayes
+- Decision Trees
+- k Nearest Neighbors
+- Random Forest
+- Boosting
 
 We will go over these algorithms in more detail during other lessons.
 
@@ -78,15 +78,15 @@ We will go over these algorithms in more detail during other lessons.
 
 ### Semi-supervised learning
 
-When only part of the given input data has been labeled. Unsupervised and semi-supervised learning can be more appealing alternatives as it can be time-consuming and costly to rely on domain expertise to label data appropriately for supervised learning.
+Semi-supervised learning occurs When only part of the given input data has been labeled. Unsupervised and semi-supervised learning can be more appealing alternatives to supervised learning as it can be time-consuming and costly to rely on domain expertise to label data appropriately.
 
 ## Challenges
 
-Although supervised learning can offer advantages, such as deep data insights and improved automation, there are some challenges. Training supervised learning models can be very time intensive, for example. Unlike unsupervised learning models, which we cover in the next section, supervised learning cannot cluster or classify data on its own.
+Supervised learning can offer advantages such as deep data insights and improved automation but it is not without challenges. Training supervised learning models can be very time intensive, for example. Unlike unsupervised learning models (which we cover in the next section), supervised learning cannot cluster or classify data on its own.
 
-Lastly, the datasets can have a higher likelihood of human error, resulting in algorithms learning incorrectly. Even if we know the right features for building a machine learning system, we also have to work through all the challenges in creating the training data. If we're going to have a human label, the expected outputs for a set of inputs as training data, we have to assume that that's a fairly easy computation for that human to do and that we're not going to get a lot of disagreement between two or three different humans who would be applying labels to the same data.
+Lastly, the datasets can have a higher likelihood of human error resulting in algorithms learning incorrectly. Even if we know the right features for building a machine learning system we also have to work through all the challenges in creating the training data. If we're going to have a human label the expected outputs for a set of inputs as training data then we have to assume that it is a fairly easy computation for that human to do and that we're not going to get a lot of disagreement between two or three different humans who would be applying labels to the same data.
 
-Building a sufficiently large data set for training a supervised model might require a lot of time and money because it might require a lot of effort from a lot of humans to get the job done.
+Building a sufficiently large data set for training a supervised model might require a lot of time and money because it can require a lot of effort from humans to get the job done.
 
 <!-- livebook:{"break_markdown":true} -->
 
