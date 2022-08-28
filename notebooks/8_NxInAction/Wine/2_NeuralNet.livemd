@@ -7,10 +7,10 @@ Mix.install([
   {:nx, "~> 0.3.0", override: true},
   {:explorer, "~> 0.2.0"},
   {:kino, "~> 0.6.2"},
-  {:kino_vega_lite, "~> 0.1.1"},
+  {:kino_vega_lite, "~> 0.1.3"},
   {:req, "~> 0.3.0"},
   {:scidata, "~> 0.1.9"},
-  {:vega_lite, "~> 0.1.4"}
+  {:vega_lite, "~> 0.1.5"}
 ])
 ```
 
@@ -357,7 +357,7 @@ min =
 ```
 
 ```elixir
-unseen_features =
+out_features =
   Enum.reduce(0..12, [], fn i, acc ->
     x = Enum.at(max, i)
     n = Enum.at(min, i)
@@ -367,10 +367,10 @@ unseen_features =
   |> Enum.reverse()
   |> Nx.tensor()
 
-unseen_input = Nx.divide(unseen_features, imax)
-IO.inspect(unseen_input, label: "unseen input")
+out_input = Nx.divide(out_features, imax)
+IO.inspect(out_input, label: "Out of sample input")
 
-Axon.predict(model, params, unseen_input)
+Axon.predict(model, params, out_input)
 |> Nx.to_flat_list()
 |> List.first()
 |> case do
