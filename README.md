@@ -31,6 +31,8 @@ If not, I have an idea for a replacement of the advanced example -- a sort of DI
 - [x] Added Essence Brain Break to Reinforcement section
 - [x] All explorer at 0.2.0
 - [x] Update to Nx 0.3.0
+- [x] Update kino-vega-lite to 0.1.3
+- [x] Update vega-lite to 0.1.4
 
 
 Spellcheck

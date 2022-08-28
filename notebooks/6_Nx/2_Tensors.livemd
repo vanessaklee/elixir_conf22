@@ -16,7 +16,7 @@ Credit: this notebook is influenced by examples in the [Nx repo](https://github.
 
 ## Numerical Elixir, alias: Nx
 
-[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a road block when it comes to deep nesting or random access. Thy also lack optimization for use cases such as problem the require millions of calculations.
+[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a road block when it comes to deep nesting or random access. It also lack optimization for use cases that require millions of calculations.
 
 Nx brings typed, multidimensional data, called tensors.
 
@@ -47,15 +47,17 @@ You may have written something similar using a list of lists.
 ]
 ```
 
-### Make a tensor
+### Help
 
-We can access the main API for tensors using IEx helpers, like this:
+If at any point you want to know more about the Nx API, you can use IEx helpers. Here is a request for help with `Nx.tensor`:
 
 ```elixir
 h(Nx.tensor())
 ```
 
-Tensors can be made from raw Elixir lists of numbers.
+### Make a tensor
+
+Nx expresses multi-dimensional data using typed tensors. Tensors can be made from raw Elixir lists of numbers.
 
 ```elixir
 tensor =
@@ -64,12 +66,16 @@ tensor =
   |> Nx.tensor(names: [:y, :x])
 ```
 
-As you can see, tensors are made of:
+Tensors are made of:
 
-* Data, the list of lists `[[1, 2], [3, 4]]`
-* Type, a signed integer 64 bits long `s64`
-* Shape, left to right with the outside dimensions first
-* Names
+* **Data**: the list of lists `[[1, 2], [3, 4]]`
+* **Type**: a signed integer 64 bits long `s64`
+* **Shape**: left to right with the outside dimensions first
+* **Names**: the names of each dimension
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Access
 
 To access any cell of the tensor, use:
 
@@ -88,7 +94,7 @@ tensor[0]
 # ...your code here...
 ```
 
-We can also get a whole dimension or a range
+We can also get a whole dimension or a range:
 
 ```elixir
 tensor[x: 1] |> IO.inspect()
@@ -124,7 +130,7 @@ challenge_tensor2 = challenge_tensor[green: 0..1, bean: 0..1]
 |> IO.inspect(label: "first 2 columns of the first 2 rows as a {2,2} tensor")
 
 (Nx.shape(challenge_tensor2) == {2,2}) |> IO.inspect(label: "second tensor shape {2,2}?")
-:ok 
+:ok
 -->
 
 <!-- livebook:{"disable_formatting":true} -->
@@ -147,13 +153,13 @@ Nx.shape(tensor)
 Nx.reshape(tensor, {1, 4}, names: [:batches, :values])
 ```
 
-This operation reuses all of the tensor data, merely alters the metadata so that the new tensor has the same type with a new shape.
+This operation reuses all of the tensor data; merely alters the metadata so that the new tensor has the same type with a new shape.
 
 Can you reeshape the tensor so it has 3 dimensions with one batch, one row, and four columns?
 
 <!--
  Possible answer
-Nx.reshape(tensor, {1, 1, 4}, names: [:batches, :row, :values]) 
+Nx.reshape(tensor, {1, 1, 4}, names: [:batches, :row, :values])
 -->
 
 ```elixir
@@ -224,7 +230,7 @@ Nx.sum(tensor, axes: [:x])
 
 <!--
  possible answer
-challenge_tensor3 = 1..8 
+challenge_tensor3 = 1..8
   |> Enum.chunk_every(2)
   |> Enum.chunk_every(2)
   |> Nx.tensor(names: [:z, :y, :x])
@@ -243,6 +249,7 @@ Nx.sum(challenge_tensor3, axes: [:y]) |> IO.inspect(label: "sum of `y` axis")
 ## Combining Tensors
 
 We are able to combine tensors using an operator. For example, we can subtract one tensor from another:
+
 $$
 \begin{bmatrix}
   5 & 6 \\\\
@@ -310,7 +317,7 @@ Nx.broadcast(1, {2, 2})
 ```
 
 This broadcast takes the scalar `1` and translates it
-to a compatible shape by copying it.  Sometimes, it's easier
+to a compatible shape by copying it. Sometimes, it's easier
 to provide a tensor as the second argument, and let `broadcast/2`
 extract its shape:
 
@@ -381,7 +388,7 @@ Nx.subtract(tensor, Nx.tensor([1, 2]))
 ```
 
 The broadcast worked as advertised, copying the `[1, 2]` row
-enough times to fill a `{2, 2}` tensor.  A tensor with a
+enough times to fill a `{2, 2}` tensor. A tensor with a
 dimension of `1` will broadcast to fill the tensor:
 
 ```elixir
@@ -464,13 +471,11 @@ The last major feature we'll cover is called auto-differentiation, or autograd.
 
 ## Automatic differentiation (autograd)
 
-An important mathematical property for a function is the
-rate of change, or the gradient. These gradients are critical
-for solving systems of equations and building probabilistic
-models. In advanced math, derivatives, or differential equations,
-are used to take gradients. Nx can compute these derivatives
-automatically through a feature called automatic differentiation,
-or autograd.
+One Nx features we will take advantage of in this training is `autograd`.
+
+The "grad" in `autograd` refers to the gradient, or the rate of change. Gradients are important for building probabilistic models. If you've watched Bruce Tate's [Groxio](https://www.youtube.com/watch?v=NcsqGS6SVXg) video's on machine learning you have seen the importance of gradients to probability in creating a model to solve FizzBuzz.
+
+Differential equations are used to take gradients. Nx provides a a feature called automatic differentiation, or autograd.
 
 <!-- livebook:{"disable_formatting":true} -->
 
@@ -478,7 +483,9 @@ or autograd.
 h Nx.Defn.grad
 ```
 
-There are many more features to Nx that we cannot cover in this training. See the [documentation](https://hexdocs.pm/nx/Nx.html) as you continue experimenting on your own.
+There are many more features to Nx that we cannot cover in this training. See the [documentation](https://hexdocs.pm/nx/Nx.html) to continue experimenting on your own.
+
+<!-- livebook:{"break_markdown":true} -->
 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](1_Intro.livemd)
 

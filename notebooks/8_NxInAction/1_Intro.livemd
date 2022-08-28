@@ -137,7 +137,7 @@ Metrics are used to measure the performance of models.
 
 The number of times the model was correct overall
 
-_How accurate is the model at making predictions on unseen data?_
+_How accurate is the model at making predictions on out of sample data?_
 
 `(true_pos + true_neg) / (true_pos + true_neg + false_pos + false_neg)`
 

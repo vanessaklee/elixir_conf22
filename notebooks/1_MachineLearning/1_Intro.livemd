@@ -134,6 +134,8 @@ Examples include machine learning models that can be used for natural language p
 
 Model training is the process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns. The data set is referred to as the training data. The result is the model; a function made of rules and data structures.
 
+To train a model, data scientists split their dataset into two categories: "in sample" and "out of sample". The split is generally 70% training, 30% testing. The model is trained on the in sample training set and then tested on how accurately it can make predictions on the out of sample testing set. 
+
 <!-- livebook:{"break_markdown":true} -->
 
 <hr style="background-color: #800080;height: 15.0px;" />
@@ -210,7 +212,7 @@ For example, the image below shows the error rate of a decision tree on both in-
 
 ### Underfitting
 
-Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to unseen data.
+Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to out of sample data.
 
 ![](images/underfit.png)
 
