@@ -6,7 +6,7 @@ A brief introduction to the traditional tools used to solve problems with machin
 
 ### Python
 
-Python is intended for general use and to be easy to learn compared to most languages; it is often the first language students encounter in US schools. It is also a go-to choice for machine learning because you can easily integrate your machine learning and its results into other Python applications.
+Python is intended for general use and to be easy to learn compared to most languages; it is often the first language students encounter in US schools. It is a go-to choice for machine learning because you can easily integrate your machine learning and its results into other Python applications.
 
 ![](images/python.png)
 
@@ -28,7 +28,7 @@ The Python ecosystem includes many established, well-maintained libraries. The p
 
 ### Elixir Numerical Elixir (Nx) Ecosystem
 
-Given Python's dominance, why even consider Elixir for machine learning? Python has its faults. Python can be slow, especially for complex routines like preprocessing your data. Python's Global Interpreter Lock (GIL) is known to be a headache for those who want to use multithreading. GIL allows only one thread to be in a state of execution at any point in time. From this point of view, Elixir is a reasonable contender. Along with multithreading, Elixir also brings the BEAM and immutability, concurrency, error handling, and easy testing.
+Given Python's dominance, why even consider Elixir for machine learning? Python has its faults. Python can be slow, especially for complex routines like preprocessing your data. Python's Global Interpreter Lock (GIL) is known to be a headache for those who want to use multithreading. GIL allows only one thread to be in a state of execution at any point in time. From this point of view, Elixir is a reasonable contender. Along with multithreading, Elixir also brings the BEAM and  immutability, concurrency, error handling, easy testing.
 
 ![](images/nx.png)
 
