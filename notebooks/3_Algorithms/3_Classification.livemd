@@ -5,7 +5,7 @@ Mix.install([
   {:essence, "~> 0.2.0"},
   {:paasaa, "~> 0.6.0"},
   {:req, "~> 0.3.0"},
-  {:kino_vega_lite, "~> 0.1.1"}
+  {:kino_vega_lite, "~> 0.1.3"}
 ])
 ```
 

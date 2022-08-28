@@ -27,8 +27,8 @@ Performance depends upon that data. The data you want to make predictions about 
 
 ```mermaid
 flowchart LR
-    mr(Model requirements) --> ld(Live unseen data)
-    ld --> dc(Data Collection)
+    mr(Model requirements) --> ld(Live data)
+    ld --> dc(Data collection)
     dc --> dl(Data labeling)
     dl --> cl(Data cleaning) 
     cl --> m(Production model)
@@ -49,10 +49,10 @@ Developing an ML model includes evaluating its performance.
 
 ```mermaid
 flowchart TB
-    hd(Historical Data)-->m(Model)
+    hd(Historical data)-->m(Model)
     m<-->me(Model evaluation)
     d-->p(Production)
-    ld(Live unseen data)-->p 
+    ld(Live data)-->p 
     p<-->pe(Production evaluation)
     m-->d(Deployment)
     style hd fill:#000,stroke:#333,color:#fff,stroke-width:4px

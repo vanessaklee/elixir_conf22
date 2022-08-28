@@ -134,6 +134,8 @@ Examples include machine learning models that can be used for natural language p
 
 Model training is the process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns. The data set is referred to as the training data. The result is the model; a function made of rules and data structures.
 
+To train a model, data scientists split their dataset into two categories: "in sample" and "out of sample". The split is generally 70% training, 30% testing. The model is trained on the in sample training set and then tested on how accurately it can make predictions on the out of sample testing set. 
+
 <!-- livebook:{"break_markdown":true} -->
 
 <hr style="background-color: #800080;height: 15.0px;" />
@@ -198,7 +200,7 @@ The problem in this example is a lack of data diversity. Let's look at two other
 
 ### Overfitting
 
-Overfitting is when a model too closely matches, or fits, its training data. This means the model will not generalize; it will not predict unseen data accurately. This can happen when a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevant information in the dataset and fit the training set too closely.
+Overfitting is when a model too closely matches, or fits, its training data. This means the model will not generalize; it will not predict out of sample data accurately. This can happen when a model trains for too long or when the model is too complex. In those cases, the model can start to learn from irrelevant information in the dataset and fit the training set too closely.
 
 Low error rates are good indicators of overfitting. In order to prevent this type of behavior, part of the training dataset is typically set aside as the _Test Set_ to check for overfitting. Overfitting is indicated when the training data has a low error rate and the test data has a high error rate.
 
@@ -212,7 +214,7 @@ Low error rates are good indicators of overfitting. In order to prevent this typ
 
 ### Underfitting
 
-Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to unseen data.
+Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to out of sample data.
 
 ![](images/underfit.png)
 
