@@ -115,8 +115,7 @@ Different loss functions can have input shape requirements in Axon. See [here](h
   * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
 * :categorical_cross_entropy
   * Used for multi-class classifcation problems.
-  * Expects target to encode a probability distribution along the last
-    axis.
+  * Expects target to encode a probability distribution along the last axis.
   * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
 * :categorical_hinge
 * :hinge

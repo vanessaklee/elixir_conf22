@@ -1,0 +1,401 @@
+# Nx in Action/ Iris / Neural Network Model
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.2.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.3.0", override: true},
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"},
+  {:req, "~> 0.3.0"},
+  {:scidata, "~> 0.1.9"},
+  {:vega_lite, "~> 0.1.4"}
+])
+```
+
+## The Plan
+
+1. ~~Define the problem~~
+2. ~~Prepare the data~~
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
+
+## Define the problem
+
+Can we classify wine by type based on features?
+
+## Prepare the data
+
+```elixir
+# this is a probabilistic model; which means our outputs should sum to 100%
+
+{inputs, targets} = Scidata.Iris.download()
+
+# Target values are: 0, 1, or 2 therefore max is 2
+tmax = 2
+
+imax =
+  inputs
+  |> Nx.tensor()
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+
+inputs =
+  Enum.map(inputs, fn i ->
+    Nx.divide(Nx.tensor(i), imax)
+  end)
+
+count = Enum.count(inputs)
+dataset = Enum.zip(inputs, targets) |> Enum.shuffle()
+ratio = 0.85
+split = fn d -> Enum.split(d, ceil(count * ratio)) end
+
+{train, test_set} = split.(dataset)
+
+{train_inputs, train_targets} = Enum.unzip(train)
+
+train_targets =
+  Enum.map(train_targets, fn i ->
+    Nx.divide(Nx.tensor([i]), tmax)
+  end)
+
+train_set = Enum.zip(train_inputs, train_targets)
+:ok
+```
+
+## Evaluate the algorithms
+
+#### Define the Model
+
+1. Epochs - how many training iterations to take over the dataset
+2. Optimzer - function used to update weights and biases (hyperparameters)
+3. Loss - how best to measure **loss** (distance between prediction & target)
+4. Metric (optional) - choose metric to measure model's performance
+5. Learning rate (optional) - size of the optimization step at each iteration
+
+<!-- livebook:{"break_markdown":true} -->
+
+Define the model with the shape and a name for the input.
+
+The first dense layer has 10 outputs. We will need another layer to shrink it down to the outputs we expect: 3.
+
+That last layer will use the softmax activation to get the probabilitistic data we want.
+
+```elixir
+a = :relu
+
+model =
+  Axon.input("IRIS Features", shape: {nil, 13})
+  |> Axon.dense(15, activation: a, name: "First layer")
+  |> Axon.dense(3, activation: :softmax, name: "Last layer")
+```
+
+```elixir
+p =
+  model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(0.005))
+  |> Axon.Loop.run(train_set, %{}, epochs: 10)
+```
+
+```elixir
+result =
+  test_set
+  |> Enum.map(fn {test, truth} ->
+    prediction =
+      Axon.predict(model, p, test)
+      |> Nx.argmax(axis: 1)
+      |> Nx.to_flat_list()
+      |> List.first()
+
+    truth =
+      truth
+      |> Nx.to_flat_list()
+      |> List.first()
+
+    IO.inspect("#{prediction == truth}: predicted #{prediction}  actual #{truth}")
+    if truth == prediction, do: 1, else: 0
+  end)
+  |> Enum.sum()
+
+"Accuracy: #{(result / Enum.count(test_set) * 100) |> round()}%"
+```
+
+```elixir
+input_name = "Wine Features"
+model = Axon.input(input_name, shape: input_shape)
+```
+
+Note the parameters at this point require 0 bytes of memory. That is because there are no layers to neural network. Before we add one, run the model in this state.
+
+```elixir
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+Notice the loss. It stays the roughly the same each epoch. This is because we aren't doing any actual learn.
+
+Each layer in a neural network helps the network learn accurate representations of the input data. Without learning, the model performs badly.
+
+<!-- livebook:{"break_markdown":true} -->
+
+##### Add a layer
+
+Pipe it afer the input and provide a `unit` to specify the number of output units. We'll start with 1.
+
+```elixir
+model =
+  Axon.input(input_name, shape: input_shape)
+  |> Axon.dense(1, name: "First Layer")
+```
+
+Run it with the new layer.
+
+```elixir
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+Much improved! In this run, our loss dropped consistently from on epoch to the next.
+
+Add another layer.
+
+```elixir
+model =
+  Axon.input(input_name, shape: input_shape)
+  |> Axon.dense(15, name: "First Layer")
+  |> Axon.dense(3, name: "Second Layer")
+```
+
+```elixir
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+### Experiment with Metrics
+
+Options: `:accuracy`, `:precision`, and `:recall`
+
+```elixir
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.metric(:accuracy)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+### Experiment with Optimizers
+
+Try: `:adam`, `:adamw`, `:adagrad`, and `:sgd`
+
+```elixir
+optimizer = :adamw
+
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.metric(:accuracy)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+### Experiment with Loss
+
+We set the loss function to `:mean_absolute_error`.
+
+Try setting it to `:mean_squared_error`.
+
+```elixir
+loss = :mean_squared_error
+
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.metric(:accuracy)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+### Experiement with Activation
+
+Try: `:linear`, `:sigmoid`, `:tanh`, and `:relu`.
+
+For this experiment we need to define our model. Try out different combinations of activation functions for each layer.
+
+```elixir
+first_layer_activation = :linear
+second_layer_activation = :linear
+
+model =
+  Axon.input(input_name, shape: input_shape)
+  |> Axon.dense(5, activation: first_layer_activation, name: "First Layer")
+  |> Axon.dense(1, activation: second_layer_activation, name: "Second Layer")
+
+model
+|> Axon.Loop.trainer(loss, optimizer)
+|> Axon.Loop.metric(:accuracy)
+|> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+## Enhance the Model
+
+Now that we've adjusted Metrics, Loss, Optimizer, and Activation to find our best model, what more can we improve?
+
+Experiment with all the variables. Add layers. Change layers' units. You can also assign a different learning rate. The default is `1.0e-3`.
+
+We will also save the run to a variable so that when you find your best model, we can save it in a later block.
+
+```elixir
+epochs = 70
+
+metric = :recall
+loss = :mean_squared_error
+first_layer_activation = :linear
+second_layer_activation = :relu
+
+# loss_rate = 0.001
+# optimizer = Axon.Optimizers.adamw(loss_rate)
+
+model =
+  Axon.input(input_name, shape: input_shape)
+  |> Axon.dense(5, activation: first_layer_activation, name: "First Layer")
+  |> Axon.dense(1, activation: second_layer_activation, name: "Second Layer")
+
+model_state =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(metric)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+```
+
+### Run and validate the model
+
+```elixir
+validated_model_state =
+  model
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.validate(model, test_set)
+  |> Axon.Loop.run(train_set, model_state, epochs: epochs)
+```
+
+## Save the model
+
+```elixir
+model_file = "elixir_conf/models/iris_nn_model.axon"
+
+model
+|> Axon.serialize(%{model_state: model_state})
+|> then(&File.write!(model_file, &1))
+```
+
+```elixir
+File.read!(model_file)
+|> Axon.deserialize()
+```
+
+## Make the predictions
+
+```elixir
+{model, %{model_state: model_state}} =
+  File.read!(model_file)
+  |> Axon.deserialize()
+
+model
+```
+
+## Predict
+
+```elixir
+acc = {0, 0}
+
+{correct, incorrect} =
+  test_set
+  |> Enum.reduce(acc, fn {input, truth}, {a, b} ->
+    predicted =
+      Axon.predict(model, model_state, input)
+      |> Nx.to_flat_list()
+      |> List.first()
+      |> Float.ceil(1)
+
+    truth = List.first(Nx.to_flat_list(truth))
+
+    if truth == predicted do
+      IO.puts(
+        IO.ANSI.format([
+          :green,
+          "[x] prediction correct: #{predicted}"
+        ])
+      )
+
+      {a + 1, b}
+    else
+      IO.puts(
+        IO.ANSI.format([
+          :red,
+          "[ ] prediction incorrect: Actual #{truth} Predicted #{predicted}"
+        ])
+      )
+
+      {a, b + 1}
+    end
+  end)
+
+IO.puts(" ")
+IO.puts(IO.ANSI.format([:green, "#{correct} prediction correct"]))
+IO.puts(IO.ANSI.format([:red, "#{incorrect} prediction incorrect"]))
+
+success_rate = (correct / (incorrect + correct) * 100) |> Float.ceil(1)
+
+"Prediction Rate: #{success_rate}%"
+```
+
+## Advanced
+
+<hr style="background-color: #EED202; height: 5px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Dropout Rate
+
+The rate at which to randomly drop out nodes during training to 
+prevent overfitting and improve generalization error. It is a method for preventing a model from depending too much on specific neurons.
+
+This example uses a 20% dropout rate.
+
+```elixir
+model =
+  Axon.input(input_shape, input_name)
+  |> Axon.dense(15, activation: second_layer_activation, name: "First Layer")
+  |> Axon.dropout(rate: 0.2)
+  |> Axon.dense(5, activation: first_layer_activation, name: "Second Layer")
+  |> Axon.dropout(rate: 0.2)
+  |> Axon.dense(1, activation: first_layer_activation, name: "Third Layer")
+  |> Axon.Loop.trainer(loss, optimizer)
+  |> Axon.Loop.metric(metric)
+  |> Axon.Loop.run(train_set, %{}, epochs: 15)
+
+:ok
+```
+
+#### Re-shape the targets
+
+Try other loss functions require re-shaping the target.
+
+* :binary_cross_entropy with from_logits: true
+* :categorical_cross_entropy with from_logits: true
+
+```elixir
+loss =
+  &Axon.Losses.binary_cross_entropy(
+    &1,
+    &2,
+    from_logits: true
+  )
+```
+
+<hr style="background-color: #EED202; height: 5px;" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](../2_Data.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx in Action - Titanic ></span>](../Titanic/1_Data.livemd)

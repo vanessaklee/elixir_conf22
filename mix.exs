@@ -18,16 +18,14 @@ defmodule ElixirConf.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:axon, "~> 0.2.0"},
-      # {:exla, "~> 0.2.2"},
-      {:nx, "~> 0.3.0"},
+      {:nx, "~> 0.3.0", override: true},
       {:explorer, "~> 0.2.0"},
       {:kino, "~> 0.6.2"},
-      {:ex_todo, "~> 0.1.0"}
-
+      {:ex_todo, "~> 0.1.0"},
+      # {:exla, "~> 0.2.2"}
     ]
   end
 end

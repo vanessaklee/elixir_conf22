@@ -1,0 +1,385 @@
+# Nx in Action/ Iris / Neural Network Model
+
+```elixir
+Mix.install([
+  {:axon, "~> 0.2.0"},
+  {:exla, "~> 0.2.2"},
+  {:nx, "~> 0.3.0", override: true},
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"},
+  {:req, "~> 0.3.0"},
+  {:scidata, "~> 0.1.9"},
+  {:vega_lite, "~> 0.1.4"}
+])
+```
+
+## The Plan
+
+1. Define the problem
+2. Prepare the data
+3. Evaluate the algorithms
+4. Choose the model
+5. Enhance the model
+6. Make the predictions
+
+## Define the problem
+
+Can we predict the origin of wines based on chemical analysis features?
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Wine Data Set
+
+Dataset of chemical analysis used to determine the origin of wines.
+
+These data are the results of a chemical analysis of wines grown in the same region in Italy but derived from three different cultivars. The analysis determined the quantities of 13 constituents found in each of the three types of wines.
+
+In a classification context, this is a well posed problem with "well behaved" class structures. A good data set for first testing of a new classifier.
+
+| Data Set     | Instances | Attributes    | # of Attributes | Missing Values? |
+| ------------ | --------- | ------------- | --------------- | --------------- |
+| Multivariate | 178       | Integer, Real | 13              | 0               |
+
+[Center for Machine Learning and Intelligent Systems](https://archive.ics.uci.edu/ml/datasets/wine)
+
+<span style="font-size:12px">
+Credit:
+Forina, M. et al, PARVUS -
+An Extendible Package for Data Exploration, Classification and Correlation.
+Institute of Pharmaceutical and Food Analysis and Technologies, Via Brigata Salerno,
+16147 Genoa, Italy.
+</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Attributes
+
+* Alcohol
+* Malic acid
+* Ash
+* Alcalinity of ash
+* Magnesium
+* Total phenols
+* Flavanoids
+* Nonflavanoid phenols
+* Proanthocyanins
+* Color intensity
+* Hue
+* OD280/OD315 of diluted wines
+* Proline
+
+Target (class identifier): 1-3
+
+<!-- livebook:{"break_markdown":true} -->
+
+
+
+## Prepare the data
+
+```elixir
+{inputs, targets} = Scidata.Wine.download()
+count = Enum.count(inputs)
+
+imax =
+  Nx.tensor(inputs)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+
+tmax = 2
+
+inputs =
+  Enum.map(inputs, fn i ->
+    Nx.divide(Nx.tensor(i), imax)
+  end)
+
+targets =
+  Enum.map(targets, fn i ->
+    Nx.divide(Nx.tensor([i]), tmax)
+  end)
+
+dataset = Enum.zip(inputs, targets) |> Enum.shuffle()
+ratio = 0.85
+split = fn d -> Enum.split(d, ceil(count * ratio)) end
+
+{train_set, test_set} = split.(dataset)
+```
+
+## Evaluate the algorithms
+
+#### Define the Model
+
+1. Epochs - how many training iterations to take over the dataset
+2. Optimzer - function used to update weights and biases (hyperparameters)
+3. Loss - how best to measure **loss** (distance between prediction & target)
+4. Metric (optional) - choose metric to measure model's performance
+5. Learning rate (optional) - size of the optimization step at each iteration
+
+<!-- livebook:{"break_markdown":true} -->
+
+First some helper functions.
+
+```elixir
+result = fn model, params, test_set ->
+  test_set
+  |> Enum.map(fn {test, truth} ->
+    prediction =
+      Axon.predict(model, params, test)
+      |> Nx.to_flat_list()
+      |> List.first()
+
+    prediction =
+      case prediction do
+        p when p < 0.5 -> 0
+        p when p > 1 -> 2
+        p when p >= 0.5 -> 1
+      end
+
+    truth =
+      truth
+      |> Nx.to_flat_list()
+      |> List.first()
+      |> case do
+        0.0 -> 0
+        0.5 -> 1
+        1.0 -> 2
+      end
+
+    if truth == prediction, do: 1, else: 0
+  end)
+  |> Enum.sum()
+end
+
+summary = fn model, params, test_set ->
+  s =
+    (result.(model, params, test_set) / Enum.count(test_set) * 100)
+    |> round()
+
+  "#{s}%"
+end
+```
+
+Define the model with the shape and a name for the input.
+
+The first dense layer has 10 outputs. We will need another layer to shrink it down to the outputs we expect: 1.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Activation
+
+#:linear, :sigmoid, :tanh, or :relu
+
+```elixir
+epochs = 10
+a = :linear
+
+linear_model =
+  Axon.input("Wine Features", shape: {nil, 13})
+  |> Axon.dense(5, activation: a, name: "First layer")
+  |> Axon.dense(1, activation: a, name: "Last layer")
+
+linear_params =
+  linear_model
+  |> Axon.Loop.trainer(:mean_squared_error, :adamw)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+
+summary.(linear_model, linear_params, test_set)
+```
+
+```elixir
+a = :sigmoid
+
+sigmoid_model =
+  Axon.input("Wine Features", shape: {nil, 13})
+  |> Axon.dense(5, activation: a, name: "First layer")
+  |> Axon.dense(1, activation: a, name: "Last layer")
+
+sigmoid_params =
+  sigmoid_model
+  |> Axon.Loop.trainer(:mean_squared_error, :adamw)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+
+summary.(sigmoid_model, sigmoid_params, test_set)
+```
+
+```elixir
+a = :tanh
+
+tanh_model =
+  Axon.input("Wine Features", shape: {nil, 13})
+  |> Axon.dense(5, activation: a, name: "First layer")
+  |> Axon.dense(1, activation: a, name: "Last layer")
+
+tanh_params =
+  tanh_model
+  |> Axon.Loop.trainer(:mean_squared_error, :adamw)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+
+summary.(tanh_model, tanh_params, test_set)
+```
+
+```elixir
+a = :relu
+
+relu_model =
+  Axon.input("Wine Features", shape: {nil, 13})
+  |> Axon.dense(10, activation: a, name: "First layer")
+  |> Axon.dense(5, activation: a, name: "Second layer")
+  |> Axon.dense(1, activation: a, name: "Last layer")
+
+relu_params =
+  relu_model
+  |> Axon.Loop.trainer(:mean_squared_error, :adamw)
+  |> Axon.Loop.run(train_set, %{}, epochs: epochs)
+
+summary.(relu_model, relu_params, test_set)
+```
+
+#### Activation winner
+
+Change the variables to your winners
+
+```elixir
+a = :relu
+model = relu_model
+```
+
+### Optimizers
+
+We started with :adamw; try:
+
+:adam, :adagrad, or :sgd
+
+```elixir
+o = :adam
+
+adam_params =
+  model
+  |> Axon.Loop.trainer(:mean_squared_error, o)
+  |> Axon.Loop.run(train_set, %{}, epochs: 10)
+
+summary.(model, adam_params, test_set)
+```
+
+```elixir
+o = :adagrad
+
+adagrad_params =
+  model
+  |> Axon.Loop.trainer(:mean_squared_error, o)
+  |> Axon.Loop.run(train_set, %{}, epochs: 10)
+
+summary.(model, adagrad_params, test_set)
+```
+
+```elixir
+o = :sgd
+
+sgd_params =
+  model
+  |> Axon.Loop.trainer(:mean_squared_error, o)
+  |> Axon.Loop.run(train_set, %{}, epochs: 10)
+
+summary.(model, sgd_params, test_set)
+```
+
+#### Optimizer winners
+
+```elixir
+o = :adamw
+```
+
+### Loss
+
+Now modify the loss. We've already tried :mean_squared_error so try :mean_absolute_error
+
+```elixir
+l = :mean_absolute_error
+
+mae_params =
+  model
+  |> Axon.Loop.trainer(l, o)
+  |> Axon.Loop.run(train_set, %{}, epochs: 10)
+
+summary.(model, mae_params, test_set)
+```
+
+#### Loss winner
+
+Set the variable to your best.
+
+```elixir
+l = :mean_squared_error
+```
+
+### Learning rate
+
+Try changing the learning rate. To use a different optimizer, you'll need to change that, as well.
+
+```elixir
+o = Axon.Optimizers.adamw(0.001)
+
+lr_params =
+  model
+  |> Axon.Loop.trainer(l, o)
+  |> Axon.Loop.run(train_set, %{}, epochs: 15)
+
+summary.(model, lr_params, test_set)
+```
+
+### All the winners
+
+```elixir
+params = lr_params
+
+summary.(model, params, test_set)
+```
+
+```elixir
+{inputs, _} = Scidata.Wine.download()
+```
+
+Create random inputs from the max and min values of the dataset.
+
+```elixir
+max =
+  imax
+  |> Nx.to_flat_list()
+  |> Enum.map(&trunc/1)
+
+min =
+  inputs
+  |> Nx.tensor()
+  |> Nx.reduce_min(axes: [0], keep_axes: true)
+  |> Nx.to_flat_list()
+  |> Enum.map(&trunc/1)
+
+~w{alcohol malic_acid ash ash_alcalinity magnesium phenols nonflavanoid proanthocyanins intensity hue diluted proline tmax}
+```
+
+```elixir
+unseen_features =
+  Enum.reduce(0..12, [], fn i, acc ->
+    x = Enum.at(max, i)
+    n = Enum.at(min, i)
+    rand = (Enum.random(x..n) / 1) |> round()
+    [rand, acc] |> List.flatten()
+  end)
+  |> Enum.reverse()
+  |> Nx.tensor()
+
+unseen_input = Nx.divide(unseen_features, imax)
+IO.inspect(unseen_input, label: "unseen input")
+
+Axon.predict(model, params, unseen_input)
+|> Nx.to_flat_list()
+|> List.first()
+|> case do
+  p when p < 0.5 -> 0
+  p when p > 1 -> 2
+  p when p >= 0.5 -> 1
+end
+```
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](../2_Data.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx in Action - Titanic ></span>](../Titanic/1_Data.livemd)

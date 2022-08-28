@@ -20,7 +20,6 @@ To experiment with linear regression using Nx.
 
 Credit: this example is influenced by Sean Moriarity [Dockyard post](https://dockyard.com/blog/2022/01/11/getting-started-with-axon), "Getting Started with Axon"].
 
-
 ## The Plan
 
 1. ~~Define the problem~~
