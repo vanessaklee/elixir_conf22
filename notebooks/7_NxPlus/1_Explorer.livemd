@@ -74,4 +74,6 @@ In the next two sections we will dig into Explorer's Series and Dataframes.
 
 <!-- livebook:{"break_markdown":true} -->
 
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Nx</span>](../6_Nx/1_Intro.livemd)
+
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Series.livemd)

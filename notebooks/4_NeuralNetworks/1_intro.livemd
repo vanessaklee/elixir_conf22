@@ -1,0 +1,166 @@
+# Neural Networks: Introduction
+
+```elixir
+Mix.install([
+  {:req, "~> 0.3.0"},
+  {:axon, "~> 0.2.0"},
+  {:exla, "~> 0.3.0"},
+  {:nx, "~> 0.3.0"}
+])
+```
+
+## Goal
+
+After introducing machine learning we’ll dive into Neural Networks which, themselves, are just another probabilistic method of learning about data. We’ll begin by first describing neural networks and then solving the problem of detecting numbers from images using the famous MNIST dataset.
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Big Picture
+
+* Made up of layers of artificial neurons (units) that activate on input
+  * Input layer (receives the input)
+  * Hidden layers (perform most of the computations)
+  * Output layer (predicts final output)
+* Input from one layer is passed to the next 
+  * Each unit is assigned a numerical value: weight
+  * Each *input* is multiplied by its weight and the result is sent as input to the *hidden layers*
+  * Each of the neurons that receive that data have a corresponding numerical value called the *bias*
+  * the bias is added to the *weight*
+  * this is then sent to threshold function called the *activation function*
+  * the result of this function will determine if the value will move on the network: *forward propagation*
+  * the highest value at the end of the network is the *prediction*
+  * the predicted *output* is compared to training data to learn how right or wrong the prediction is
+    * this information is transferred backwards through the network: *back propagation*
+    * the *weights* are adjusted
+
+## Neural Networks
+
+Neural networks are fundamentally composed of artificial neurons which are in turn modeled from biological neurons – cells in the brain that are excited by sensory input. For example the perceptron, the first artificial neuron, abstracts biological neurons by taking a set of weighted inputs (X1,X2,X3), processes them through an activation threshold (bias) and produces a binary output of 0 or 1.
+
+![](images/neuron.png)
+
+Therefore, a neural network is a collection of artificial neurons separated by “layers”. Each layer can process the input of another providing a rich feature set for prediction. Mathematically this can be described as “neural networks take an input vector of p variables X = (X1, X2, … Xp) and creates a nonlinear function f(X) to predict response Y”.
+
+![](images/neural_network.png)
+
+In modern applications of neural networks both the rectified linear unit (ReLU) and sigmoid activation functions are preferred over perceptrons. The key reason for further development of artificial neurons, and a key difference from perceptrons, is that modern activation functions output values between 0 and 1 while a perceptron’s output is binary, either 0 or 1. This makes tuning neural networks easier as small changes in the parameters won’t cause large changes throughout the network.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+<img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
+
+##### Definitions
+
+* _Features_ - Input from data that we are interested in as predictors
+* _Weights_ - Values attributed to features which indicates the importance as a predictor
+* _Biases_ - A measure of how easy it is to get neuron to fire
+* _Parameters_ - Internal values of a neural network (weights, biases, features, etc)
+* _Hyperparameters_ - External values of a neural network (epochs, learning rate, etc)
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+## Brain Break!
+
+<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+Time for some Elixir
+</span>
+
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+
+Let's get some fingers on the keyboard and explore a simple neural network.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Our first neural network will be the “hello, world” example of data science – a network built using the famous MNIST dataset. The MNIST dataset is a collection of handwritten digits and our goal is to correctly classify the digits 0-9. Let’s download the dataset and get a sense of what it looks like.
+
+**Note**: We're using axon here to demonstrate a single neural network - don't worry about the implementation details of the library as we'll cover that in a later section.
+
+```elixir
+# Don't worry about learning this code - its just boilerplate to download our
+# dataset
+url = "https://storage.googleapis.com/cvdf-datasets/mnist/"
+%{body: train_images} = Req.get!(url <> "train-images-idx3-ubyte.gz")
+%{body: train_labels} = Req.get!(url <> "train-labels-idx1-ubyte.gz")
+
+<<_::32, n_images::32, n_rows::32, n_cols::32, images::binary>> = train_images
+<<_::32, n_labels::32, labels::binary>> = train_labels
+
+images =
+  images
+  |> Nx.from_binary({:u, 8})
+  |> Nx.reshape({n_images, 1, n_rows, n_cols}, names: [:images, :channels, :height, :width])
+  |> Nx.divide(255)
+
+# Visualization of the images so we can get a idea of what it looks like
+images[[images: 0..4]] |> Nx.to_heatmap()
+```
+
+From running the above code we can see that the dataset is relatively simple. It contains images of handwritten numbers and labels corresponding to each image. Let’s go ahead feed this data into a single layer neural network.
+
+```elixir
+targets =
+  labels
+  |> Nx.from_binary({:u, 8})
+  |> Nx.new_axis(-1)
+  |> Nx.equal(Nx.tensor(Enum.to_list(0..9)))
+  |> Nx.to_batched(32)
+
+# Here is the core of our code - we're essentially taking out inputs,
+# processing them through an activation function, and the output is our model
+model =
+  Axon.input("input", shape: {nil, 1, 28, 28})
+  |> Axon.flatten()
+  |> Axon.dense(10, activation: :softmax)
+
+images =
+  images
+  |> Nx.to_batched(32)
+
+params =
+  model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+  |> Axon.Loop.metric(:accuracy, "Accuracy")
+  |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 5, compiler: EXLA)
+```
+
+As with most things in machine learning, our goal is to minimize the error (or the cost function) of our predictions. As we train our model on the MNIST dataset we can see that the accuracy improves while the error decreases. So, for a few lines of code, we're approximately 90% accuracy. Not bad! But can we do better?
+
+## Multilayer Neural Networks
+
+Modern neural networks typically have multiple hidden layers. This helps improve the learning task by allowing n-dimensional computation that captures more aspects of complex datasets. It’s also important to note that the name “hidden layer” is a bit of a misnomer. It is not hidden or doing special secret computation – it literally means “the layers that are not the input or output layers”.
+
+![](images/multi_neural_network.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+As a multi-layer model is trained each previous output from a hidden layer is use as the input for the next. In other words, each activation of a hidden layer is used as the input vector of the next. Therefore, as more layers are added, more nuance in the data can be captured. Mathematically we can think of this as taking our initial input vector and applying n transformations to the data.
+
+Finally, unlike a single-layer network, a multi-layer network will have multiple outputs rather than one. For example, our MNIST dataset will output 10 probabilities (the numbers 0-9). We then assign an image with a number that has the highest likelihood of being the number we are looking for. To guarantee the output is a valid probability (remember probabilities must sum up to 1 and cannot be negative) we typically use the special softmax activation function.
+
+Let's revisit our code from above - what happens when we add more layers? Does our accuracy increase - does the model improve? Feel free to tune parameters/hyperparameters to discover what helps decrease our error rate.
+
+```elixir
+multi_layer_model =
+  Axon.input("input", shape: {nil, 1, 28, 28})
+  |> Axon.flatten()
+  # |> Axon.dense(128, activation: :relu)
+  |> Axon.dense(10, activation: :softmax)
+
+params =
+  multi_layer_model
+  |> Axon.Loop.trainer(:categorical_cross_entropy, :adam)
+  |> Axon.Loop.metric(:accuracy, "Accuracy")
+  |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 5, compiler: EXLA)
+```
+
+## Conclusion
+
+Overall, neural networks are simply a collection of artificial neurons. At their core each neuron is simple a function that takes an input, processes that input on an activation function, and outputs a value between 0 and 1. An entire neural network, while mathematically complex, can be thought of, itself, as a function taking input and giving an output. Most of the complexity comes from the number of neurons in a network, the number of layers, and the different activation functions we have at our disposal. And while these networks can be large and complex it is easier to think of them as functions that gives us probabilistic outputs.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Algorithms</span>](../3_Algorithms/4_Unsupervised.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Tools ></span>](../5_Tools/1_Intro.livemd)

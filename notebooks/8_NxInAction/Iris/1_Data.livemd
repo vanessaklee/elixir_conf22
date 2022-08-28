@@ -64,7 +64,7 @@ The Nx ecosystem library, Scidata, provides the Iris dataset for us. It is retur
 
 ```elixir
 Enum.count(features) |> IO.inspect(label: "features")
-Enum.count(features) |> IO.inspect(label: "targets")
+Enum.count(targets) |> IO.inspect(label: "targets")
 :ok
 ```
 

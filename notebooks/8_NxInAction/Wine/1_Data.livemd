@@ -1,0 +1,218 @@
+# Nx in Action/ Wine / Data
+
+```elixir
+Mix.install([
+  {:nx, "~> 0.3.0", override: true},
+  {:explorer, "~> 0.2.0"},
+  {:kino, "~> 0.6.2"},
+  {:kino_vega_lite, "~> 0.1.1"},
+  {:scidata, "~> 0.1.9"},
+  {:vega_lite, "~> 0.1.4"}
+])
+```
+
+## The Plan
+
+1. Define the problem
+2. Prepare the data
+3. Analyze the data
+
+## Define the problem
+
+Can we predict the origin of wines based on chemical analysis features?
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Wine Data Set
+
+Dataset of chemical analysis used to determine the origin of wines.
+
+These data are the results of a chemical analysis of wines grown in the same region in Italy but derived from three different cultivars. The analysis determined the quantities of 13 constituents found in each of the three types of wines.
+
+In a classification context, this is a well posed problem with "well behaved" class structures. A good data set for first testing of a new classifier.
+
+| Data Set     | Instances | Attributes    | # of Attributes | Missing Values? |
+| ------------ | --------- | ------------- | --------------- | --------------- |
+| Multivariate | 178       | Integer, Real | 13              | 0               |
+
+[Center for Machine Learning and Intelligent Systems](https://archive.ics.uci.edu/ml/datasets/wine)
+
+<span style="font-size:12px">
+Credit:
+Forina, M. et al, PARVUS -
+An Extendible Package for Data Exploration, Classification and Correlation.
+Institute of Pharmaceutical and Food Analysis and Technologies, Via Brigata Salerno,
+16147 Genoa, Italy.
+</span>
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Attributes
+
+* Alcohol
+* Malic acid
+* Ash
+* Alcalinity of ash
+* Magnesium
+* Total phenols
+* Flavanoids
+* Nonflavanoid phenols
+* Proanthocyanins
+* Color intensity
+* Hue
+* OD280/OD315 of diluted wines
+* Proline
+
+Target (class identifier): 1-3
+
+## Load: Scidata
+
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 55px; float: left; margin-right: 40px;" />
+
+The Nx ecosystem library, Scidata, provides the Wine dataset for us. It is returned as a tuple of features (inputs) and targets (classes).
+
+```elixir
+{features, targets} = Scidata.Wine.download()
+```
+
+```elixir
+Enum.count(features) |> IO.inspect(label: "features")
+Enum.count(targets) |> IO.inspect(label: "targets")
+:ok
+```
+
+```elixir
+feature_max =
+  Nx.tensor(features)
+  |> Nx.reduce_max(axes: [0], keep_axes: true)
+```
+
+```elixir
+inputs =
+  Enum.map(features, fn feature ->
+    Nx.divide(Nx.tensor(feature), feature_max)
+  end)
+```
+
+```elixir
+targets =
+  Enum.map(targets, fn t ->
+    Nx.tensor([t])
+  end)
+```
+
+Look closely at the targets above. The species looks to be grouped in order 0-2 within the dataset. If we were to split this dataset into a training set and a testing set without shuffling first, we would get two unbalanced sets.
+
+```elixir
+df = Enum.zip([inputs, targets]) |> Enum.shuffle()
+```
+
+## Load: Explorer
+
+<img src="https://raw.githubusercontent.com/elixir-nx/explorer/main/explorer.png" alt="Brain icon" style="width: 200px; float: left; margin-right: 20px;" />
+
+The Wine dataset is also easily available from the Nx ecosystem library, Explorer. Explorer provides the dataset differently, but such that it can be readily loaded into a dataframe.
+
+```elixir
+alias Explorer.DataFrame
+alias Explorer.Series
+
+expdf = Explorer.Datasets.wine()
+
+DataFrame.shape(expdf)
+```
+
+```elixir
+DataFrame.n_rows(expdf)
+```
+
+```elixir
+DataFrame.n_columns(expdf)
+```
+
+## Visualize
+
+<img src="https://static.thenounproject.com/png/5094962-200.png" style="width: 75px; float: left; margin-right: 20px;" />
+
+To visualize the data, use Explorer to sample a few rows of the Dataframe with `sample/3` and print it out in a table view with `table/2`
+
+```elixir
+expdf
+|> DataFrame.sample(10)
+|> DataFrame.table(limit: 3)
+```
+
+Verify there are 3 distinct wine types the dataset.
+
+```elixir
+expdf
+|> DataFrame.distinct(columns: ["class"])
+```
+
+### Smart Cells
+
+Another way to visualize the data is to use Livebook SmartCells. Set the data to the Wine dataframe and select an x-axis and y-axis.
+
+Lets determine if our dataset is balanced. How many rows of each wine type are there?
+
+The cell below uses data from the `expdf` variable we set using the Explorer Wine dataset. It is a "bar" chart with type "nominal" as the x-axis and "COUNT(*)" as the y-axis.
+
+Evaluate the celll below.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Data Analytics
+
+<!-- livebook:{"attrs":{"chart_title":null,"height":350,"layers":[{"chart_type":"bar","color_field":null,"color_field_aggregate":null,"color_field_type":null,"data_variable":"expdf","x_field":"class","x_field_aggregate":null,"x_field_type":"nominal","y_field":"__count__","y_field_aggregate":null,"y_field_type":null}],"vl_alias":"Elixir.VegaLite","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+VegaLite.new(width: 750, height: 350)
+|> VegaLite.data_from_values(expdf, only: ["class"])
+|> VegaLite.mark(:bar)
+|> VegaLite.encode_field(:x, "class", type: :nominal)
+|> VegaLite.encode(:y, aggregate: :count)
+```
+
+Although not as balanced as the Iris dataset, this is a relatively well-balanced dataset.
+
+<!-- livebook:{"break_markdown":true} -->
+
+We want to relate the chemical features of the wine to the wine type. The relationship does not necessarily imply that one variable causes the other, but that there is some significant association between the two variables.
+
+Charting can be helpful in determining the strength of the relationship between variables. If the chart shows trends, then fitting a linear regression model to the data may be a useful model.
+
+```elixir
+alias VegaLite, as: Vl
+
+Vl.new(width: 200, height: 200)
+|> Vl.data_from_values(expdf)
+|> Vl.mark(:arc)
+|> Vl.encode_field(:theta, "malic_acid", type: :quantitative)
+|> Vl.encode_field(:color, "class", type: :nominal)
+|> Vl.config(view: [stroke: nil])
+```
+
+```elixir
+Vl.new(width: 200, height: 200)
+|> Vl.data_from_values(expdf)
+|> Vl.mark(:arc)
+|> Vl.encode_field(:theta, "flavanoids", type: :quantitative)
+|> Vl.encode_field(:color, "class", type: :nominal)
+|> Vl.config(view: [stroke: nil])
+```
+
+Change the x- and y-axis to experiment with visualizing other combinations.
+
+<!-- livebook:{"attrs":{"chart_title":null,"height":150,"layers":[{"chart_type":"point","color_field":null,"color_field_aggregate":null,"color_field_type":null,"data_variable":"expdf","x_field":"alcalinity_of_ash","x_field_aggregate":null,"x_field_type":"quantitative","y_field":"color_intensity","y_field_aggregate":null,"y_field_type":"quantitative"}],"vl_alias":"Elixir.Vl","width":750},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+Vl.new(width: 750, height: 150)
+|> Vl.data_from_values(expdf, only: ["alcalinity_of_ash", "color_intensity"])
+|> Vl.mark(:point)
+|> Vl.encode_field(:x, "alcalinity_of_ash", type: :quantitative)
+|> Vl.encode_field(:y, "color_intensity", type: :quantitative)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_NeuralNet.livemd)

@@ -115,8 +115,7 @@ Different loss functions can have input shape requirements in Axon. See [here](h
   * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
 * :categorical_cross_entropy
   * Used for multi-class classifcation problems.
-  * Expects target to encode a probability distribution along the last
-    axis.
+  * Expects target to encode a probability distribution along the last axis.
   * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
 * :categorical_hinge
 * :hinge
@@ -170,5 +169,7 @@ The number of actual positive classes (`true_pos`) relative to the number of act
 | **Negative (Predicted)** | True Negative     | False Negative    |
 
 <!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Nx Plus</span>](../7_NxPlus/1_Explorer.livemd)
 
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](Iris/1_Data.livemd)

@@ -2,9 +2,9 @@
 
 ```elixir
 Mix.install([
-  {:axon, "~> 0.1.0"},
+  {:axon, "~> 0.2.0"},
   {:exla, "~> 0.2.2"},
-  {:nx, "~> 0.2.1"},
+  {:nx, "~> 0.3.0", override: true},
   {:explorer, "~> 0.2.0"},
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
@@ -79,7 +79,7 @@ Define the model with the shape and a name for the input.
 
 ```elixir
 input_name = "Iris Features"
-model = Axon.input(input_shape, input_name)
+model = Axon.input(input_name, shape: input_shape)
 ```
 
 Note the parameters at this point require 0 bytes of memory. That is because there are no layers to neural network. Before we add one, run the model in this state.
@@ -102,7 +102,7 @@ Pipe it afer the input and provide a `unit` to specify the number of output unit
 
 ```elixir
 model =
-  Axon.input(input_shape, input_name)
+  Axon.input(input_name, shape: input_shape)
   |> Axon.dense(1, name: "First Layer")
 ```
 
@@ -120,7 +120,7 @@ Add another layer.
 
 ```elixir
 model =
-  Axon.input(input_shape, input_name)
+  Axon.input(input_name, shape: input_shape)
   |> Axon.dense(5, name: "First Layer")
   |> Axon.dense(1, name: "Second Layer")
 ```
@@ -181,7 +181,7 @@ first_layer_activation = :linear
 second_layer_activation = :linear
 
 model =
-  Axon.input(input_shape, input_name)
+  Axon.input(input_name, shape: input_shape)
   |> Axon.dense(5, activation: first_layer_activation, name: "First Layer")
   |> Axon.dense(1, activation: second_layer_activation, name: "Second Layer")
 
@@ -211,7 +211,7 @@ second_layer_activation = :relu
 # optimizer = Axon.Optimizers.adamw(loss_rate)
 
 model =
-  Axon.input(input_shape, input_name)
+  Axon.input(input_name, shape: input_shape)
   |> Axon.dense(5, activation: first_layer_activation, name: "First Layer")
   |> Axon.dense(1, activation: second_layer_activation, name: "Second Layer")
 
@@ -318,7 +318,7 @@ This example uses a 20% dropout rate.
 
 ```elixir
 model =
-  Axon.input(input_shape, input_name)
+  Axon.input(input_name, shape: input_shape)
   |> Axon.dense(15, activation: second_layer_activation, name: "First Layer")
   |> Axon.dropout(rate: 0.2)
   |> Axon.dense(5, activation: first_layer_activation, name: "Second Layer")
