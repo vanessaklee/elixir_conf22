@@ -1,4 +1,4 @@
-# Statitics Crash Course
+# Statistics Crash Course
 
 ## Goal
 
@@ -44,3 +44,23 @@ b.  Choose door number 2
 <!-- livebook:{"break_markdown":true} -->
 
 ### Challenger Disaster
+
+<!-- livebook:{"break_markdown":true} -->
+
+The above set of examples demonstrate the counterintuitive world that can be demonstrated with statistical and probabilistic analysis. Although illustrative the problems exist in an abstract domain – so let’s look at the impacts of statistical analysis in the real world.
+
+The Challenger disaster was a fatal space shuttle failure on January 28, 1986. The Space Shuttle Challenger broke apart in 73 seconds killing all crew members and lead to a large-scale investigation of NASA’s space program. In the end it was determined that the O-rings of the solid rocket booster failed due to cold weather temperatures. So how could NASA have known this was an issue? Well, let’s explore historical shuttle failure in cold weather with statistics.
+
+![](images/oring_failure_nasa_commission.png)
+
+The above image shows the number of incidents with shuttles in relation to the weather during the day of the launch. We can display the above data in a scatterplot to get a better sense of what we're dealing with.
+
+![](images/oring_failure_scatterplot.png)
+
+What does this data tell us? Well, we can see some cold weather incidents but really it doesn’t seem so dramatic. So, what happens if we apply some statistical methods – can we see more correlation with O-ring failure and cold weather? For this example, we’ll use a type of regression analysis called logistic regression.
+
+Without getting too deep into the detail’s regression analysis tells us how much impact variables have on outcomes. In our case we want to know just how impactful weather is on O-ring failure. Further, we’re using logistic regression because we’re using qualitative data to represent solid rocket booster failure. If we were to use a quantitative method, like linear regression, it would assume there is a numerical importance of 1 = “failure” and 0 = “no failure”. But this is an arbitrary assignment with no numerical significance. Let’s see what plugging this data into a logistic regression model gets us.
+
+![](images/oring_failure_logistic.png)
+
+Here we have a clearer picture of O-ring – we can see a sharp increase of failure that is evident as the temperature decreases. Essentially for every one degree increase in temperature reduces the odds of failure by 0.84. At the time of the Challenger launch the temperature was 31 degrees F and while that’s well below our data we have on hand we can be confident that the failure rate would only increase. In fact, if they were to tell you they were launching in 31 degree weather with this dataset in front of you, your heart would skip a beat!
