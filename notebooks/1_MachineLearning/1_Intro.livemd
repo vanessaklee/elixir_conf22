@@ -18,10 +18,10 @@ Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the proce
 
 #### Common Uses
 
-- classification of images
-- recommendation engines
-- fraud and threat detection
-- business process automation
+* classification of images
+* recommendation engines
+* fraud and threat detection
+* business process automation
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -35,9 +35,9 @@ Machine learning types are broken down by how an algorithm learns prediction acc
 
 There are three main types of machine learning
 
-- Supervised learning
-- Unsupervised learning
-- Reinforcement learning
+* Supervised learning
+* Unsupervised learning
+* Reinforcement learning
 
 We will cover each of the 3 types in the next section.
 
@@ -102,13 +102,13 @@ Essentially, ML algorithms are functions with an input of data and an output of 
 
 Examples of well-known algorithms are:
 
-- Regression (linear, logistic, etc.)
-- Classification
-- Clustering
-- Decision Trees
-- Random Forest
-- k-Nearest Neighbors
-- Artificial neural networks (ANN)
+* Regression (linear, logistic, etc.)
+* Classification
+* Clustering
+* Decision Trees
+* Random Forest
+* k-Nearest Neighbors
+* Artificial neural networks (ANN)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -193,6 +193,18 @@ The problem in this example is a lack of data diversity. Let's look at two other
 <!-- livebook:{"break_markdown":true} -->
 
 ![](images/fit.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Overfitting
+
+Overfitting occurs when a model too closely matches, or fits, it’s in-sample training data. This means the model will not generalize; it will not perform well on out-of-sample data. This can happen if the model overtrains on a dataset, if hyperparameters are aggressively tuned, or any number of factors that can cause a model to view a dataset as the only accurate depiction of the world.
+
+For example, the image below shows the error rate of a decision tree on both in-sample and out-of-sample-data. Notice that as the number of nodes in a leaf increases the better our prediction on both datasets becomes. However, around a node count of 10 our in-sample error rate decreases while our error rate on the out-of-sample increases. It is at this point in the graph where we know that we’re overfitting our model – essentially, we’re becoming great at predicting data in our training set but poorly predicting data in our test set.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/overfitting.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
