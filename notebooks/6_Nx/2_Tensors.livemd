@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:nx, "~> 0.2.1"}
+  {:nx, "~> 0.3.0"}
 ])
 
 import IEx.Helpers
@@ -222,7 +222,8 @@ Nx.sum(tensor, axes: [:x])
 * with dimension names `[:z, :y, :x]`
 * calculate the sums along the `y` axis
 
-<!-- possible answer
+<!--
+ possible answer
 challenge_tensor3 = 1..8 
   |> Enum.chunk_every(2)
   |> Enum.chunk_every(2)
@@ -396,8 +397,6 @@ dimension of `1` will broadcast to fill the tensor:
 Both of these examples copy parts of the tensor enough
 times to fill out the broadcast shape. You can check out the
 Nx broadcasting documentation for more details:
-
-<!-- livebook:{"disable_formatting":true} -->
 
 ## Numerical definitions (defn)
 

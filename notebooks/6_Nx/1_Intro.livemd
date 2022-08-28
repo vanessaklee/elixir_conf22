@@ -31,4 +31,9 @@ This training course uses Livebook for lesson content as well as for writing and
 | [Kino](https://github.com/livebook-dev/kino)          | Client-driven interactive widgets for Livebook to render rich and interactive outputs |
 | [VegaLite](https://github.com/livebook-dev/vega_lite) | Elixir bindings to Vega-Lite grammar for composing interactive graphics               |
 
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Tools</span>](../5_Tools/1_Intro.livemd)
+
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Tensors.livemd)

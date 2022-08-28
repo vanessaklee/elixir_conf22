@@ -167,9 +167,9 @@ Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 |> Enum.uniq()
 |> IO.inspect(label: "unique tokens > 10")
 
-# idea for a little challenge; have them count the tokens in the first two
-# and add the uniq in the final? No need for a solution, but it could be hidden
-# in a markdown section
+#### Challenge
+
+How could this library be of use in your ML tasks? 
 
 :ok
 ```

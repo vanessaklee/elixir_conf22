@@ -93,3 +93,9 @@ Maps the input value (`x`) to the continuous output variable (`y`) and makes pre
   * _what will the temperature be tomorrow?_
 * Gas prices 
   * _will gas prices drop next month?_
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Statistics</span>](../2_Statistics/1_Intro.livemd)
+
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Regression.livemd)

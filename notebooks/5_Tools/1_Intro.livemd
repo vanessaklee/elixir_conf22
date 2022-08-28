@@ -90,6 +90,6 @@ Now to explore the Numerical Elixir (Nx) ecosystem upclose.
 
 <!-- livebook:{"break_markdown":true} -->
 
-[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](4_Unsupervised.livemd)
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Neural Networks</span>](../4_NeuralNetworks/1_Intro.livemd)
 
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx ></span>](../6_Nx/1_Intro.livemd)

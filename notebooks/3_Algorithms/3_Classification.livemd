@@ -1,5 +1,14 @@
 # Machine Learning / Algorithms & Models / Classification
 
+```elixir
+Mix.install([
+  {:essence, "~> 0.2.0"},
+  {:paasaa, "~> 0.6.0"},
+  {:req, "~> 0.3.0"},
+  {:kino_vega_lite, "~> 0.1.1"}
+])
+```
+
 ## Goal
 
 This lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
@@ -20,24 +29,77 @@ A naive bayes model uses probability to classify objects based on features. It i
 
 ### Uses
 
-- text classification
-- spam detection
-- recommendation engines
+* text classification
+* spam detection
+* recommendation engines
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Decision Trees & Random Forest
+<hr style="background-color: #800080;height: 15.0px;" />
 
-Decision trees are classifiers that determine which category an input belongs to by traversing the leaves and nodes of a tree. They are like a flow chart where the class of an object is determined step-by-step using certain known conditions.
+## Brain Break!
 
-A Random Forest is a collection of several decision trees from random subsets of the data. The result is a combination of trees that may make more accurate predictions than a single decision tree.
+<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+Time for some Elixir
+</span>
 
-TODO: brain break needed here? data analysis task? The haberman dataset analysis for an unbalanced dataset? Smartcell bar chart?
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
 
-### Uses
+Let's learn about an Elixir library.
 
-- classification
-- regression
+[Paasaa](https://github.com/minibikini/paasaa) is Natural language detection for Elixir.
+
+To make the most of this library we need a few documents. Use [Req](https://github.com/wojtekmach/req) to get them from Project Gutenburg.
+
+Use the Essense library we explored in an earlier section to read the plain text.
+
+```elixir
+doc =
+  "https://www.gutenberg.org/cache/epub/22160/pg22160.txt"
+  |> Req.get!()
+  |> Map.get(:body)
+  |> Essence.Document.from_text()
+  |> then(fn d -> Essence.Document.sentence(d, 54) end)
+  |> Enum.take(10)
+  |> Enum.join(" ")
+```
+
+What language is this document written in?
+
+```elixir
+doc |> Paasaa.detect()
+```
+
+To be sure, check all the languages. This will display the language along with the probability that the text is in that language.
+
+```elixir
+doc |> Paasaa.all()
+```
+
+Try more:
+
+```elixir
+"La ventura va guiando nuestras cosas mejor de lo que acertáramos a desear"
+|> Paasaa.detect()
+```
+
+```elixir
+"Prova autorevole del Diavolo, emiliani sconfitti con un gol per tempo. A segno anche Giroud"
+|> Paasaa.detect()
+```
+
+```elixir
+"Santrfor mevkisine İcardi ya da Umut Bozok’tan birini alacak olan yönetim"
+|> Paasaa.detect()
+```
+
+##### Challenge
+
+What more could you combine with the Essence library? Could the concordance feature combined with language detection give you a sense for what words appear near high frequency words much like the next classification algorithm we are about to cover: k Nearest Neighbors.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<hr style="background-color: #800080;height: 15.0px;" />
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -47,17 +109,24 @@ K nearest neighbors (KNN) classifies data points based on their proximity and as
 
 ### Uses
 
-- problems with smaller datasets because the processing time grows as the size of the data grows
-- recommendation engines
-- image recognition
-
-TODO: brain break needed here? data analysis task? The haberman dataset analysis for unbalanced dataset? Smartcell bar chart? Normalization function Boomer wrote? Or the fuel economy example from a few years ago.
+* problems with smaller datasets because the processing time grows as the size of the data grows
+* recommendation engines
+* image recognition
 
 <!-- livebook:{"break_markdown":true} -->
 
-<hr style="background-color: #800080;height: 15.0px;" />
+### Decision Trees & Random Forest
 
-<hr style="background-color: #800080;height: 15.0px;" />
+Decision trees are classifiers that determine which category an input belongs to by traversing the leaves and nodes of a tree. They are like a flow chart where the class of an object is determined step-by-step using certain known conditions.
+
+A Random Forest is a collection of several decision trees from random subsets of the data. The result is a combination of trees that may make more accurate predictions than a single decision tree.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Uses
+
+* classification
+* regression
 
 <!-- livebook:{"break_markdown":true} -->
 

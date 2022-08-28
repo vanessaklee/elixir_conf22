@@ -99,7 +99,7 @@ flowchart TB
 
 Large data sets and deep learning systems make it challenging to scale model training. Additionally, models need to be updated regularly as a result of continuous evaluation and improvement plus to correct distribution shifts. The manual steps of learning and deploying models can quickly become tedious and error prone.
 
-The machine learning community is paying increasing attention to scalability through parallelization, which makes the recent boom in the Nx ecosystem timely. 
+The machine learning community is paying increasing attention to scalability through parallelization, which makes the recent boom in the Nx ecosystem timely.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -116,8 +116,10 @@ If you will be using your own data to get predictions from your model, such as i
 
 Given these concerns, it quickly becomes apparent that machine learning is part of a larger system. To maintain that system from development through deployment requires a holistic approach with an interdisciplinary team.
 
-In this training we've focused on models. More than building accurate models and integrating them into a system, we have to plan for how to best collect data and what the best data to collect is. To move what you've learned into a production environment you need to address the concerns raised here to support rapid experimentation and improvement in production. 
+In this training we've focused on models. More than building accurate models and integrating them into a system, we have to plan for how to best collect data and what the best data to collect is. To move what you've learned into a production environment you need to address the concerns raised here to support rapid experimentation and improvement in production.
 
 <!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Nx In Action</span>](../8_NxInAction/1_Intro.livemd)
 
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Future.livemd)

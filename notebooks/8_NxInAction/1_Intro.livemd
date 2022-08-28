@@ -170,4 +170,6 @@ The number of actual positive classes (`true_pos`) relative to the number of act
 
 <!-- livebook:{"break_markdown":true} -->
 
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous chapter: Nx Plus</span>](../7_NxPlus/1_Explorer.livemd)
+
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](Iris/1_Data.livemd)

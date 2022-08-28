@@ -2,13 +2,10 @@
 
 ```elixir
 Mix.install([
-  {:axon, "~> 0.1.0"},
-  {:exla, "~> 0.2.2"},
-  {:nx, "~> 0.2.1"},
+  {:nx, "~> 0.3.0", override: true},
   {:explorer, "~> 0.2.0"},
   {:kino, "~> 0.6.2"},
   {:kino_vega_lite, "~> 0.1.1"},
-  {:req, "~> 0.3.0"},
   {:scidata, "~> 0.1.9"},
   {:vega_lite, "~> 0.1.4"}
 ])

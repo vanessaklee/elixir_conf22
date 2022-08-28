@@ -2,8 +2,8 @@
 
 ```elixir
 Mix.install([
-  {:axon, "~> 0.1.0"},
-  {:nx, "~> 0.2.1"}
+  {:axon, "~> 0.2.0"},
+  {:nx, "~> 0.3.0"}
 ])
 ```
 
@@ -19,7 +19,7 @@ Credit: this notebook is influenced by the [Axon repo](https://github.com/elixir
 
 ## Overview
 
-Axon was developed with the specific goal of providing programmers with zero deep learning experience an easy-to-use easy to learn and use library. At the same time, Axon has the goal of giving those with experience a functional take on deep learning and the tools to be up and running fast. 
+Axon was developed with the specific goal of providing programmers with zero deep learning experience an easy-to-use easy to learn and use library. At the same time, Axon has the goal of giving those with experience a functional take on deep learning and the tools to be up and running fast.
 
 Axon has 4 main components:
 
@@ -30,6 +30,8 @@ Axon has 4 main components:
 
 <!-- livebook:{"break_markdown":true} -->
 
+
+
 ## Defining the Model
 
 Axon enters our machine learning process when we have already preprocessed our data and are ready to train a model.
@@ -38,15 +40,13 @@ In the next chapter we will put Axon to use in our own Neural Network example. H
 
 ```elixir
 model =
-  Axon.input({nil, 1, 28, 28}, "input")
+  Axon.input("Input", shape: {nil, 1, 28, 28})
   |> Axon.flatten()
   |> Axon.dense(128, activation: :relu)
   |> Axon.dense(10, activation: :softmax)
 ```
 
 All `Axon` models start with an input layer to tell subsequent layers what shapes to expect. We then use `Axon.flatten/2` which flattens the previous layer by squeezing all dimensions but the first dimension into a single dimension. Our model consists of 2 fully connected layers with 128 and 10 units respectively. The first layer uses `:relu` activation which returns `max(0, input)` element-wise. The final layer uses `:softmax` activation to return a probability distribution over the 10 labels [0 - 9].
-
-<!-- livebook:{"break_markdown":true} -->
 
 ## Training
 
@@ -65,8 +65,6 @@ model
 
 ![](images/training_sp.png)
 
-<!-- livebook:{"break_markdown":true} -->
-
 ## Prediction
 
 Once you have the parameters from the training step, you can use them to make predictions using `Axon.predict`:
@@ -74,8 +72,6 @@ Once you have the parameters from the training step, you can use them to make pr
 ````
 Axon.predict(model, params, first_batch)```
 ````
-
-<!-- livebook:{"break_markdown":true} -->
 
 ## Concepts
 

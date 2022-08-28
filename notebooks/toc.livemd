@@ -17,7 +17,6 @@
    5. [Tools of the Trade](3_Algorithms/5_Tools.livemd)
 4. <span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>
    1. [Introduction to Neural Networks](4_NeuralNetworks/1_Intro.livemd)
-   2. [Deep Learning](4_NeuralNetworks/2_DeepLearning.livemd)
 5. <span style="color: #800080; font-size: 24px; font-weight: bold;">Tools of the Trade</span>
    1. [Tools for Machine Learning](5_Tools/1_Intro.livemd)
 6. <span style="color: #800080; font-size: 24px; font-weight: bold;">Numerical Elixir</span>
@@ -38,10 +37,6 @@
       2. Titanic
          1. [Data](8_NxInAction/titanic/1_Data.livemd)
          2. [Train](8_NxInAction/titanic/2_Train.livemd)
-      3. Advanced (cc fraud? stock market?)
-         1. Data
-         2. Train
-         3. Predict
 9. What's Next for Nx?
    1. [ML in Production](9_WhatsNext/1_Prod.livemd)
    2. [Revoew](9_WhatsNext/2_Future.livemd)
