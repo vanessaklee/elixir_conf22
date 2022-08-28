@@ -16,20 +16,20 @@ Credit: this notebook is influenced by examples in the [Nx repo](https://github.
 
 ## Numerical Elixir, alias: Nx
 
-[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a road block when it comes to deep nesting or random access. Thy also lack optimization for use cases such as problem the require millions of calculations.
+[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a road block when it comes to deep nesting or random access. It also lacks optimization for use cases that require millions of calculations.
 
-Nx brings typed, multidimensional data, called tensors.
+Nx brings typed, multidimensional data called tensors.
 
 ## Tensors
 
 Tensors hold typed data. Types like:
 
-* unsigned integers (u8, u16, u32, u64)
-* signed integers (s8, s16, s32, s64)
-* floats (f32, f64), brain floats (bf16)
-* and complex (c64, c128)
+- unsigned integers (u8, u16, u32, u64)
+- signed integers (s8, s16, s32, s64)
+- floats (f32, f64), brain floats (bf16)
+- and complex (c64, c128)
 
-The typed data is held in multiple, named dimensions. Tensors have a predetermined shape and type. Here is two dimensional array:
+The typed data is held in multiple, named dimensions. Tensors have a predetermined shape and type. Here is an example of a two dimensional array:
 
 $$
 \begin{bmatrix}
@@ -66,10 +66,10 @@ tensor =
 
 As you can see, tensors are made of:
 
-* Data, the list of lists `[[1, 2], [3, 4]]`
-* Type, a signed integer 64 bits long `s64`
-* Shape, left to right with the outside dimensions first
-* Names
+- Data, the list of lists `[[1, 2], [3, 4]]`
+- Type, a signed integer 64 bits long `s64`
+- Shape, left to right with the outside dimensions first
+- Names
 
 To access any cell of the tensor, use:
 
@@ -88,7 +88,7 @@ tensor[0]
 # ...your code here...
 ```
 
-We can also get a whole dimension or a range
+We can also get a whole dimension or a range:
 
 ```elixir
 tensor[x: 1] |> IO.inspect()
@@ -100,8 +100,8 @@ tensor[y: 0..1] |> IO.inspect()
 
 ### Make your own tensors
 
-* make a `{4, 4}` tensor with named dimensions (:x & :y)
-* then return a `{2, 2}` tensor containing the first two columns
+- make a `{4, 4}` tensor with named dimensions (:x & :y)
+- then return a `{2, 2}` tensor containing the first two columns
   of the first two rows
 
 The code box below demonstrates how IEx helpers provide details about the last term used.
@@ -124,7 +124,7 @@ challenge_tensor2 = challenge_tensor[green: 0..1, bean: 0..1]
 |> IO.inspect(label: "first 2 columns of the first 2 rows as a {2,2} tensor")
 
 (Nx.shape(challenge_tensor2) == {2,2}) |> IO.inspect(label: "second tensor shape {2,2}?")
-:ok 
+:ok
 -->
 
 <!-- livebook:{"disable_formatting":true} -->
@@ -147,13 +147,13 @@ Nx.shape(tensor)
 Nx.reshape(tensor, {1, 4}, names: [:batches, :values])
 ```
 
-This operation reuses all of the tensor data, merely alters the metadata so that the new tensor has the same type with a new shape.
+This operation reuses all of the tensor data; it merely alters the metadata so that the new tensor has the same type with a new shape.
 
 Can you reeshape the tensor so it has 3 dimensions with one batch, one row, and four columns?
 
 <!--
  Possible answer
-Nx.reshape(tensor, {1, 1, 4}, names: [:batches, :row, :values]) 
+Nx.reshape(tensor, {1, 1, 4}, names: [:batches, :row, :values])
 -->
 
 ```elixir
@@ -217,14 +217,14 @@ Nx.sum(tensor, axes: [:x])
 
 #### Operate on Tensors
 
-* create a `{2, 2, 2}` tensor
-* with the values `1..8`
-* with dimension names `[:z, :y, :x]`
-* calculate the sums along the `y` axis
+- create a `{2, 2, 2}` tensor
+- with the values `1..8`
+- with dimension names `[:z, :y, :x]`
+- calculate the sums along the `y` axis
 
 <!--
  possible answer
-challenge_tensor3 = 1..8 
+challenge_tensor3 = 1..8
   |> Enum.chunk_every(2)
   |> Enum.chunk_every(2)
   |> Nx.tensor(names: [:z, :y, :x])
@@ -243,6 +243,7 @@ Nx.sum(challenge_tensor3, axes: [:y]) |> IO.inspect(label: "sum of `y` axis")
 ## Combining Tensors
 
 We are able to combine tensors using an operator. For example, we can subtract one tensor from another:
+
 $$
 \begin{bmatrix}
   5 & 6 \\\\
@@ -310,7 +311,7 @@ Nx.broadcast(1, {2, 2})
 ```
 
 This broadcast takes the scalar `1` and translates it
-to a compatible shape by copying it.  Sometimes, it's easier
+to a compatible shape by copying it. Sometimes, it's easier
 to provide a tensor as the second argument, and let `broadcast/2`
 extract its shape:
 
@@ -381,7 +382,7 @@ Nx.subtract(tensor, Nx.tensor([1, 2]))
 ```
 
 The broadcast worked as advertised, copying the `[1, 2]` row
-enough times to fill a `{2, 2}` tensor.  A tensor with a
+enough times to fill a `{2, 2}` tensor. A tensor with a
 dimension of `1` will broadcast to fill the tensor:
 
 ```elixir
@@ -396,20 +397,20 @@ dimension of `1` will broadcast to fill the tensor:
 
 Both of these examples copy parts of the tensor enough
 times to fill out the broadcast shape. You can check out the
-Nx broadcasting documentation for more details:
+(Nx broadcasting documentation)[https://hexdocs.pm/nx/Nx.html#broadcast/3] for more details.
 
 ## Numerical definitions (defn)
 
 The `defn` macro simplifies the expression of mathematical formulas
 containing tensors. Numerical definitions have two primary benefits
-over classic Elixir functions.
+over classic Elixir functions:
 
-* They are _tensor-aware_. Nx replaces operators like `Kernel.-/2`
+- They are _tensor-aware_. Nx replaces operators like `Kernel.-/2`
   with the `Defn` counterparts &mdash; which in turn use `Nx` functions
   optimized for tensors &mdash; so the formulas we express can use
   tensors out of the box.
 
-* `defn` definitions allow for building computation graph of all the
+- `defn` definitions allow for building computation graph of all the
   individual operations and using a just-in-time (JIT) compiler to emit
   highly specialized native code for the desired computation unit.
 
@@ -419,7 +420,7 @@ our code within a `defn` block.
 
 To use Nx in a Mix project or a notebook, we need to include
 the `:nx` dependency and import the `Nx.Defn` module. The
-dependency is already included, so import it in a Code cell,
+dependency is already included, so import it in a Code cell
 like this:
 
 ```elixir
@@ -427,7 +428,7 @@ import Nx.Defn
 ```
 
 Just as the Elixir language supports `def`, `defmacro`, and `defp`,
-Nx supports `defn`. There are a few restrictions. It allows only
+Nx supports `defn` but there are a few restrictions. It allows only
 numerical arguments in the form of primitives or tensors as arguments
 or return values, and has a subset of the language within
 the `defn` block.
