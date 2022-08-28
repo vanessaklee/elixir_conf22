@@ -1,9 +1,46 @@
-# Machine Learning / Statitics
+# Statitics Crash Course
 
 ## Goal
 
-TODO what is the goal of the Statistics and Linear Regression lesson
+After going over machine learning we'll take a brief look at some underlying mathematical ideas.
 
-### Introduction
+### Statistical Learning
 
 The Basics of Statistics
+
+We hear a lot about machine learning being the subject of "allowing computers to learn without being explicity programmed". But what does that mean? Broadly speaking, it means given one or more inputs we want to build a model that predicts, or estimates, an output. To correctly predict a model uses probability and statistics to infer patterns and relationships from data – collectively this is known as statistical learning which encompasses a vast array of tools for *understanding data*.
+
+### Examples
+
+As humans we ourselves can infer ideas and concepts from data easily. If I mentioned what’s the probability of getting tails from flipping a fair coin, you would say 50%. If I asked you the chance the sun would rise tomorrow you would say 100% (at least, we hope so). However, humans are also very good at tricking themselves into assuming past events to continue into the future. In many cases this is an evolutionary necessity, but it also makes us very poor gamblers.
+
+Let’s look at more complex scenarios:
+
+Every week you play a lottery game where you choose 4 numbers between 1 to 80 and your friends give you the advice of:
+
+```
+a.  Chose two even and two odd numbers
+b.  Calculate the average and pick 4 numbers not too far away
+c.  Pick a high number, middle number, and low number
+d.  Doesn’t matter which numbers you pick – it’s just luck
+```
+
+For example, you have flipped a fair coin 9 times and it has landed on tails 9 times in a row – what is the probability the next flip will be tails?
+
+```
+a. 10% (1/10)
+b. 100%
+c. 20%
+d. 50%
+```
+
+(**Optional**) You’re a contestant on a game show and you’re presented with 3 doors – two of which have goats, one of which has a car. Let’s say you choose door 1. Before the gameshow host opens your selected door, they open door number 3, revealing a goat. They now give you the choice: keep your original choice or choose door number 2. What do you do? Why?
+
+```
+a.  Keep your original door
+b.  Choose door number 2
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Challenger Disaster
