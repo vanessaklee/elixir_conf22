@@ -40,9 +40,9 @@ Both linear and logistic regression are among the most popular algorithms within
 
 #### Uses
 
-- fraud detection
-- disease prediction
-- binary classification problems like spam identification
+* fraud detection
+* disease prediction
+* binary classification problems like spam identification
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -51,7 +51,7 @@ Both linear and logistic regression are among the most popular algorithms within
 <!-- livebook:{"break_markdown":true} -->
 
 <span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
-### Brain Break!
+ Brain Break!
 </span>
 
 <!-- livebook:{"break_markdown":true} -->

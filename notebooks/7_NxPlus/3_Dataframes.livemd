@@ -14,21 +14,22 @@ Credit: this notebook is influenced by examples in the [Explorer repo](https://g
 
 ## DataFrames
 
-A `DataFrame` is really just a collection of `Series` of the same size. Which is why you can create a `DataFrame` from a `Keyword` list.
+A dataframe is really just a collection of series of the same size. Which is why you can create a dataframe from a keyword list.
 
 ```elixir
 alias Explorer.DataFrame
+alias Explorer.Series
 
 df = DataFrame.new(a: [1, 2, 3], b: ["a", "b", "c"])
 ```
 
-Similarly to `Series`, the `Inspect` implementation prints some info at the top and to the left. At the top we see the shape of the dataframe (rows and columns) and then for each column we see the name, dtype, and first five values. We can see a bit more from that built-in dataset we loaded in earlier.
+Inspect it.
 
 ```elixir
 df
 ```
 
-You can directly access the details of a DataFrame:
+Access details:
 
 ```elixir
 df = DataFrame.new(a: [1, 2, 3], b: ["a", "b", "c"])
@@ -40,64 +41,86 @@ IO.inspect(DataFrame.n_rows(df), label: "# of rows")
 IO.inspect(DataFrame.n_columns(df), label: "# of columns")
 ```
 
-Plus the head and tail.
+Access the head and tail.
 
 ```elixir
-IO.inspect(DataFrame.head(df), label: "Head")
-IO.inspect(DataFrame.tail(df, 2), label: "Tail")
-```
-
-## Dataframe Select
-
-TODO consider moving this section later, after covering the the Select options
-
-This Fraud Detection dataset contains transactions made by credit cards in September 2013 by European cardholders. The transactions occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions.
-
-It contains only numerical input variables which are the result of a PCA transformation. Features V1, V2, … V28 are the principal components obtained with PCA, the only features which have not been transformed with PCA are 'Time' and 'Amount'. Feature 'Time' contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature 'Amount' is the transaction Amount, this feature can be used for example-dependant cost-sensitive learning. Feature 'Class' is the response variable and it takes value 1 in case of fraud and 0 otherwise.
-
-```elixir
-# The Fraud Detection data set
-fraud_df = Explorer.DataFrame.from_csv!("data/creditcard.csv", dtypes: [{"Time", :float}])
-
-# The data set has these headers
-# ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
-# 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
-# 'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount',
-# 'Class']
-
-IO.inspect(
-  DataFrame.select(fraud_df, ["Time", "V1", "Class"]),
-  label: "Values for Time, V1, and Class"
-)
-
-IO.inspect(
-  DataFrame.select(fraud_df, &String.contains?(&1, "V1")),
-  label: "Values that start with 'V1'"
-)
-
-IO.inspect(
-  Explorer.DataFrame.select(fraud_df, &(&1 == "Class"), :keep),
-  label: "Keep only the Class column"
-)
+DataFrame.head(df)
 ```
 
 ```elixir
-# Filter
-# Use callbacks on the dataframe to generate boolean mask series 
-# of the same size as the dataframe. Here we filter for only time values
-# greater than or equal to a set value.
-IO.inspect(
-  DataFrame.filter(fraud_df, &Series.greater_equal(&1["Time"], 172_786.0)),
-  label: "Filter for Time greater than or equal to 172786.0"
-)
+DataFrame.tail(df, 2)
+```
 
-# You can pipe filters
-IO.inspect(
-  DataFrame.filter(fraud_df, &Series.greater_equal(&1["Time"], 172_786.0))
-  |> DataFrame.filter(&Series.less(&1["V1"], -10.0))
-  |> DataFrame.select(&(&1 == "Amount"), :keep),
-  label: "Piped filters"
-)
+## Dataset
+
+The Iris dataset was developed by Edgar Anderson in 1936. We are starting with this dataset because it is simple and easy to understand. It is also one of the datasets in Explorer.
+
+It includes three iris species. There are 50 samples of each species along with additional properties. One flower species is linearly separable from the other two, but the other two are not linearly separable from each other.
+
+<span style="font-size: 14px;">
+Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multiple measurements in taxonomic problems. Annals of Eugenics.
+</span>
+
+![](images/iris.png)
+![](images/iris.png)
+
+```elixir
+df = Explorer.Datasets.iris()
+```
+
+Note the features in the dataframe:
+
+* sepal_length `float`
+* sepal_width `float`
+* petal_length `float`
+* petal_width `float`
+* species `string`
+
+```elixir
+DataFrame.shape(df)
+```
+
+```elixir
+DataFrame.n_rows(df)
+```
+
+```elixir
+DataFrame.n_columns(df)
+```
+
+Get the values of particular features:
+
+```elixir
+DataFrame.select(df, ["sepal_length", "petal_length", "species"])
+```
+
+Get features that start with "petal":
+
+```elixir
+DataFrame.select(df, &String.contains?(&1, "petal"))
+```
+
+Keep only the "species" column:
+
+```elixir
+Explorer.DataFrame.select(df, &(&1 == "species"), :keep)
+```
+
+#### Filter
+
+Use callbacks on the dataframe to generate boolean mask series 
+of the same size as the dataframe.
+
+```elixir
+DataFrame.filter(df, &Series.greater_equal(&1["sepal_length"], 7.7))
+```
+
+You can pipe filters:
+
+```elixir
+DataFrame.filter(df, &Series.greater_equal(&1["sepal_length"], 7.7))
+|> DataFrame.filter(&Series.less(&1["petal_width"], 2.3))
+|> DataFrame.select(&(&1 == "petal_width"), :keep)
 ```
 
 ### Mutate
