@@ -14,7 +14,7 @@ Credit: this notebook is influenced by examples in the [Explorer repo](https://g
 
 ## DataFrames
 
-A `DataFrame` is really just a collection of `Series` of the same size. Which is why you can create a `DataFrame` from a `Keyword` list.
+A `DataFrame` is really just a collection of `Series` of the same size which is why you can create a `DataFrame` from a `Keyword` list.
 
 ```elixir
 alias Explorer.DataFrame
@@ -28,7 +28,7 @@ Similarly to `Series`, the `Inspect` implementation prints some info at the top 
 df
 ```
 
-You can directly access the details of a DataFrame:
+You can directly access the details of a DataFrame...
 
 ```elixir
 df = DataFrame.new(a: [1, 2, 3], b: ["a", "b", "c"])
@@ -40,7 +40,7 @@ IO.inspect(DataFrame.n_rows(df), label: "# of rows")
 IO.inspect(DataFrame.n_columns(df), label: "# of columns")
 ```
 
-Plus the head and tail.
+...as well as the head and tail.
 
 ```elixir
 IO.inspect(DataFrame.head(df), label: "Head")
@@ -51,7 +51,7 @@ IO.inspect(DataFrame.tail(df, 2), label: "Tail")
 
 TODO consider moving this section later, after covering the the Select options
 
-This Fraud Detection dataset contains transactions made by credit cards in September 2013 by European cardholders. The transactions occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions.
+This Fraud Detection dataset contains transactions made by credit cards in September 2013 by European cardholders. The transactions occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced; the positive class (frauds) accounts for 0.172% of all transactions.
 
 It contains only numerical input variables which are the result of a PCA transformation. Features V1, V2, … V28 are the principal components obtained with PCA, the only features which have not been transformed with PCA are 'Time' and 'Amount'. Feature 'Time' contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature 'Amount' is the transaction Amount, this feature can be used for example-dependant cost-sensitive learning. Feature 'Class' is the response variable and it takes value 1 in case of fraud and 0 otherwise.
 
@@ -83,7 +83,7 @@ IO.inspect(
 
 ```elixir
 # Filter
-# Use callbacks on the dataframe to generate boolean mask series 
+# Use callbacks on the dataframe to generate boolean mask series
 # of the same size as the dataframe. Here we filter for only time values
 # greater than or equal to a set value.
 IO.inspect(
@@ -102,7 +102,7 @@ IO.inspect(
 
 ### Mutate
 
-Add columns or change existing ones. You can pass in new columns as keyword arguments. It also works to transform existing columns. You may not always want to use keyword arguments. Given that column names are String.t(), it may make more sense to use a map.
+Add columns or change existing ones. You can pass in new columns as keyword arguments. It also works to transform existing columns. You may not always want to use keyword arguments. Given that column names are `String.t()` it may make more sense to use a map.
 
 ```elixir
 # Mutate the Class column from integer to float
@@ -150,13 +150,13 @@ fraud_df
 
 ### Select
 
-Let's jump right into it. We can select columns pretty simply.
+Let's jump right into it! We can select columns pretty simply.
 
 ```elixir
 DataFrame.select(df, ["year", "country"])
 ```
 
-But Elixir gives us some superpowers. In R there's [`tidy-select`](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html). I don't think we need that in Elixir. Anywhere in `Explorer` where you need to pass a list of column names, you can also execute a filtering callback on the column names. It's just an anonymous function passed to `df |> DataFrame.names() |> Enum.filter(callback_here)`.
+Elixir gives us some superpowers. In R there's [`tidy-select`](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html) we don't need that in Elixir. Anywhere in `Explorer` where you need to pass a list of column names you can also execute a filtering callback those column names. It's just an anonymous function passed to `df |> DataFrame.names() |> Enum.filter(callback_here)`.
 
 ```elixir
 DataFrame.select(df, &String.ends_with?(&1, "fuel"))
@@ -356,7 +356,7 @@ df
 
 ### Joins
 
-Joining is *fast* and easy. You can specify the columns to join on and how to join. Polars even supports cartesian (cross) joins, so `Explorer` does too.
+Joining is _fast_ and easy. You can specify the columns to join on and how to join. Polars even supports cartesian (cross) joins, so `Explorer` does too.
 
 ```elixir
 df1 = DataFrame.select(df, ["year", "country", "total"])
@@ -397,15 +397,15 @@ grouped |> DataFrame.summarise(per_capita: [:max]) |> DataFrame.arrange(desc: :p
 
 Qatar it is. You can use the following aggregations:
 
-* `:min` - Take the minimum value within the group. See `Explorer.Series.min/1`.
-* `:max` - Take the maximum value within the group. See `Explorer.Series.max/1`.
-* `:sum` - Take the sum of the series within the group. See `Explorer.Series.sum/1`.
-* `:mean` - Take the mean of the series within the group. See `Explorer.Series.mean/1`.
-* `:median` - Take the median of the series within the group. See `Explorer.Series.median/1`.
-* `:first` - Take the first value within the group. See `Explorer.Series.first/1`.
-* `:last` - Take the last value within the group. See `Explorer.Series.last/1`.
-* `:count` - Count the number of rows per group.
-* `:n_unique` - Count the number of unique rows per group.
+- `:min` - Take the minimum value within the group. See `Explorer.Series.min/1`.
+- `:max` - Take the maximum value within the group. See `Explorer.Series.max/1`.
+- `:sum` - Take the sum of the series within the group. See `Explorer.Series.sum/1`.
+- `:mean` - Take the mean of the series within the group. See `Explorer.Series.mean/1`.
+- `:median` - Take the median of the series within the group. See `Explorer.Series.median/1`.
+- `:first` - Take the first value within the group. See `Explorer.Series.first/1`.
+- `:last` - Take the last value within the group. See `Explorer.Series.last/1`.
+- `:count` - Count the number of rows per group.
+- `:n_unique` - Count the number of unique rows per group.
 
 The API is similar to `mutate`: you can use keyword args or a map and specify aggregations to use.
 

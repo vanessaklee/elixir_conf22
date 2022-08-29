@@ -19,24 +19,22 @@ Credit: this notebook is influenced by the [Axon repo](https://github.com/elixir
 
 ## Overview
 
-Axon was developed with the specific goal of providing programmers with zero deep learning experience an easy-to-use easy to learn and use library. At the same time, Axon has the goal of giving those with experience a functional take on deep learning and the tools to be up and running fast.
+Axon was developed with the specific goal of providing programmers with a library that is easy to use and learn, even with zero deep learning experience. At the same time Axon has the goal of giving those with experience a functional take on deep learning and the tools to be up and running fast.
 
 Axon has 4 main components:
 
-* Functional API – A low-level API of Elixir defn of which all other APIs build on.
-* Model Creation API – A high-level model creation API which manages model initialization and application.
-* Optimization API – An API for creating and using first-order optimization techniques.
-* Training API – An API for quickly training models.
+- Functional API – A low-level API of Elixir defn of which all other APIs build on.
+- Model Creation API – A high-level model creation API which manages model initialization and application.
+- Optimization API – An API for creating and using first-order optimization techniques.
+- Training API – An API for quickly training models.
 
 <!-- livebook:{"break_markdown":true} -->
-
-
 
 ## Defining the Model
 
 Axon enters our machine learning process when we have already preprocessed our data and are ready to train a model.
 
-In the next chapter we will put Axon to use in our own Neural Network example. Here is a sneak peek of what that will look like.
+In the next chapter we will put Axon to use in our own Neural Network example. Here is a sneak peek of what that will look like:
 
 ```elixir
 model =
@@ -46,11 +44,11 @@ model =
   |> Axon.dense(10, activation: :softmax)
 ```
 
-All `Axon` models start with an input layer to tell subsequent layers what shapes to expect. We then use `Axon.flatten/2` which flattens the previous layer by squeezing all dimensions but the first dimension into a single dimension. Our model consists of 2 fully connected layers with 128 and 10 units respectively. The first layer uses `:relu` activation which returns `max(0, input)` element-wise. The final layer uses `:softmax` activation to return a probability distribution over the 10 labels [0 - 9].
+All `Axon` models start with an input layer to tell subsequent layers what shapes to expect. We then use `Axon.flatten/2` to flatten the previous layer by squeezing all dimensions but the first dimension into a single dimension. Our model consists of 2 fully connected layers with 128 and 10 units, respectively. The first layer uses `:relu` activation which returns `max(0, input)` element-wise. The final layer uses `:softmax` activation to return a probability distribution over the 10 labels [0 - 9].
 
 ## Training
 
-Axon boils the task of training down to defining a training step and passing the step to a training loop. You can use `Axon.Training.step/3` to create a generic training step with a model, a loss function, and an optimizer. In this example, we'll use *categorical cross-entropy* and the *Adam* optimizer. You can then pass this to a training loop with your training data to train the final model. `Axon.Training.train/4` lets you specify some additional options as well, such as the `Nx` compiler to use.
+Axon boils the task of training down to defining a training step and passing the step to a training loop. You can use `Axon.Training.step/3` to create a generic training step with a model, a loss function, and an optimizer. In this example, we'll use _categorical cross-entropy_ and the _Adam_ optimizer. You can then pass this to a training loop with your training data to train the final model. `Axon.Training.train/4` lets you specify some additional options as well, such as the `Nx` compiler.
 
 Following is a non-functional example that trains for 10 epochs using the `EXLA` compiler. It will log Accuracy metrics every 100 training steps.
 
@@ -129,9 +127,9 @@ The softmax activation function takes in a vector of raw outputs of the neural n
 
 Axon's `dense` is a functional implementation of a dense layer. It performs linear transformation on the input. It takes these paramters in these shapes:
 
-* `input` - `{batch_size, * input_features}`
-* `kernel` - `{input_features, output_features}`
-* `bias` - `{}` or `{output_features}`
+- `input` - `{batch_size, * input_features}`
+- `kernel` - `{input_features, output_features}`
+- `bias` - `{}` or `{output_features}`
 
 Like this: `Axon.Layers.dense(input, kernel, bias)`
 

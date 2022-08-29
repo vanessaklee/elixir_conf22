@@ -15,16 +15,16 @@ Credit: this notebook is influenced by examples in the [Explorer repo](https://g
 
 ## Series
 
-In `Pandas`, a `Series` is like a column in a table, a one-deimensional array capable of holding data. In `Polars`, the Rust/Python DataFrame library, a `Series` is a single column in a DataFrame.
+In (pandas)[https://pandas.pydata.org/], a `Series` is like a column in a table, a one-dimensional array capable of holding data. In (polars)[https://lib.rs/crates/polars], the Rust/Python DataFrame library, a `Series` is a single column in a DataFrame.
 
 Similarly in `Explorer` A `DataFrame` is a row-aligned map of `Series`. `Series` can have the following `dtypes`:
 
-* `:float` - 64-bit floating point number
-* `:integer` - 64-bit signed integer
-* `:boolean` - Boolean
-* `:string` - UTF-8 encoded binary
-* `:date` - Date type that unwraps to `Elixir.Date`
-* `:datetime` - DateTime type that unwraps to `Elixir.NaiveDateTime`
+- `:float` - 64-bit floating point number
+- `:integer` - 64-bit signed integer
+- `:boolean` - Boolean
+- `:string` - UTF-8 encoded binary
+- `:date` - Date type that unwraps to `Elixir.Date`
+- `:datetime` - DateTime type that unwraps to `Elixir.NaiveDateTime`
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -64,19 +64,19 @@ Series.dtype(s3)
 
 #### Nullability
 
-Series can be nullable.
+Series can be nullable...
 
 ```elixir
 s = Series.from_list([1.0, 2.0, nil, nil, 5.0])
 ```
 
-And you can fill in those missing values using one of the following strategies:
+...and the missing values may be filled in using one of the following strategies:
 
-* `:forward` - replace nil with the previous value
-* `:backward` - replace nil with the next value
-* `:max` - replace nil with the series maximum
-* `:min` - replace nil with the series minimum
-* `:mean` - replace nil with the series mean
+- `:forward` - replace nil with the previous value
+- `:backward` - replace nil with the next value
+- `:max` - replace nil with the series maximum
+- `:min` - replace nil with the series minimum
+- `:mean` - replace nil with the series mean
 
 ```elixir
 Series.fill_missing(s, :mean)

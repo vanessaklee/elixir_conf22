@@ -22,15 +22,11 @@ Mix.install([
 
 Can we predict passangers who will survive the Titanic disaster?
 
-## Prepare the data
-
-Can we predict passangers who will survive the Titanic disaster?
-
 <!-- livebook:{"break_markdown":true} -->
 
 ![](images/titanic.png)
 
-## Load
+## Prepare the data
 
 With the use of Explorer, load the normalized training set you saved in the last section.
 
@@ -136,7 +132,7 @@ Our problem is a binary classification problem. That means we want to classify p
 
 Probabilities closer to 1 indicate a higher confidence that the passenger survived. Probabilities closer to 0 represent a lower confidence that an example passenger survived.
 
-`sigmoid` is an activation function which always returns a value between 0 and 1. Making it a good choice to return the probability we’re looking for.
+`sigmoid` is an activation function which always returns a value between 0 and 1, making it a good choice to return the probability we’re looking for.
 
 ```elixir
 model =
@@ -189,7 +185,7 @@ loss =
 
 This assigns the proprotional value for "Surivived" to the positive weight. There are fewer examples of the "Survived" class in the dataset, which means it has the larger of the two proportional values.
 
-If the model guesses "postive", that the passenger "Surivived", the loss function resturns a bigger penalty for __incorrectly__ classifying that a passenger "Survived" is larger than for incorrectly classifying a passenger as "Perished".
+If the model guesses "postive" that the passenger "Surivived", the loss function returns a bigger penalty for **incorrectly** classifying that a passenger "Survived" than it does for incorrectly classifying a passenger as "Perished".
 
 ```elixir
 optimizer = Axon.Optimizers.adam(1.0e-3)

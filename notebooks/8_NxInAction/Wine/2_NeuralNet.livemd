@@ -55,25 +55,23 @@ Institute of Pharmaceutical and Food Analysis and Technologies, Via Brigata Sale
 
 #### Attributes
 
-* Alcohol
-* Malic acid
-* Ash
-* Alcalinity of ash
-* Magnesium
-* Total phenols
-* Flavanoids
-* Nonflavanoid phenols
-* Proanthocyanins
-* Color intensity
-* Hue
-* OD280/OD315 of diluted wines
-* Proline
+- Alcohol
+- Malic acid
+- Ash
+- Alcalinity of ash
+- Magnesium
+- Total phenols
+- Flavanoids
+- Nonflavanoid phenols
+- Proanthocyanins
+- Color intensity
+- Hue
+- OD280/OD315 of diluted wines
+- Proline
 
 Target (class identifier): 1-3
 
 <!-- livebook:{"break_markdown":true} -->
-
-
 
 ## Prepare the data
 
@@ -381,5 +379,3 @@ end
 ```
 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](../2_Data.livemd)
-
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Nx in Action - Titanic ></span>](../Titanic/1_Data.livemd)

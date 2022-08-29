@@ -9,26 +9,26 @@ Mix.install([
 
 ## Goal
 
-To provide an overview of the Explorer library and a detailed look at Explorer's Series and Dataframes.
+To provide an overview of the (Explorer library)[https://github.com/elixir-nx/explorer] and a detailed look at Explorer's Series and Dataframes.
 
 ## Introduction
 
-Explorer brings series and dataframes to the Nx ecosystem. Series are one-dimensional and dataframes are two-dimensional. Both are a standard data structures in EDA (exploratory data analytics).
+Explorer brings series and dataframes to the Nx ecosystem. Series are one-dimensional and dataframes are two-dimensional. Both are standard data structures in EDA (Exploratory Data Analytics).
 
-A Dataframe is a two-dimensional table. The columns and rows of a dataframe similar to those in databases like SQL. The Explorer library exposes dataframes and dataframe manipulation through an API. If you are familiar with `tidyverse` or `pandas` then the Explorer API will be familiar.
+A Dataframe is a two-dimensional table. The columns and rows of a dataframe are similar to those in databases like SQL. The Explorer library exposes dataframes and dataframe manipulation through an API. If you are familiar with (Tidyverse)[https://www.tidyverse.org/] or (pandas)[https://pandas.pydata.org/] then the Explorer API will be familiar.
 
 ## Data
 
 ### Reading Data
 
-With Explorer you can also load data from a map or keyword list with `Explorer.DataFrame.new/1`.
+With Explorer you can also load data from a map or keyword list with (Explorer.DataFrame.new/2)[https://elixir-nx.github.io/explorer/Explorer.DataFrame.html#new/2].
 
 Explorer also supports reading data in many other formats:
 
-* Delimited (i.e. CSV)
-* Parquet
-* NDJSON
-* Feather (Arrow IPC)
+- Delimited (i.e. CSV)
+- Parquet
+- NDJSON
+- Feather (Arrow IPC)
 
 #### Options
 
@@ -46,7 +46,7 @@ With a format like CSV, the options are:
 
 ### Built-In Data
 
-`Explorer` provides example datasets via `Explorer.Datasets`:
+Explorer provides example datasets via (Explorer.Datasets)[https://elixir-nx.github.io/explorer/Explorer.Datasets.html]:
 
 ```elixir
 df = Explorer.Datasets.iris()
@@ -69,8 +69,7 @@ Explorer supports writing the same formats as reading `to_csv/3`, `to_ipc/3`, `t
 | `delimiter` | Single character used to separate fields within a record         | `","`  |
 | `header`    | Should the column names be written as the first line of the file | `true` |
 
-
-In the next two sections we will dig into Explorer's Series and Dataframes. 
+In the next two sections we will dig into Explorer's Series and Dataframes.
 
 <!-- livebook:{"break_markdown":true} -->
 
