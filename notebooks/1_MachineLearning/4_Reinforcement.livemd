@@ -124,4 +124,4 @@ What would you add to this library? How could it be of use to you in your curren
 
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_Unsupervised.livemd)
 
-[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Algorithms & Models ></span>](../3_Algorithms/1_Intro.livemd)
+[<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Statistics></span>](../2_Statistics/1_Intro.livemd)
