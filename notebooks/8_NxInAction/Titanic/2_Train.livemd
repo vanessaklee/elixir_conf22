@@ -20,11 +20,7 @@ Mix.install([
 
 ## Define the problem
 
-Can we predict passangers who will survive the Titanic disaster?
-
-<!-- livebook:{"break_markdown":true} -->
-
-![](images/titanic.png)
+Can we predict passengers who will survive the Titanic disaster?
 
 ## Prepare the data
 
@@ -160,7 +156,7 @@ IO.puts("Survived: #{survived} / #{(survived / Nx.size(train_targets) * 100) |> 
 IO.puts("Perished: #{perished} / #{(perished / Nx.size(train_targets) * 100) |> Float.ceil()}%")
 ```
 
-We have an slighly imbalanced dataset. When you have a very imbalanced dataset, you'll want to tell your model to make proportional updates.
+We have an slightly imbalanced dataset. When you have a very imbalanced dataset, you'll want to tell your model to make proportional updates.
 
 Axon loss functions like `binary_cross_entropy/3` let you send weight parameters for each class. We'll send them as proportional to the overall number of occurrences in the training set.
 
@@ -183,9 +179,9 @@ loss =
   )
 ```
 
-This assigns the proprotional value for "Surivived" to the positive weight. There are fewer examples of the "Survived" class in the dataset, which means it has the larger of the two proportional values.
+This assigns the proportional value for "Survived" to the positive weight. There are fewer examples of the "Survived" class in the dataset, which means it has the larger of the two proportional values.
 
-If the model guesses "postive" that the passenger "Surivived", the loss function returns a bigger penalty for **incorrectly** classifying that a passenger "Survived" than it does for incorrectly classifying a passenger as "Perished".
+If the model guesses "positive", that the passenger "Survived", the loss function returns a bigger penalty for __incorrectly__ classifying that a passenger "Survived" than it does for incorrectly classifying a passenger as "Perished".
 
 ```elixir
 optimizer = Axon.Optimizers.adam(1.0e-3)

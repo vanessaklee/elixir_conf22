@@ -14,7 +14,6 @@
    2. [Supervised - Regression](3_Algorithms/2_Regression.livemd)
    3. [Supervised - Classification](3_Algorithms/3_Classification.livemd)
    4. [Unsupervised](3_Algorithms/4_Unsupervised.livemd)
-   5. [Tools of the Trade](3_Algorithms/5_Tools.livemd)
 4. <span style="color: #800080; font-size: 24px; font-weight: bold;">Neural Networks</span>
    1. [Introduction to Neural Networks](4_NeuralNetworks/1_Intro.livemd)
 5. <span style="color: #800080; font-size: 24px; font-weight: bold;">Tools of the Trade</span>
@@ -27,19 +26,22 @@
       1. [Series](7_NxPlus/2_Series.livemd)
       2. [Dataframes ](7_NxPlus/3_Dataframes.livemd)
    2. [Axon](7_NxPlus/4_Axon.livemd)
-8. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span>
+8. <span style="color: #800080; font-size: 24px; font-weight: bold;">Nx in Action</span> -- PLAYGROUND
    1. [Ask the Right Questions](8_NxInAction/1_Intro.livemd)
    2. Data, Train, Test, Predict
       1. Iris 
          1. [Data](8_NxInAction/Iris/1_Data.livemd)
-         2. [Train](8_NxInAction/Iris/2_LinearRegression.livemd)
-         3. [Predict](8_NxInAction/Iris/3_NeuralNet.livemd)
+         2. [Linear Regression](8_NxInAction/Iris/2_LinearRegression.livemd)
+         3. [Neural Networks](8_NxInAction/Iris/3_NeuralNet.livemd)
       2. Titanic
-         1. [Data](8_NxInAction/titanic/1_Data.livemd)
-         2. [Train](8_NxInAction/titanic/2_Train.livemd)
-9. What's Next for Nx?
+         1. [Data](8_NxInAction/Titanic/1_Data.livemd)
+         2. [Train](8_NxInAction/Titanic/2_Train.livemd)
+      3. Wine
+         1. [Data](8_NxInAction/Wine/1_Data.livemd)
+         2. [Neural Networks](8_NxInAction/Wine/2_NeuralNet.livemd)
+9. <span style="color: #800080; font-size: 24px; font-weight: bold;">What's Next for Nx?</span>
    1. [ML in Production](9_WhatsNext/1_Prod.livemd)
-   2. [Revoew](9_WhatsNext/2_Future.livemd)
+   2. [Future](9_WhatsNext/2_Future.livemd)
 
 <!-- livebook:{"break_markdown":true} -->
 

@@ -2,7 +2,7 @@
 
 ## Goal
 
-What do think about before you put machine learning into your production environment.
+What do you think about before you put machine learning into your production environment.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -68,7 +68,7 @@ flowchart TB
 
 ##### Evaluation
 
-Models may require different evaluation at different points in the development cycle. During model evaluation you may evaluate on accuracy. Production evaluation may consider value of the data to customers. The distribution of the data may change over time. Detect distribution drift through continuous model monitoring.
+Models may require different evaluation at different points in the development cycle. During model evaluation you may evaluate accuracy. Production evaluation may consider the value of the data to customers. The distribution of the data may change over time. Detect distribution drift through continuous model monitoring.
 
 <!-- livebook:{"break_markdown":true} -->
 
