@@ -40,17 +40,17 @@ Citation: R. A. Fisher (1936) <span style="font-style: italic;">The use of multi
 
 ### Features
 
-* sepal_length `float`
-* sepal_width `float`
-* petal_length `float`
-* petal_width `float`
-* species `string`
+- sepal_length `float`
+- sepal_width `float`
+- petal_length `float`
+- petal_width `float`
+- species `string`
 
 ### Observations
 
-* There are 150 observations with 4 features each
-* There are no null values
-* There are 50 observations of each species (setosa, versicolor, virginica)
+- There are 150 observations with 4 features each
+- There are no null values
+- There are 50 observations of each species (setosa, versicolor, virginica)
 
 ## Load: Scidata
 
@@ -142,7 +142,7 @@ Another way to visualize the data is to use Livebook SmartCells. Set the data to
 
 Lets determine if our dataset is balanced. How many rows of each species are there?
 
-The cell below uses data from the `expdf` variable we set using the Explorer Iris dataset. It is a "bar" chart with "species" type "nominal" as the x-axis and "COUNT(*)" as the y-axis.
+The cell below uses data from the `expdf` variable we set using the Explorer Iris dataset. It is a "bar" chart with "species" type "nominal" as the x-axis and "COUNT(\*)" as the y-axis.
 
 Evaluate the celll below.
 
@@ -170,10 +170,10 @@ There are exactly 50 of each of the three Species features; we have a balanced d
 
 ##### Types
 
-* _Quantitative_ - numerical data
-* _Nominal_ - categorical data without a set order or scale
-* _Ordinal_ - categorical data with a set order or scale
-* _Temporal_ - data which represents a state in time
+- _Quantitative_ - numerical data
+- _Nominal_ - categorical data without a set order or scale
+- _Ordinal_ - categorical data with a set order or scale
+- _Temporal_ - data which represents a state in time
 
 <hr style="background-color: #800080;height: 5.0px;" />
 
@@ -278,7 +278,7 @@ First, get the features from the `feature_set`:
 features = DataFrame.names(feature_set)
 ```
 
-Enumerate over that lis and inspect the name on each iteration.
+Enumerate over that list and inspect the name on each iteration.
 
 ```elixir
 features
@@ -371,9 +371,9 @@ Our targets are currently strings, i.e. "Iris-setosa". Normalize them by convert
 
 ##### Label
 
-* 0: Iris Setosa
-* 1: Iris Versicolour
-* 2: Iris Virginica
+- 0: Iris Setosa
+- 1: Iris Versicolour
+- 2: Iris Virginica
 
 ```elixir
 target_set

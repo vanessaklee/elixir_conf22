@@ -3,10 +3,10 @@
 ## Goal
 
 > <span style="font-size: 14px; font-style: italic;">"It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility"</span>
-> 
+>
 > <span style="font-size: 14px;">Hans Moravec, 1988</span>
 
-In this notebook we will go over the steps for Machine Learning and how we will perform them using Elixir's Nx ecosystem. We have covered this topics previously, but here we present them in the context of how we will put them to use to train, test, and use a ML model to make prediction in Elixir.
+In this notebook we will go over the steps for Machine Learning and how we will perform them using Elixir's Nx ecosystem. We have covered these topics previously but here we present them in the context of how we will put them to use to train, test, and use a ML model to make prediction in Elixir.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -63,7 +63,7 @@ In Axon, that means making decisions about:
 
 ##### Epochs
 
-An epoch refers to one complete pass of the training data through the algorithm. It is  a hyperparameter. The maximum epochs to run the Axon loop for. Must be non-negative integer (default is 1).
+An epoch refers to one complete pass of the training data through the algorithm. It is a hyperparameter. The maximum epochs to run the Axon loop for. Must be non-negative integer (default is 1).
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -83,17 +83,17 @@ The loss function measures how well a model fit the data set.The bigger the diff
 
 Axon currently supports the following optimizers. Read about them [here](https://github.com/elixir-nx/axon/blob/main/lib/axon/optimizers.ex#L58).
 
-* Adabelief
-* Adagrad
-* Adam
-* Adamw
-* Fromage
-* Lamb
-* Noisy SGD
-* Radam
-* RMSProp
-* SGD
-* Yogi
+- Adabelief
+- Adagrad
+- Adam
+- Adamw
+- Fromage
+- Lamb
+- Noisy SGD
+- Radam
+- RMSProp
+- SGD
+- Yogi
 
 The Axon optimization API does not depend on Axon models, so you are able to use the API to optimize any differentiable objective function.
 
@@ -109,23 +109,23 @@ The loss function measures how well a model fit the data set.The bigger the diff
 
 Different loss functions can have input shape requirements in Axon. See [here](https://github.com/elixir-nx/axon/blob/main/lib/axon/losses.ex) for more details.
 
-* :binary_cross_entropy
-  * Used in binary classification problems.
-  * Expects targets to encode probabilities between 0 and 1.
-  * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
-* :categorical_cross_entropy
-  * Used for multi-class classifcation problems.
-  * Expects target to encode a probability distribution along the last axis.
-  * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
-* :categorical_hinge
-* :hinge
-* :kl_divergence
-* :log_cosh
-* :margin_ranking
-* :soft_margin
-* :mean_absolute_error
-* :mean_squared_error
-* :poisson
+- :binary_cross_entropy
+  - Used in binary classification problems.
+  - Expects targets to encode probabilities between 0 and 1.
+  - You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
+- :categorical_cross_entropy
+  - Used for multi-class classifcation problems.
+  - Expects target to encode a probability distribution along the last axis.
+  - You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
+- :categorical_hinge
+- :hinge
+- :kl_divergence
+- :log_cosh
+- :margin_ranking
+- :soft_margin
+- :mean_absolute_error
+- :mean_squared_error
+- :poisson
 
 <!-- livebook:{"break_markdown":true} -->
 
