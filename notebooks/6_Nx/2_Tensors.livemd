@@ -10,13 +10,13 @@ import IEx.Helpers
 
 ## Goal
 
-To gain an understand of and experience with tensors in Nx.
+To gain an understanding of and experience with tensors in Nx.
 
 Credit: this notebook is influenced by examples in the [Nx repo](https://github.com/elixir-nx/nx/blob/main/nx/guides/intro-to-nx.livemd).
 
 ## Numerical Elixir, alias: Nx
 
-[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a road block when it comes to deep nesting or random access. It also lack optimization for use cases that require millions of calculations.
+[Nx](https://github.com/elixir-nx/nx) is Elixir's library for numerical computing. Vanilla Elixir's numeric data structures hit a roadblock when it comes to deep nesting or random access. It also lacks optimization for use cases that require millions of calculations.
 
 Nx brings typed, multidimensional data, called tensors.
 
@@ -158,7 +158,7 @@ This operation reuses all of the tensor data; merely alters the metadata so that
 tensor.type() == reshaped.type()
 ```
 
-Can you reeshape the tensor so it has 3 dimensions with one batch, one row, and four columns?
+Can you reshape the tensor so it has 3 dimensions with one batch, one row, and four columns?
 
 ```elixir
 your(code(here(...(your(code(here(...)))))))
@@ -204,7 +204,7 @@ A scalar is a real number rather than a vector. It is a quantity having only mag
 
 <!-- livebook:{"break_markdown":true} -->
 
-Now we can then get the cosine of `pi`. We can also get consine on the whole tensor.
+Now we can then get the cosine of `pi`. We can also get cosine on the whole tensor.
 
 ```elixir
 Nx.cos(pi) |> IO.inspect(label: "cosine of pi")
@@ -454,11 +454,11 @@ TensorMath.subtract(tensor, Nx.tensor([1, 2]))
 
 ## Automatic differentiation (autograd)
 
-One Nx features we will take advantage of in this training is `autograd`.
+One Nx feature we will take advantage of in this training is `autograd`.
 
-The "grad" in `autograd` refers to the gradient, or the rate of change. Gradients are important for building probabilistic models. If you've watched Bruce Tate's [Groxio](https://www.youtube.com/watch?v=NcsqGS6SVXg) video's on machine learning you have seen the importance of gradients to probability in creating a model to solve FizzBuzz.
+The "grad" in `autograd` refers to the gradient, or the rate of change. Gradients are important for building probabilistic models. If you've watched Bruce Tate's [Groxio](https://www.youtube.com/watch?v=NcsqGS6SVXg) videos on machine learning you have seen the importance of gradients to probability in creating a model to solve FizzBuzz.
 
-Differential equations are used to take gradients. Nx provides a a feature called automatic differentiation, or autograd.
+Differential equations are used to take gradients. Nx provides a feature called automatic differentiation, or autograd.
 
 <!-- livebook:{"disable_formatting":true} -->
 

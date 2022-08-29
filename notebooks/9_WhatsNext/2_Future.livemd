@@ -77,7 +77,7 @@ Scholar.Cluster.KMeans.predict(model, Nx.tensor([[1.9, 4.3], [1.1, 2.0]]))
 
 ### Sharing Axon Models on Huggingface
 
-An [article](https://alongtheaxon.com/blog/axon_models_on_huggingface). They got permission to store Axon models in the Huggingface public repository. [Stefano Falsetto](https://github.com/stefkohub) developed a HuggingfaceHub Elixir library to access and interact with the repo. The have settled on a good source of ONNX libraries (see existing models [here](https://github.com/onnx/models)) and a path to convert the libraries to Axon. They are inviting others to share.
+An [article](https://alongtheaxon.com/blog/axon_models_on_huggingface). They got permission to store Axon models in the Huggingface public repository. [Stefano Falsetto](https://github.com/stefkohub) developed a HuggingfaceHub Elixir library to access and interact with the repo. They have settled on a good source of ONNX libraries (see existing models [here](https://github.com/onnx/models)) and a path to convert the libraries to Axon. They are inviting others to share.
 
 > The Axon community was looking for techniques to share models. What if we used Huggingface’s Hub as a model repository? I knew that the Hub is designed to be model framework agnostic. How agnostic are they really?
 

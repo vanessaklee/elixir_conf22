@@ -6,7 +6,7 @@
 > 
 > <span style="font-size: 14px;">Hans Moravec, 1988</span>
 
-In this notebook we will go over the steps for Machine Learning and how we will perform them using Elixir's Nx ecosystem. We have covered this topics previously, but here we present them in the context of how we will put them to use to train, test, and use a ML model to make prediction in Elixir.
+In this notebook we will go over the steps for Machine Learning and how we will perform them using Elixir's Nx ecosystem. We have covered this topics previously, but here we present them in the context of how we will put them to use to train, test, and use a ML model to make predictions in Elixir.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -22,19 +22,19 @@ In this notebook we will go over the steps for Machine Learning and how we will 
 
 ### Define the Problem
 
-What is the problem you want to solve? What is the quesition you want to answer?
+What is the problem you want to solve? What is the question you want to answer?
 
 The challenge of machine learning, and artificial intelligence in general, is to ask the right questions and understand what the answers you get mean.
 
 That means taking the time to look at the big picture. It is easy to get excited by the little accomplishment, especially in deep learning: each layer making progress and predictions printing out one after the other. Remember to keep asking yourself if you are asking the best questions and asking those questions of the best dataset.
 
-We are humans asking machines to answer questions for us, but as humans our sensory percention evolved over billions of years of evolution.
+We are humans asking machines to answer questions for us, but as humans our sensory perception evolved over billions of years of evolution.
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Prepare the Data
 
-Find a dataset relevent to the problem you are trying to solve.
+Find a dataset relevant to the problem you are trying to solve.
 
 Take a good look at the data. Look for potential problems, patterns, classifications, correlations and comparisons. Turn “abnormal” data into “normalized” data. Normalizing includes extraction, loading, and data cleaning to identify aberrant, missing, or outliers.
 
@@ -42,7 +42,7 @@ Take a good look at the data. Look for potential problems, patterns, classificat
 
 ### Evaluate the Algorithm
 
-Try out different algorithms to find the best on to use in training the model. The wrong model can lead to poor performance.
+Try out different algorithms to find the best one to use in training the model. The wrong model can lead to poor performance.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -57,13 +57,13 @@ In Axon, that means making decisions about:
 1. Epochs - how many training iterations to take over the dataset
 2. Learning rate - size of the optimization step at each iteration
 3. Loss - measure of the distance between the prediction from the label
-4. Metric (optional) - choose metric to measure mdoel's performance
+4. Metric (optional) - choose metric to measure model's performance
 
 <!-- livebook:{"break_markdown":true} -->
 
 ##### Epochs
 
-An epoch refers to one complete pass of the training data through the algorithm. It is  a hyperparameter. The maximum epochs to run the Axon loop for. Must be non-negative integer (default is 1).
+An epoch refers to one complete pass of the training data through the algorithm. It is  a hyperparameter. The maximum epochs to run the Axon loop for. Must be a non-negative integer (default is 1).
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -75,7 +75,7 @@ Implementations of common gradient-based optimization algorithms. Customize the 
 
 ##### Loss Function
 
-The loss function measures how well a model fit the data set.The bigger the difference between the prediction and the ground truth (target or class), the higher the loss function value.
+The loss function measures how well a model fits the data set.The bigger the difference between the prediction and the ground truth (target or class), the higher the loss function value.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -114,7 +114,7 @@ Different loss functions can have input shape requirements in Axon. See [here](h
   * Expects targets to encode probabilities between 0 and 1.
   * You can optionally set `from_logits: true` to indicate values are binary_cross_entropy(y_true, y_pred, opts \\ []) do
 * :categorical_cross_entropy
-  * Used for multi-class classifcation problems.
+  * Used for multi-class classification problems.
   * Expects target to encode a probability distribution along the last axis.
   * You can specify `from_logits: true` to indicate `y_pred` is a logits tensor.
 * :categorical_hinge
@@ -143,7 +143,7 @@ _How accurate is the model at making predictions on out of sample data?_
 
 ##### Precision
 
-Tells you how good the model is at prediction a specific category.
+Tells you how good the model is at predicting a specific category.
 
 _Out of all positive predictions made by the model, what percentage are truly positive?_
 

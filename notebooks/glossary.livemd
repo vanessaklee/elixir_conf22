@@ -38,7 +38,7 @@ A glossary of frequently used terms in Machine Learning to reference throughout 
 
 <details>
   <summary>Bias</summary>
-  an additional input of a neural network with a constant value, positive or negative, used to increase or decrease the output of a neuron. It helps to ensure that even if all the inputs are zeros there will stil be an activation in the next layer. For example, in a sigmoid function, the biash shifts the curve left or right but does not change the same of the curve.
+  an additional input of a neural network with a constant value, positive or negative, used to increase or decrease the output of a neuron. It helps to ensure that even if all the inputs are zeros there will still be an activation in the next layer. For example, in a sigmoid function, the biash shifts the curve left or right but does not change the same of the curve.
 </details>
 
 <!-- livebook:{"break_markdown":true} -->
@@ -59,7 +59,7 @@ graph LR;
 
 <details>
   <summary>Class</summary>
-  the "class" predicted in classification machine learning. For example, if you're attempting to detect fraud the classes would be "fraud" and "not fraud". In the case of multiple classes to indentify dog breeds the classes are pug, golden retriever, poodle, etc.
+  the "class" predicted in classification machine learning. For example, if you're attempting to detect fraud the classes would be "fraud" and "not fraud". In the case of multiple classes to identify dog breeds the classes are pug, golden retriever, poodle, etc.
 </details>
 
 <details>
@@ -110,7 +110,7 @@ graph LR;
 
 <details>
   <summary>Hyperparameter</summary>
-  the parameter whose value fine tuned during training iterations of a model to control the learning process; i.e. learning rate. In contrast to a parameter, a hyper parameter is external to the model and its value cannot be estimated from the data.
+  the parameter whose value is fine tuned during training iterations of a model to control the learning process; i.e. learning rate. In contrast to a parameter, a hyper parameter is external to the model and its value cannot be estimated from the data.
 </details>
 
 <details>
@@ -144,7 +144,7 @@ pie showData
 
 <details>
   <summary>Learning Rate</summary>
-  parameter that determines the size of the optimization step at each iteration. It affects how quickly a model can learn because it directs how inforamtion learned by the loss function overrides old information.
+  parameter that determines the size of the optimization step at each iteration. It affects how quickly a model can learn because it directs how information learned by the loss function overrides old information.
 </details>
 
 <details>
@@ -154,7 +154,7 @@ pie showData
 
 <details>
   <summary>Loss Function</summary>
-  reveals the accuracy of a model; the result of the loss function is the distance between the prediction and the true value. Its indicates whether or not weights and biases should to be adjusted to improve accuracy. It is an example of a machine learning algorithm learning from its mistakes.
+  reveals the accuracy of a model; the result of the loss function is the distance between the prediction and the true value. Its indicates whether or not weights and biases should be adjusted to improve accuracy. It is an example of a machine learning algorithm learning from its mistakes.
 </details>
 
 <!-- livebook:{"break_markdown":true} -->
@@ -169,12 +169,12 @@ pie showData
 
 <details>
   <summery>Mean Squared Error (MSE)</summary>
-  Used in regression algorithms to determines loss as the average squared difference between the prediction and the ground truth.
+  Used in regression algorithms to determine loss as the average squared difference between the prediction and the ground truth.
 </details>
 
 <details>
   <summary>Mini-batch</summary>
-  small subset of the entire batch of examples run together in a single training iteration.
+  a small subset of the entire batch of examples run together in a single training iteration.
 </details>
 
 <details>
@@ -184,7 +184,7 @@ pie showData
 
 <details>
   <summary>Normalization</summary>
-  process of converting an values into a standard range typically 0 to 1.
+   process of converting values into a standard range typically 0 to 1.
 </details>
 
 <details>
@@ -242,7 +242,7 @@ pie showData
 
 <details>
   <summary>Tensor</summary>
-  datastructure which is a multidimensional array of vectors and matrices. A vector is a one-dimensional tensor and a matrix is a two-dimensional tensor.
+  data structure which is a multidimensional array of vectors and matrices. A vector is a one-dimensional tensor and a matrix is a two-dimensional tensor.
 </details>
 
 <details>

@@ -125,7 +125,7 @@ params =
   |> Axon.Loop.run(Stream.zip(images, targets), %{}, epochs: 5, compiler: EXLA)
 ```
 
-As with most things in machine learning, our goal is to minimize the error (or the cost function) of our predictions. As we train our model on the MNIST dataset we can see that the accuracy improves while the error decreases. So, for a few lines of code, we're approximately 90% accuracy. Not bad! But can we do better?
+As with most things in machine learning, our goal is to minimize the error (or the cost function) of our predictions. As we train our model on the MNIST dataset we can see that the accuracy improves while the error decreases. So, for a few lines of code, we're at approximately 90% accuracy. Not bad! But can we do better?
 
 ## Multilayer Neural Networks
 
@@ -157,7 +157,7 @@ params =
 
 ## Conclusion
 
-Overall, neural networks are simply a collection of artificial neurons. At their core each neuron is simple a function that takes an input, processes that input on an activation function, and outputs a value between 0 and 1. An entire neural network, while mathematically complex, can be thought of, itself, as a function taking input and giving an output. Most of the complexity comes from the number of neurons in a network, the number of layers, and the different activation functions we have at our disposal. And while these networks can be large and complex it is easier to think of them as functions that gives us probabilistic outputs.
+Overall, neural networks are simply a collection of artificial neurons. At their core each neuron is simply a function that takes an input, processes that input on an activation function, and outputs a value between 0 and 1. An entire neural network, while mathematically complex, can be thought of, itself, as a function taking input and giving an output. Most of the complexity comes from the number of neurons in a network, the number of layers, and the different activation functions we have at our disposal. And while these networks can be large and complex it is easier to think of them as functions that give us probabilistic outputs.
 
 <!-- livebook:{"break_markdown":true} -->
 

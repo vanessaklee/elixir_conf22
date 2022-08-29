@@ -22,11 +22,11 @@ Mix.install([
 
 ## Define the problem
 
-Can we predict passangers who will survive the Titanic disaster?
+Can we predict passengers who will survive the Titanic disaster?
 
 ## Prepare the data
 
-The Titanic Distaster Dataset describes the survival status of individual passengers
+The Titanic Disaster Dataset describes the survival status of individual passengers
 on the Titanic. It does not contain information from the crew.
 
 <span style="font-size: 14px;">
@@ -114,7 +114,7 @@ df["Survived"] |> Series.count()
 
 Another way to visualize the data is to use Livebook SmartCells. Set the data to the Iris dataframe and select an x-axis and y-axis.
 
-Lets determine if our dataset is balanced. How many passengers survived?
+Let's determine if our dataset is balanced. How many passengers survived?
 
 <!-- livebook:{"attrs":{"chart_title":null,"height":750,"layers":[{"chart_type":"bar","color_field":"Survived","color_field_aggregate":null,"color_field_type":"nominal","data_variable":"df","x_field":"Sex","x_field_aggregate":null,"x_field_type":"nominal","y_field":"__count__","y_field_aggregate":null,"y_field_type":null}],"vl_alias":"Elixir.VegaLite","width":500},"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
 
@@ -165,7 +165,7 @@ Enum.each(DataFrame.names(df), fn name ->
 end)
 ```
 
-#### What do to with Nil values
+#### What to do with Nil values
 
 We have options for handling nil values. We can fill the nil values with other values using different strategies.
 
@@ -197,7 +197,7 @@ df =
 
 <!-- livebook:{"break_markdown":true} -->
 
-Certain columns, like Cabin, seem unlike to influence accurancy. Extract the data we want and then Transform it. Drop Name, Ticket, Cabin, Embarked, and PassengerId.
+Certain columns, like Cabin, seem unlikely to influence accuracy. Extract the data we want and then Transform it. Drop Name, Ticket, Cabin, Embarked, and PassengerId.
 
 ```elixir
 df = DataFrame.select(df, ["Survived", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare"])
@@ -243,7 +243,7 @@ test_df = Explorer.DataFrame.slice(df, num_train, num_test)
 
 ## Write to File
 
-Save the normalized sets to use to train our model in the next section. Use Kino save the files.
+Save the normalized sets to use to train our model in the next section. Use Kino to save the files.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -251,7 +251,7 @@ Using `Kino.Input`, evaluate the code block and then put the file location in th
 
 `elixir_conf/data/titanic_train.csv`
 
-After you enter the input, evaluate the next code block. You should see the filname printed out.
+After you enter the input, evaluate the next code block. You should see the filename printed out.
 
 ```elixir
 train_filename = Kino.Input.text("Training Filename")

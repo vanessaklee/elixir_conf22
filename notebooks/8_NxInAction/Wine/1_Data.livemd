@@ -153,11 +153,11 @@ expdf
 
 Another way to visualize the data is to use Livebook SmartCells. Set the data to the Wine dataframe and select an x-axis and y-axis.
 
-Lets determine if our dataset is balanced. How many rows of each wine type are there?
+Let's determine if our dataset is balanced. How many rows of each wine type are there?
 
 The cell below uses data from the `expdf` variable we set using the Explorer Wine dataset. It is a "bar" chart with type "nominal" as the x-axis and "COUNT(*)" as the y-axis.
 
-Evaluate the celll below.
+Evaluate the cell below.
 
 <!-- livebook:{"break_markdown":true} -->
 

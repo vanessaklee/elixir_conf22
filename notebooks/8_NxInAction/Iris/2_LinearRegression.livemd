@@ -63,7 +63,7 @@ split = fn d -> Enum.split(d, ceil(count * ratio)) end
 
 ### Linear Regression
 
-A linear regression algorithms to plot a line of best fit calculated through the method of least squares in order to model the relationship the relationship between variables and forecasting.
+Linear regression algorithms plot a line of best fit calculated through the method of least squares in order to model the relationship between variables and forecasting.
 
 In our case, we want to relate the Iris features to their species. The relationship does not necessarily imply that one variable causes the other, but that there is some significant association between the two variables. We saw in our data notebook for the dataset that there may be a significant association.
 
@@ -155,7 +155,7 @@ end
 
 `update` returns the updated parameters, `weight` and `bias`.
 
-So as our predictions are made, the parameter values will change, but we need to start off with some inital values for them. The initial values have to match the dimensions (shape) of our inputs {4, 1} & targets {1}. Basically, we have to start somewhere:
+So as our predictions are made, the parameter values will change, but we need to start off with some initial values for them. The initial values have to match the dimensions (shape) of our inputs {4, 1} & targets {1}. Basically, we have to start somewhere:
 
 ```elixir
 defmodule LinReg do
