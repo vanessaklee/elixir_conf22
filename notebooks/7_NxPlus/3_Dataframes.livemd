@@ -8,7 +8,7 @@ Mix.install([
 
 ## Goal
 
-To gain an understand of and experience with dataframes in Explorer.
+To gain an understanding of and experience with dataframes in Explorer.
 
 Credit: this notebook is influenced by examples in the [Explorer repo](https://github.com/elixir-nx/explorer/tree/main/notebooks).
 
@@ -230,7 +230,7 @@ df2 = DataFrame.select(df, ["petal_length", "sepal_length"])
 DataFrame.join(df1, df2)
 ```
 
-To Explore future, visit the [documentation](https://hexdocs.pm/explorer/Explorer.html).
+To Explore further, visit the [documentation](https://hexdocs.pm/explorer/Explorer.html).
 
 <!-- livebook:{"break_markdown":true} -->
 

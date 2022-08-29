@@ -9,7 +9,7 @@ Mix.install([
 
 ## Goal
 
-To gain an understand of and experience with series in Explorer.
+To gain an understanding of and experience with series in Explorer.
 
 Credit: this notebook is influenced by examples in the [Explorer repo](https://github.com/elixir-nx/explorer/tree/main/notebooks).
 

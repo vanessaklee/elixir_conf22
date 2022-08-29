@@ -21,7 +21,7 @@ Series are one-dimensional.
 
 #### Dataframes
 
-A dataframes is a two-dimensional table. The columns and rows of a dataframe similar to those in databases like SQL.
+A dataframes is a two-dimensional table. The columns and rows of a dataframe are similar to those in databases like SQL.
 
 ## Data
 

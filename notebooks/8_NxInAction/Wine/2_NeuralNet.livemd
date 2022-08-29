@@ -109,7 +109,7 @@ split = fn d -> Enum.split(d, ceil(count * ratio)) end
 #### Define the Model
 
 1. Epochs - how many training iterations to take over the dataset
-2. Optimzer - function used to update weights and biases (hyperparameters)
+2. Optimizer - function used to update weights and biases (hyperparameters)
 3. Loss - how best to measure **loss** (distance between prediction & target)
 4. Metric (optional) - choose metric to measure model's performance
 5. Learning rate (optional) - size of the optimization step at each iteration

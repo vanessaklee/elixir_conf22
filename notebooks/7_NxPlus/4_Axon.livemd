@@ -81,9 +81,9 @@ Neural Networks concepts in Axon.
 
 An activation function decides whether a neuron should be activated or not. This means that it will decide whether the neuron’s input to the network is important or not in the process of prediction. The role of the Activation Function is to derive output from a set of input values fed to a layer.
 
-The Activation Functions are typically divided into 2 types: linear and non-linear. A linear function graphs as a line; a non-linear graphs as a non-line or curve. Non-linear activation function are more popular because they make it easy for the model to generalize or adapt to a variety of data.
+The Activation Functions are typically divided into 2 types: linear and non-linear. A linear function graphs as a line; a non-linear graphs as a non-line or curve. Non-linear activation functions are more popular because they make it easy for the model to generalize or adapt to a variety of data.
 
-The activation function helps the neural network to use important data points and supress irrelevant ones.
+The activation function helps the neural network to use important data points and suppress irrelevant ones.
 
 Axon provides options for activation: `:linear`, `:sigmoid`, `:tanh`, `:relu`, and more.
 
@@ -91,7 +91,7 @@ Axon provides options for activation: `:linear`, `:sigmoid`, `:tanh`, `:relu`, a
 
 ##### Linear
 
-With linear activation function the activation is proportional to the input. The function doesn't do anything to the weighted sum of the input, it simply passes on the input it was given.
+With a linear activation function the activation is proportional to the input. The function doesn't do anything to the weighted sum of the input, it simply passes on the input it was given.
 
 ![](images/linear_activation.png)
 
@@ -105,7 +105,7 @@ Maps logistic or multinomial regression output to probabilities, returning a val
 
 ##### Tanh
 
-Similar to sigmoid in shape, but with the advantage that the negative inputs will be mapped strongly negative and the zero inputs will be mapped near zero in the tanh graph. Its mainly used classification between two classes. Usually used in hidden layers of a neural network because it helps in centering the data and makes learning for the next layer much easier.
+Similar to sigmoid in shape, but with the advantage that the negative inputs will be mapped strongly negative and the zero inputs will be mapped near zero in the tanh graph. It is mainly used in classifying between two classes. Usually used in hidden layers of a neural network because it helps in centering the data and makes learning for the next layer much easier.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -127,7 +127,7 @@ The softmax activation function takes in a vector of raw outputs of the neural n
 
 ### Layers
 
-Axon's `dense` is a functional implementation of a dense layer. It performs linear transformation on the input. It takes these paramters in these shapes:
+Axon's `dense` is a functional implementation of a dense layer. It performs linear transformation on the input. It takes these parameters in these shapes:
 
 * `input` - `{batch_size, * input_features}`
 * `kernel` - `{input_features, output_features}`
@@ -145,7 +145,7 @@ Since `kernel` and `bias` are typically learnable parameters, they are trained u
 
 A gradient method is a type of algorithm to solve problems of form, in our class a slope. In this lesson we will see use a gradient descent method to determine the loss function.
 
-Gradient descent is used to find the minimum value for a function. You begin with randam values for the parameters and then take small steps in the direction of the slope at each iteration.
+Gradient descent is used to find the minimum value for a function. You begin with random values for the parameters and then take small steps in the direction of the slope at each iteration.
 
 Typically you will call `dense/3` in a pipe, like this:
 

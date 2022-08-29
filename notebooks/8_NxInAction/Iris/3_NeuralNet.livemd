@@ -61,7 +61,7 @@ split = fn d -> Enum.split(d, ceil(count * ratio)) end
 #### Define the Model
 
 1. Epochs - how many training iterations to take over the dataset
-2. Optimzer - function used to update weights and biases (hyperparameters)
+2. Optimizer - function used to update weights and biases (hyperparameters)
 3. Loss - how best to measure **loss** (distance between prediction & target)
 4. Metric (optional) - choose metric to measure model's performance
 5. Learning rate (optional) - size of the optimization step at each iteration
@@ -82,7 +82,7 @@ input_name = "Iris Features"
 model = Axon.input(input_name, shape: input_shape)
 ```
 
-Note the parameters at this point require 0 bytes of memory. That is because there are no layers to neural network. Before we add one, run the model in this state.
+Note the parameters at this point require 0 bytes of memory. That is because there are no layers to the neural network. Before we add one, run the model in this state.
 
 ```elixir
 model
@@ -90,7 +90,7 @@ model
 |> Axon.Loop.run(train_set, %{}, epochs: epochs)
 ```
 
-Notice the loss. It stays the roughly the same each epoch. This is because we aren't doing any actual learn.
+Notice the loss. It stays roughly the same each epoch. This is because we aren't doing any actual learning.
 
 Each layer in a neural network helps the network learn accurate representations of the input data. Without learning, the model performs badly.
 
@@ -98,7 +98,7 @@ Each layer in a neural network helps the network learn accurate representations 
 
 ##### Add a layer
 
-Pipe it afer the input and provide a `unit` to specify the number of output units. We'll start with 1.
+Pipe it after the input and provide a `unit` to specify the number of output units. We'll start with 1.
 
 ```elixir
 model =
@@ -114,7 +114,7 @@ model
 |> Axon.Loop.run(train_set, %{}, epochs: epochs)
 ```
 
-Much improved! In this run, our loss dropped consistently from on epoch to the next.
+Much improved! In this run, our loss dropped consistently from one epoch to the next.
 
 Add another layer.
 
@@ -170,7 +170,7 @@ model
 |> Axon.Loop.run(train_set, %{}, epochs: epochs)
 ```
 
-### Experiement with Activation
+### Experiment with Activation
 
 Try: `:linear`, `:sigmoid`, `:tanh`, and `:relu`.
 
