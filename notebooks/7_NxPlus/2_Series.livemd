@@ -15,9 +15,7 @@ Credit: this notebook is influenced by examples in the [Explorer repo](https://g
 
 ## Series
 
-In `Pandas`, a `Series` is like a column in a table, a one-deimensional array capable of holding data. In `Polars`, the Rust/Python DataFrame library, a `Series` is a single column in a DataFrame.
-
-Similarly in `Explorer` A `DataFrame` is a row-aligned map of `Series`. `Series` can have the following `dtypes`:
+Explorer's dataframes are like row-aligned maps of series. Series can have the following `dtypes`:
 
 * `:float` - 64-bit floating point number
 * `:integer` - 64-bit signed integer
@@ -28,7 +26,7 @@ Similarly in `Explorer` A `DataFrame` is a row-aligned map of `Series`. `Series`
 
 <!-- livebook:{"break_markdown":true} -->
 
-##### Make One
+##### Make a series
 
 `Series` can be made from Elixir basic types. The `dtype` and size of the `Series` can be seen at the top of the output.
 
@@ -46,20 +44,18 @@ s2 = Series.from_list(["a", "b", "c"])
 s3 = Series.from_list([~D[2011-01-01], ~D[1965-01-21]])
 ```
 
-The printed values are limited to the first 50.
-
-```elixir
-Series.from_list(Enum.to_list(1..100))
-```
-
-Get only the specific details like `size` and `dtype` like this:
-
 ```elixir
 Series.size(s3)
 ```
 
 ```elixir
 Series.dtype(s3)
+```
+
+Printed values are limited to the first 50.
+
+```elixir
+Series.from_list(Enum.to_list(1..100))
 ```
 
 #### Nullability
@@ -92,11 +88,7 @@ Series.from_list([1, 2.0, 4, 5, 1.7])
 
 #### Access
 
-`Series` implements the `Access` protocol. You can slice and dice in many ways:
-
-```elixir
-s1
-```
+`Series` implements the `Access` protocol.
 
 ```elixir
 s1[1]
@@ -114,9 +106,7 @@ s1[0..4]
 s1[[0, 4, 4]]
 ```
 
-#### Flip Flop
-
-Reverse a `Series` or convert it to an Elixir list.
+#### Change things around
 
 ```elixir
 Series.to_list(s1)
@@ -126,7 +116,7 @@ Series.to_list(s1)
 Series.reverse(s1)
 ```
 
-You can sort.
+Get your series in order:
 
 ```elixir
 1..100 |> Enum.to_list() |> Enum.shuffle() |> Series.from_list() |> Series.sort()
@@ -139,15 +129,13 @@ s = 1..100 |> Enum.to_list() |> Enum.shuffle() |> Series.from_list()
 ids = Series.argsort(s)
 ```
 
-And take only what you want.
+Take only what you need.
 
 ```elixir
 Series.take(s, ids)
 ```
 
 #### Comparison
-
-Compare `Series`
 
 ```elixir
 s4 = Series.reverse(s1)
@@ -168,8 +156,6 @@ Series.greater_equal(s1, 4)
 ```
 
 #### Arithmetic
-
-Support for arithmatic such as addition, subtraction, multiplication, and division.
 
 ```elixir
 Series.add(s1, s4)
@@ -192,14 +178,7 @@ Series.divide(s5, 5)
 Calculate cumulative values.
 
 ```elixir
-s = 1..100 |> Enum.to_list() |> Series.from_list()
-Series.cumulative_sum(s)
-```
-
-Rolling values.
-
-```elixir
-Series.window_sum(s, 4)
+Series.cumulative_sum(s5)
 ```
 
 Count and list unique values.
@@ -219,7 +198,7 @@ And you can even get a dataframe showing the counts for each distinct value.
 Series.count(s)
 ```
 
-Which is a good time to move our focus to DataFrames in the next lesson.
+Which leads us to dataframes in the next lesson.
 
 <!-- livebook:{"break_markdown":true} -->
 
