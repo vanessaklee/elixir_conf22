@@ -1,9 +1,154 @@
-# Machine Learning / Statitics
+# Statistics Crash Course
+
+```elixir
+Mix.install([])
+```
 
 ## Goal
 
-TODO what is the goal of the Statistics and Linear Regression lesson
+After going over some machine learning algorithms we will take a brief detour into statistics and probability - two core ideas underpinning machine learning. We'll first build up some probabilistic intuition, briefly touch on some real world examples, and end by testing our skills at gambling.
 
-### Introduction
+<!-- livebook:{"break_markdown":true} -->
 
-The Basics of Statistics
+<hr style="background-color: #800080;height: 5.0px;" />
+
+<img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
+
+##### Key Ideas
+
+* Given a set of probabilities each, when added together, must equal one.
+* Probabilities must be non-negative.
+* Mean is the summation of observations divided by the number of observations.
+* Standard deviation is a measure of how spread out our values are from the mean.
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+## Statistical Learning
+
+We hear a lot about machine learning being the subject of "allowing computers to learn without being explicity programmed". But what does that mean? Broadly speaking, it means given one or more inputs we want to build a model that predicts, or estimates, an output. To correctly predict a model uses probability and statistics to infer patterns and relationships from data – collectively this is known as statistical learning which encompasses a vast array of tools for *understanding data*.
+
+### Examples
+
+As humans we ourselves can infer ideas and concepts from data easily. If I mentioned what’s the probability of getting tails from flipping a fair coin, you would say 50%. If I asked you the chance the sun would rise tomorrow you would say 100% (at least, we hope so). However, humans are also very good at tricking themselves into assuming past events to continue into the future. In many cases this is an evolutionary necessity, but it also makes us very poor gamblers.
+
+Let’s look at more complex scenarios:
+
+Every week you play a lottery game where you choose 4 numbers between 1 to 80 and your friends give you the advice of:
+
+```
+a.  Chose two even and two odd numbers
+b.  Calculate the average and pick 4 numbers not too far away
+c.  Pick a high number, middle number, and low number
+d.  Doesn’t matter which numbers you pick – it’s just luck
+```
+
+For example, you have flipped a fair coin 9 times and it has landed on tails 9 times in a row – what is the probability the next flip will be tails?
+
+```
+a. 10% (1/10)
+b. 100%
+c. 20%
+d. 50%
+```
+
+(**Optional**) You’re a contestant on a game show and you’re presented with 3 doors – two of which have goats, one of which has a car. Let’s say you choose door 1. Before the gameshow host opens your selected door, they open door number 3, revealing a goat. They now give you the choice: keep your original choice or choose door number 2. What do you do? Why?
+
+```
+a.  Keep your original door
+b.  Choose door number 2
+```
+
+## Challenger Disaster
+
+The above set of examples demonstrate the counterintuitive world that can be demonstrated with statistical and probabilistic analysis. Although illustrative the problems exist in an abstract domain – so let’s look at the impacts of statistical analysis in the real world.
+
+The Challenger disaster was a fatal space shuttle failure on January 28, 1986. The Space Shuttle Challenger broke apart in 73 seconds killing all crew members and lead to a large-scale investigation of NASA’s space program. In the end it was determined that the O-rings of the solid rocket booster failed due to cold weather temperatures. So how could NASA have known this was an issue? Well, let’s explore historical shuttle failure in cold weather with statistics.
+
+![](images/oring_failure_nasa_commission.png)
+
+The above image shows the number of incidents with shuttles in relation to the weather during the day of the launch. We can display the above data in a scatterplot to get a better sense of what we're dealing with.
+
+![](images/oring_failure_scatterplot.png)
+
+What does this data tell us? Well, we can see some cold weather incidents but really it doesn’t seem so dramatic. So, what happens if we apply some statistical methods – can we see more correlation with O-ring failure and cold weather? For this example, we’ll use a type of regression analysis called logistic regression.
+
+Without getting too deep into the detail’s regression analysis tells us how much impact variables have on outcomes. In our case we want to know just how impactful weather is on O-ring failure. Further, we’re using logistic regression because we’re using qualitative data to represent solid rocket booster failure. If we were to use a quantitative method, like linear regression, it would assume there is a numerical importance of 1 = “failure” and 0 = “no failure”. But this is an arbitrary assignment with no numerical significance. Let’s see what plugging this data into a logistic regression model gets us.
+
+![](images/oring_failure_logistic.png)
+
+Here we have a clearer picture of O-ring – we can see a sharp increase of failure that is evident as the temperature decreases. Essentially for every one degree decrease in temperature increases the odds of failure by 0.84. At the time of the Challenger launch the temperature was 31 degrees F and while that’s well below our data we have on hand we can be confident that the failure rate would only increase. In fact, if they were to tell you they were launching in 31 degree weather with this dataset in front of you, your heart would skip a beat!
+
+## Montecarlo Simulation
+
+So now that we've tested our intuition and seen a real world scenario let's explore probabilities by working with some simulations. The below code simulates an American roulette wheel where we only focus on placing bets and red or black. Our goal, assuming we can borrow as much money as we want, is to always end up winning $80 within 1000 spins. Is this possible? Will we always win? How many spins on average will it take?
+
+To explore this idea we'll use a technique called a Monte Carlo simulation - where the idea is to run a simulation over and over again with randomized input and assess the results in the aggregate. Each simulation plays one round (or epoch) of 1000 spins and it's currently set to 3. Try running the code and see what happens. Maybe try increasing to 200 or 1000 epochs. What do you notice?
+
+```elixir
+defmodule MonteCarlo do
+  def get_spin_results(win_prob) do
+    :rand.uniform() <= win_prob
+  end
+
+  def play_round(episode_winnings, bet_amount \\ 1, count \\ 0) do
+    black_wager_prob = 0.4739
+    won = get_spin_results(black_wager_prob)
+
+    if won do
+      episode_winnings = episode_winnings + bet_amount
+      [episode_winnings, count]
+    else
+      episode_winnings = episode_winnings - bet_amount
+      bet_amount = bet_amount * 2
+      count = count + 1
+
+      play_round(episode_winnings, bet_amount, count)
+    end
+  end
+
+  def new_spin(episode_winnings, spins \\ 0, finished \\ false) do
+    if spins > 1000 do
+      episode_winnings
+    else
+      spins = spins + 1
+
+      if episode_winnings == 80 do
+        if not finished do
+          IO.inspect("Number of spins to reach $80 in winnings: #{spins}")
+        end
+
+        new_spin(episode_winnings, spins, true)
+      else
+        [winnings, count] = play_round(episode_winnings)
+        spins = spins + count
+        new_spin(winnings, spins)
+      end
+    end
+  end
+
+  def idealized_martingale_simulation(episodes) do
+    if episodes >= 0 do
+      new_spin(0, 0)
+      new_episode = episodes - 1
+      idealized_martingale_simulation(new_episode)
+    end
+  end
+end
+
+## Running relevant simulations here
+MonteCarlo.idealized_martingale_simulation(3)
+```
+
+You may have noticed that the number of spins land roughly between 140 - 190. In fact, if we take the mean of 4 epochs that randomly output 133, 157, 160, and 168 we get 154.5. Remember the mean is the summation of all inputs divided by the total number of observations. Below is a graph of 10 simulations of 1000 spins, from this we can observe that we usually converge to $80 around the 150(ish) spin mark.
+
+![](images/monte_carlo.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Further we can examine the mean and the standard deviation above and below the mean. What's interesting is that our values do not stabilize - sometimes we reach 80 quickly and sometimes we dive into an unbounded negative. However, most telling is that all three values converge upon $80 which gives us further confidence in our gambling abilities.
+
+![](images/monte_carlo_std.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Overall this is a suprising result - our strategy of always betting on black allows us, with some unlimited constraints, to always beat the house. Further, we typically reach our goal well within the 1000 spins that we've limited ourselves to. In fact we would be able to reach the same performance in under 250 spins.
