@@ -63,7 +63,7 @@ In Axon, that means making decisions about:
 
 ##### Epochs
 
-An epoch refers to one complete pass of the training data through the algorithm. It is  a hyperparameter. The maximum epochs to run the Axon loop for. Must be a non-negative integer (default is 1).
+An epoch refers to one complete pass of the training data through the algorithm. It is a hyperparameter. The maximum epochs to run the Axon loop for. Must be a non-negative integer (default is 1).
 
 <!-- livebook:{"break_markdown":true} -->
 

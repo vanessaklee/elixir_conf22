@@ -67,9 +67,7 @@ In modern applications of neural networks both the rectified linear unit (ReLU) 
 Time for some Elixir
 </span>
 
-<span style="width: 85px; float: left; margin-right: 40px;">
-![](images/brain.png)
-</span>
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
 
 Let's get some fingers on the keyboard and explore a simple neural network.
 

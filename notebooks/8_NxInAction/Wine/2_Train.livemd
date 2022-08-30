@@ -16,8 +16,8 @@ Mix.install([
 
 ## The Plan
 
-1. Define the problem
-2. Prepare the data
+1. ~~Define the problem~~
+2. ~~Prepare the data~~
 3. Evaluate the algorithms
 4. Choose the model
 5. Enhance the model

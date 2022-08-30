@@ -153,10 +153,8 @@ To train a model, data scientists split their dataset into two categories: "in s
 Time for some Elixir
 </span>
 
-<span style="width: 85px; float: left; margin-right: 40px;">
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
 
-</span>
-![](images/brain.png)
 Let's get some fingers on the keyboard and explore an Elixir library.
 
 [Gibran](https://github.com/abitdodgy/gibran) is an early Elixir library that experimented with natural language processor. It can convert a string into a list of tokens using different strategies.
@@ -194,7 +192,9 @@ How could this library be of use in your ML tasks?
 <span style="width: 30px; float: left; margin-right: 30px;">
 
 </span>
+
 ![](images/caution.png)
+
 <span style="font-size: 16px; font-style: italic;">
 It is easy to think that more data is better because more data generally leads to increased accuracy but it also leads to decreased performance and difficulty in visualizing the data.
 </span>

@@ -54,9 +54,7 @@ Both linear and logistic regression are among the most popular algorithms within
 Time for some Elixir
 </span>
 
-<span style="width: 85px; float: left; margin-right: 40px;">
-![](images/brain.png)
-</span>
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-bottom: 40px; margin-right: 20px;" />
 
 Story Time. Let's use our imagination to understand what regression means and how it is useful.
 

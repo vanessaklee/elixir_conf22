@@ -286,7 +286,7 @@ First, get the features from the `feature_set`:
 features = DataFrame.names(feature_set)
 ```
 
-Enumerate over that lis and inspect the name on each iteration.
+Enumerate over that list and inspect the name on each iteration.
 
 ```elixir
 features

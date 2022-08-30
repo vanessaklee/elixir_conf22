@@ -52,7 +52,7 @@ Reinforcement Learning isn't the best choice if the cost of using trial and erro
 Time for some Elixir
 </span>
 
-<span style="width: 85px; float: left; margin-right: 40px;">![](images/brain.png)</span>
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-bottom: 10px; margin-right: 20px;" />
 
 Take a break and explore an Elixir library called [Essense](https://github.com/nicbet/essence). It is a Natural Language Processing (NLP) and Text Summarization Library. NLP brings together the fields of linguistics and AI to explore how computers can understand text and spoken words like human beings can.
 
@@ -60,74 +60,64 @@ To make the most of this library we need a document. For ours we'll use [Req](ht
 
 Essense provides a convenience method for reading the plain text.
 
-```
-
+```elixir
 doc =
   "https://www.gutenberg.org/files/1952/1952-0.txt"
   |> Req.get!()
   |> Map.get(:body)
   |> Essence.Document.from_text()
-
 ```
 
 Take a look at how many tokens are contained in the story:
 
-```
-
+```elixir
 doc |> Essence.Document.enumerate_tokens() |> Enum.count()
-
 ```
 
 Grab the first sentence.
 
-```
-
+```elixir
 doc |> then(fn d -> Essence.Document.sentence(d, 0) end)
-
 ```
 
 We can compute the frequency distribution of the tokens:
 
-```
-
+```elixir
 fd = doc |> Essence.Vocabulary.freq_dist()
-
 ```
 
 Essence can tell us the unique set of dictionary words in the story, called the `Vocabulary`:
 
-```
-
+```elixir
 vocabulary = doc |> Essence.Vocabulary.vocabulary()
-
 ```
 
 The top 10 most frequently occurring tokens:
 
-```
-
+```elixir
 top_tokens =
   vocabulary
   |> Enum.sort_by(fn x -> Map.get(fd, x) end, &>=/2)
   |> Enum.slice(1, 10)
-
 ```
 
 Get the diversity of the vocabulary using Essense's lexical richness. It is the number of tokens divided by the size of the vocabulary above.
 
-```
-
+```elixir
 doc |> Essence.Vocabulary.lexical_richness()
-
 ```
 
 Get a concordance view of 'wallpaper'; note it doesn't match on 'wallpaper' as it is matching on tokens. Try other words.
 
-```
-
+```elixir
 doc |> Essence.Document.concordance("paper")
-
 ```
+
+##### Challenge
+
+What would you add to this library? How could it be of use to you in your current projects? Could you do sentiment analysis on only the most frequent words in your customer communication or GitHub PRs? Could the concordance feature give you a sense for what words appear near high frequency words?
+
+<!-- livebook:{"break_markdown":true} -->
 
 ##### Challenge
 
@@ -139,9 +129,6 @@ What would you add to this library? How could it be of use to you in your curren
 
 <!-- livebook:{"break_markdown":true} -->
 
-<!-- livebook:{"break_markdown":true} -->
-
 [<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](3_Unsupervised.livemd)
 
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next chapter: Statistics></span>](../2_Statistics/1_Intro.livemd)
-```

@@ -28,10 +28,6 @@ Axon has 4 main components:
 * Optimization API – An API for creating and using first-order optimization techniques.
 * Training API – An API for quickly training models.
 
-<!-- livebook:{"break_markdown":true} -->
-
-
-
 ## Defining the Model
 
 Axon enters our machine learning process when we have already preprocessed our data and are ready to train a model.
@@ -67,11 +63,11 @@ model
 
 ## Prediction
 
-Once you have the parameters from the training step, you can use them to make predictions using `Axon.predict`:
+```elixir
+Axon.predict(model, params, first_batch)
+```
 
-````
-Axon.predict(model, params, first_batch)```
-````
+Once you have the parameters from the training step, you can use them to make predictions using `Axon.predict`:
 
 ## Concepts
 

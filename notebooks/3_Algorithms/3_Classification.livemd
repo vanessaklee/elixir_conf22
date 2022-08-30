@@ -43,15 +43,9 @@ A naive bayes model uses probability to classify objects based on features. It i
 Time for some Elixir
 </span>
 
-<span style="width: 85px; float: left; margin-right: 40px;">
-![](images/brain.png)
-</span>
+<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-bottom: 10px; margin-right: 20px;" />
 
-Let's learn about an Elixir library.
-
-[Paasaa](https://github.com/minibikini/paasaa) is Natural language detection for Elixir.
-
-To make the most of this library we need a few documents. Use [Req](https://github.com/wojtekmach/req) to get them from Project Gutenburg.
+[Paasaa](https://github.com/minibikini/paasaa) is Natural language detection for Elixir. To make the most of this library we need a few documents. Use [Req](https://github.com/wojtekmach/req) to get them from Project Gutenburg.
 
 Use the Essense library we explored in an earlier section to read the plain text.
 
