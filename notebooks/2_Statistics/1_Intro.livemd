@@ -18,8 +18,10 @@ After going over some machine learning algorithms we will take a brief detour in
 
 * Given a set of probabilities each, when added together, must equal one.
 * Probabilities must be non-negative.
-* Mean is the summation of observations divided by the number of observations.
-* Standard deviation is a measure of how spread out our values are from the mean.
+* *Mean* is the summation of observations divided by the number of observations.
+* *Standard deviation* is a measure of how spread out our values are from the mean.
+* *Quantitative data* is data that can be numerical measured (income, height, price of a stock.)
+* *Qualitative data* is data that is categorized (married, not married, list of products.)
 
 <hr style="background-color: #800080;height: 5.0px;" />
 
