@@ -22,6 +22,8 @@ After going over some machine learning algorithms we will take a brief detour in
 * *Standard deviation* is a measure of how spread out our values are from the mean.
 * *Quantitative data* is data that can be numerical measured (income, height, price of a stock.)
 * *Qualitative data* is data that is categorized (married, not married, list of products.)
+* Quantitative is usually referred to as *regression problems*
+* Qualitative is usually referred to as *classification problems*
 
 <hr style="background-color: #800080;height: 5.0px;" />
 
