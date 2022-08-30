@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:vega_lite, "~> 0.1.5"},
+  {:vega_lite, "~> 0.1.6"},
   {:kino_vega_lite, "~> 0.1.1"},
   {:nx, "~> 0.2.1"}
 ])
@@ -71,46 +71,57 @@ Here we have a clearer picture of O-ring – we can see a sharp increase of fail
 
 ## Montecarlo Simulation
 
-
-
 ```elixir
-def idealized_martingale_simulation(episodes) do
-  episodic_winnings = Nx.tensor([0, 1000])
+defmodule MonteCarlo do
+  def get_spin_results(win_prob) do
+    :rand.uniform() <= win_prob
+  end
+
+  def play_round(episode_winnings, bet_amount \\ 1, count \\ 0) do
+    black_wager_prob = 0.4739
+    won = get_spin_results(black_wager_prob)
+
+    if won do
+      episode_winnings = episode_winnings + bet_amount
+      [episode_winnings, count]
+    else
+      episode_winnings = episode_winnings - bet_amount
+      bet_amount = bet_amount * 2
+      count = count + 1
+
+      play_round(episode_winnings, bet_amount, count)
+    end
+  end
+
+  def new_spin(episode_winnings, spins \\ 0, finished \\ false) do
+    if spins > 1000 do
+      episode_winnings
+    else
+      spins = spins + 1
+
+      if episode_winnings == 80 do
+        if not finished do
+          IO.inspect("Number of spins to reach $80 in winnings: #{spins}")
+        end
+
+        new_spin(episode_winnings, spins, true)
+      else
+        [winnings, count] = play_round(episode_winnings)
+        spins = spins + count
+        new_spin(winnings, spins)
+      end
+    end
+  end
+
+  def idealized_martingale_simulation(episodes) do
+    if episodes >= 0 do
+      new_spin(0, 0)
+      new_episode = episodes - 1
+      idealized_martingale_simulation(new_episode)
+    end
+  end
 end
 
-# def idealized_martingale_simulation(episodes):
-#     episodic_winnings = np.empty(shape=(0, 1000))
-
-# while episodes > 0:
-#     number_of_spins = 0
-#     winnings = np.empty((0, 1000))
-#     episode_winnings = 0
-#     episodes -= 1
-
-#     # 1000 spins = 1 episode
-#     while number_of_spins < 1000:
-#         won = False
-#         bet_amount = 1
-
-#         if episode_winnings == 80:
-#             number_of_spins += 1
-#             winnings = np.append(winnings, episode_winnings)
-#             continue
-
-#         while not won:
-#             black_wager_prob = 0.4739
-#             won = get_spin_result(black_wager_prob)
-#             number_of_spins += 1
-
-#             if won == True:
-#                 episode_winnings = episode_winnings + bet_amount
-#             else:
-#                 episode_winnings = episode_winnings - bet_amount
-#                 bet_amount = bet_amount * 2
-
-#             winnings = np.append(winnings, episode_winnings)
-
-#     episodic_winnings = np.vstack((episodic_winnings, winnings))
-
-# return episodic_winnings
+## Running relevant simulations here
+MonteCarlo.idealized_martingale_simulation(3)
 ```
