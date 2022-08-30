@@ -32,11 +32,11 @@ Clustering analyzes and clusters data into the most common topics. That means yo
 
 Additional applications unsupervised learning include:
 
-- anomaly detection
-- social network analysis
-- recommending new groups after discovering what groups to which an object belongs
-- discovering products likely to be purchased together
-- topic analysis
+* anomaly detection
+* social network analysis
+* recommending new groups after discovering what groups to which an object belongs
+* discovering products likely to be purchased together
+* topic analysis
 
 ![](images/anomoly_detection.png)
 
@@ -46,11 +46,11 @@ While unsupervised learning has many benefits, some challenges can occur when it
 
 Other challenges include:
 
-- longer training times
-- large datasets lead to computational complexity
-- greater risk of inaccurate results
-- human required to validate output variables
-- no insight into the basis on which data was clustered
+* longer training times
+* large datasets lead to computational complexity
+* greater risk of inaccurate results
+* human required to validate output variables
+* no insight into the basis on which data was clustered
 
 ## Unsupervised & Semi-supervised Learning
 

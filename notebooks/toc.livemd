@@ -38,7 +38,7 @@
          2. [Train](8_NxInAction/Titanic/2_Train.livemd)
       3. Wine
          1. [Data](8_NxInAction/Wine/1_Data.livemd)
-         2. [Neural Networks](8_NxInAction/Wine/2_NeuralNet.livemd)
+         2. [Train](8_NxInAction/Wine/2_Train.livemd)
 9. <span style="color: #800080; font-size: 24px; font-weight: bold;">What's Next for Nx?</span>
    1. [ML in Production](9_WhatsNext/1_Prod.livemd)
    2. [Future](9_WhatsNext/2_Future.livemd)

@@ -11,7 +11,7 @@ Mix.install([
 
 ## Goal
 
-This lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+This lesson will provide a brief introduction to classification algorithms in machine learning to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
 
 ## Overview
 
@@ -39,11 +39,13 @@ A naive bayes model uses probability to classify objects based on features. It i
 
 ## Brain Break!
 
-<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+<span style="color: #800080; font-size: 24px; font-weight: bold;">
 Time for some Elixir
 </span>
 
-<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+<span style="width: 85px; float: left; margin-right: 40px;">
+![](images/brain.png)
+</span>
 
 Let's learn about an Elixir library.
 

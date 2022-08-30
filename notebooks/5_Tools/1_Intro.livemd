@@ -1,4 +1,4 @@
-# Machine Learning / Traditional Tools
+# Machine Learning / Tools
 
 ## Goal
 

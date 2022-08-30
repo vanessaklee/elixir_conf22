@@ -8,13 +8,15 @@ Mix.install([
 
 ## Goal
 
-After an introduction to machine learning we will define, train, and test a machine learning model using a publicly available dataset. We will then employ the model to make predictions. This lesson serves as an introduction to and an overview of machine learning.
+This lesson serves as an introduction to and an overview of machine learning.
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### Introduction
 
 Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the process by which machines improve their performance without explicit programming. Machines discover patterns, are able to make predictions and get better over time with exposure to data. In some types of machine learning these predictions can become increasingly accurate over time without human intervention. Historical data is given as training input. Through training and testing, the machine learning algorithms are able to predict new, unseen output values.
+
+<!-- livebook:{"break_markdown":true} -->
 
 #### Common Uses
 
@@ -31,7 +33,7 @@ Machine Learning (ML) is a type of Artificial Intelligence (AI) and is the proce
 
 ### Types of Machine Learning
 
-Machine learning types are broken down by how an algorithm learns prediction accuracy. The practice of Machine Learning means knowing the right question to ask and how to choose the algorithm based on the type of data you want to predict.
+Machine learning types are broken down by how an algorithm learns prediction accuracy. The practice of machine learning means knowing the right question to ask and how to choose the algorithm based on the type of data you want to predict.
 
 There are three main types of machine learning
 
@@ -39,18 +41,22 @@ There are three main types of machine learning
 * Unsupervised learning
 * Reinforcement learning
 
-We will cover each of the 3 types in the next section.
+We will cover each of them in the next section.
 
 <!-- livebook:{"break_markdown":true} -->
 
 ### How it Works
 
-A supervised learning system has a data flow that looks like this:
+The goal of ML is to make a **prediction**. Once a prediction is made it is compared to the **ground truth** (the expected result).
+
+The **loss function** gives a quantity to the distance between the prediction and the ground truth.
+
+Here is a sample worksflow of a supervised learning system:
 
 <!-- livebook:{"break_markdown":true} -->
 
 ```mermaid
-graph TD;
+flowchart TD;
   ML{{Supervised Machine Learning}}-->TRN([TRAINING]);
   ML-->TST[TESTING];
   TRN-->In([Input training dataset]);
@@ -62,22 +68,15 @@ graph TD;
   TST-->UD[New, unseen input data];
   UD-->M;
   M-->P[[Prediction, a.k.a best guess]]
-
+  style ML fill:#B7D7EB,stroke:#000,color:#000,stroke-width:2px
+  style TRN fill:#aaa,stroke:#000,color:#000,stroke-width:4px
+  style In fill:#fff,stroke:#000,color:#000,stroke-width:2px, stroke-dasharray: 5 5
+  style TST fill:#aaa,stroke:#019EFE,color:#000,stroke-width:4px
+  style UD fill:#fff,stroke:#019EFE,color:#000,stroke-width:2px, stroke-dasharray: 5 5
+  style M fill:#bbf,stroke:#808,color:#000,stroke-width:4px
+  style P fill:#fff,stroke:#808,color:#000,stroke-width:4px
+  style GT stroke-dasharray: 5 5
 ```
-
-<!-- livebook:{"break_markdown":true} -->
-
-Most supervised machine learning can be divided as either **Classification** or **Regression**.
-
-The goal of ML is to make a **prediction**.
-
-Once a prediction is made it is compared to the **Ground Truth** (the expected result).
-
-The **Loss Function** gives a quantity to the distance between the prediction and the ground truth.
-
-Regression algorithms typically use Mean Square Error (MSE), which determines loss as the average squared difference between the prediction and the ground truth.
-
-Classification algorithms typically use Cross Entropy Loss (aka softmax), which measures loss as the difference between probabilities that a model assigns to classes.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -112,6 +111,14 @@ Examples of well-known algorithms are:
 
 <!-- livebook:{"break_markdown":true} -->
 
+Most supervised machine learning is either **classification** or **regression**.
+
+Classification algorithms typically use Cross Entropy Loss (aka softmax), which measures loss as the difference between probabilities that a model assigns to classes.
+
+Regression algorithms typically use Mean Square Error (MSE), which determines loss as the average squared difference between the prediction and the ground truth.
+
+<!-- livebook:{"break_markdown":true} -->
+
 ![](images/decision_tree.png)
 
 <span style="float: right; font-size: 12px;">
@@ -134,7 +141,7 @@ Examples include machine learning models that can be used for natural language p
 
 Model training is the process of running a machine learning algorithm on a dataset and optimizing the algorithm to find patterns. The data set is referred to as the training data. The result is the model; a function made of rules and data structures.
 
-To train a model, data scientists split their dataset into two categories: "in sample" and "out of sample". The split is generally 70% training, 30% testing. The model is trained on the in sample training set and then tested on how accurately it can make predictions on the out of sample testing set. 
+To train a model, data scientists split their dataset into two categories: "in sample" and "out of sample". The split is generally 70% training, 30% testing. The model is trained on the in sample training set and then tested on how accurately it can make predictions on the out of sample testing set.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -142,15 +149,17 @@ To train a model, data scientists split their dataset into two categories: "in s
 
 ## Brain Break!
 
-<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+<span style="color: #800080; font-size: 24px; font-weight: bold;">
 Time for some Elixir
 </span>
 
-<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+<span style="width: 85px; float: left; margin-right: 40px;">
 
+</span>
+![](images/brain.png)
 Let's get some fingers on the keyboard and explore an Elixir library.
 
-![Gibran](https://github.com/abitdodgy/gibran) is an early Elixir library that experimented with natural language processor. It can convert a string into a list of tokens using different strategies.
+[Gibran](https://github.com/abitdodgy/gibran) is an early Elixir library that experimented with natural language processor. It can convert a string into a list of tokens using different strategies.
 
 ```elixir
 str = "Tomorrow, and tomorrow, and tomorrow, Creeps in this petty pace from day to day"
@@ -180,13 +189,23 @@ How could this library be of use in your ML tasks?
 
 ## Problems in Machine Learning
 
-<img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 95px; float: left; margin-right: 50px;" />
+<hr style="background-color: #EED202; height: 5px;" />
 
+<span style="width: 30px; float: left; margin-right: 30px;">
+
+</span>
+![](images/caution.png)
+<span style="font-size: 16px; font-style: italic;">
 It is easy to think that more data is better because more data generally leads to increased accuracy but it also leads to decreased performance and difficulty in visualizing the data.
+</span>
+
+<hr style="background-color: #EED202;height: 5px;" />
+
+<!-- livebook:{"break_markdown":true} -->
 
 ### Generalization
 
-The goal of Generalization is training a model to make it perform accurately on data it has never seen before. This is what makes machine learning useful in solving everyday problems that require predictions or classification.
+**Generalization** refers to the generalizability of a machine learning model. In otherwords, generalization is the ability of the model to make accurate preditions on data it has never seen before. This is what makes machine learning useful in solving everyday problems that require predictions or classification.
 
 Say you train a model to classify images into two groups: "dogs" or "not dogs". If the dataset you used to train the model contains only two breeds of dogs it may perform very accurately. Will it generalize to a dataset containing more dog breeds? Or one with cats and wolves? Unlikely. In this case you might see the testing dataset with 90% accuracy. That accuracy is likely to drop to the 70s for the other dog breeds and below 40 for the mix of animals.
 
@@ -221,5 +240,7 @@ Underfitting is when a model produces inaccurate prediction outcomes because it 
 ![](images/underfit.png)
 
 <!-- livebook:{"break_markdown":true} -->
+
+[<span style="float: left; color: #800080; font-weight: bold; font-family: FreeMono, monospace">< previous</span>](../toc.livemd)
 
 [<span style="float: right; color: #800080; font-weight: bold; font-family: FreeMono, monospace">next ></span>](2_Supervised.livemd)

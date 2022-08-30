@@ -63,11 +63,13 @@ In modern applications of neural networks both the rectified linear unit (ReLU) 
 
 ## Brain Break!
 
-<span style="color: #800080; font-size:30px; font-weight: bold; font-family: FreeMono, monospace">
+<span style="color: #800080; font-size: 24px; font-weight: bold;">
 Time for some Elixir
 </span>
 
-<img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-right: 40px;" />
+<span style="width: 85px; float: left; margin-right: 40px;">
+![](images/brain.png)
+</span>
 
 Let's get some fingers on the keyboard and explore a simple neural network.
 

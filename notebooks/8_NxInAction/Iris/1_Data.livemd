@@ -166,7 +166,11 @@ There are exactly 50 of each of the three Species features; we have a balanced d
 
 <hr style="background-color: #800080;height: 5.0px;" />
 
-<img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
+<span style="width: 85px; float: right; margin-right: 40px;">
+
+</span>
+
+![](images/brain.png)
 
 ##### Types
 
@@ -238,15 +242,19 @@ train_df = DataFrame.slice(expdf, 0, train_size)
 
 <hr style="background-color: #EED202; height: 5px;" />
 
-<img src="https://static.thenounproject.com/png/1038260-200.png" alt="Caution icon" style="width: 50px; display: block; margin-left: auto; margin-right: auto;" />
+<span style="width: 30px; float: left; margin-right: 30px;">
+
+</span>
+
+![](images/caution.png)
 
 <span style="font-size: 16px; font-style: italic;">
 This is a beginner exercise meant as a warm up to putting the Nx ecosystem into action. You'll note the Iris dataset is very small.This method we are using is not suggested for real world problems since splitting the dataset into a training and testing set reduces the size even more.
 
-Since the goal is to predict iris species using a dataset the model has not seen before, ideally we would have a much larger training and testing set. Remember back in an earlier lesson when we discussed the challenges of machine learning. Here we are at risk of **overfitting** the training data.
-</span>
+Since the goal is to predict iris species using a dataset the model has not seen before, ideally we would have a much larger training and testing set. Remember back in an earlier lesson when we discussed the challenges of machine learning. Here we are at risk of **overfitting** the training data.</span>
 
 <hr style="background-color: #EED202;height: 5px;" />
+</span>
 
 ## Features & Targets
 

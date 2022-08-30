@@ -6,7 +6,4 @@ TODO what is the goal of the Statistics and Linear Regression lesson
 
 ### Introduction
 
-The Basics of Statistics 
-
-
-
+The Basics of Statistics

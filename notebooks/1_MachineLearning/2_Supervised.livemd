@@ -37,10 +37,10 @@ Supervised learning can perform two main tasks:
 
 Other examples include:
 
-- Image and object recognition
-- Predictive analytics
-- Sentiment analysis
-- Fraud and spam detection
+* Image and object recognition
+* Predictive analytics
+* Sentiment analysis
+* Fraud and spam detection
 
 We will go much deeper into Regression and Classification in a later chapter.
 
@@ -58,13 +58,13 @@ Many domains already have a large set of rich training data for training classif
 
 Some of the most commonly used learning methods which will be discussed in more detail over the next lesson include:
 
-- Regression
-- Classification
-- Naive Bayes
-- Decision Trees
-- k Nearest Neighbors
-- Random Forest
-- Boosting
+* Regression
+* Classification
+* Naive Bayes
+* Decision Trees
+* k Nearest Neighbors
+* Random Forest
+* Boosting
 
 We will go over these algorithms in more detail during other lessons.
 

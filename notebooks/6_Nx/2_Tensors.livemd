@@ -195,7 +195,9 @@ pi = Nx.tensor(3.1415, type: {:f, 32})
 ```
 
 <hr style="background-color: #800080;height: 5.0px;" />
+
 <img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
+
 ##### Scalar
 
 A scalar is a real number rather than a vector. It is a quantity having only magnitude, not direction.

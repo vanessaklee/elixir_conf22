@@ -2,7 +2,7 @@
 
 ## Goal
 
-This lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+This lesson will provide a brief introduction to some of the most common unsupervised algorithms in machine learning to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
 
 ## Overview
 
@@ -47,12 +47,12 @@ The K-means algorithm comes with a few difficulties:
 
 #### Uses
 
-- clustering IT alerts
-- optimizing delivery of goods
-- document clustering
-- image segmentation
-- identifying location of police activity
-- call record detail analysis
+* clustering IT alerts
+* optimizing delivery of goods
+* document clustering
+* image segmentation
+* identifying location of police activity
+* call record detail analysis
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -64,8 +64,8 @@ Nodes are compared with one another based on their similarity. Larger groups are
 
 #### Uses
 
-- biological data analysis
-- social network data
+* biological data analysis
+* social network data
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -82,10 +82,10 @@ Time series forecasting models are typically made of these four components:
 
 #### Uses
 
-- forecasting
-  - the spread of COVID-19
-  - the daily generation of wind power
-  - an avalanche in a famous ski resort
+* forecasting
+  * the spread of COVID-19
+  * the daily generation of wind power
+  * an avalanche in a famous ski resort
 
 <!-- livebook:{"break_markdown":true} -->
 

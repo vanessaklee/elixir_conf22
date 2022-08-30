@@ -1,6 +1,6 @@
-# Nx in Action / DIY ML in Elixir
+# Nx in Action / Ask the Right Questions
 
-## Goal
+## Goal: DIY ML in Elixir
 
 > <span style="font-size: 14px; font-style: italic;">"It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility"</span>
 > 

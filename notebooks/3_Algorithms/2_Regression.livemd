@@ -1,4 +1,4 @@
-# Algorithms & Models
+# Machine Learning / Algorithms & Models / Linear Regression
 
 ```elixir
 Mix.install([
@@ -8,7 +8,7 @@ Mix.install([
 
 ## Goal
 
-This lesson will provide a brief introduction to some of the most common machine learning algorithms in order to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
+This lesson will provide a brief introduction to linear regression algorithms in machine learning to understand why they are commonly used. We will also look at how the algorithms solve real-world problems.
 
 ## Overview
 
@@ -48,15 +48,15 @@ Both linear and logistic regression are among the most popular algorithms within
 
 <hr style="background-color: #800080;height: 15.0px;" />
 
-<!-- livebook:{"break_markdown":true} -->
+## Brain Break!
 
-<span style="color: #800080; font-size:50px; font-weight: bold; font-family: FreeMono, monospace">
- Brain Break!
+<span style="color: #800080; font-size: 24px; font-weight: bold;">
+Time for some Elixir
 </span>
 
-<!-- livebook:{"break_markdown":true} -->
-
-<img src="https://static.thenounproject.com/png/506914-200.png" alt="Brain icon" style="width: 95px; float: left; margin-right: 40px;" />
+<span style="width: 85px; float: left; margin-right: 40px;">
+![](images/brain.png)
+</span>
 
 Story Time. Let's use our imagination to understand what regression means and how it is useful.
 
