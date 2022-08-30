@@ -51,7 +51,7 @@ In modern applications of neural networks both the rectified linear unit (ReLU) 
 
 <img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
 
-##### Definitions
+##### Key Ideas
 
 * _Features_ - Input from data that we are interested in as predictors
 * _Weights_ - Values attributed to features which indicates the importance as a predictor
@@ -128,6 +128,26 @@ params =
 As with most things in machine learning, our goal is to minimize the error (or the cost function) of our predictions. As we train our model on the MNIST dataset we can see that the accuracy improves while the error decreases. So, for a few lines of code, we're at approximately 90% accuracy. Not bad! But can we do better?
 
 ## Multilayer Neural Networks
+
+![](images/gradient_descent_equation.png)
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+<img src="https://static.thenounproject.com/png/2212696-200.png" alt="Brain icon" style="width: 85px; float: right; margin-right: 40px;" />
+
+##### Key Ideas
+
+* _Gradient Descent_ - Finding local and global maxima
+  * *"One can visualize standing in a mountainous terrain, and
+    the goal is to get to the bottom through a series of steps. As long as each
+    step goes downhill, we must eventually get to the bottom. In this case we
+    were lucky, because with our starting guess θ 0 we end up at the global
+    minimum. In general we can hope to end up at a (good) local minimum."*
+* _Calculus_ - Trying to find what changes in x reaches y
+
+<hr style="background-color: #800080;height: 5.0px;" />
+
+<!-- livebook:{"break_markdown":true} -->
 
 Modern neural networks typically have multiple hidden layers. This helps improve the learning task by allowing n-dimensional computation that captures more aspects of complex datasets. It’s also important to note that the name “hidden layer” is a bit of a misnomer. It is not hidden or doing special secret computation – it literally means “the layers that are not the input or output layers”.
 
