@@ -29,7 +29,7 @@ After going over some machine learning algorithms we will take a brief detour in
 
 ## Statistical Learning
 
-We hear a lot about machine learning being the subject of "allowing computers to learn without being explicity programmed". But what does that mean? Broadly speaking, it means given one or more inputs we want to build a model that predicts, or estimates, an output. To correctly predict a model uses probability and statistics to infer patterns and relationships from data – collectively this is known as statistical learning which encompasses a vast array of tools for *understanding data*.
+We hear a lot about machine learning being the subject of "allowing computers to learn without being explicitly programmed". But what does that mean? Broadly speaking, it means given one or more inputs we want to build a model that predicts, or estimates, an output. To correctly predict a model uses probability and statistics to infer patterns and relationships from data – collectively this is known as statistical learning which encompasses a vast array of tools for *understanding data*.
 
 ### Examples
 
@@ -155,4 +155,4 @@ Further we can examine the mean and the standard deviation above and below the m
 
 <!-- livebook:{"break_markdown":true} -->
 
-Overall this is a suprising result - our strategy of always betting on black allows us, with some unlimited constraints, to always beat the house. Further, we typically reach our goal well within the 1000 spins that we've limited ourselves to. In fact we would be able to reach the same performance in under 250 spins.
+Overall this is a surprising result - our strategy of always betting on black allows us, with some unlimited constraints, to always beat the house. Further, we typically reach our goal well within the 1000 spins that we've limited ourselves to. In fact we would be able to reach the same performance in under 250 spins.

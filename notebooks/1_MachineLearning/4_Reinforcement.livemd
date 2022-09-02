@@ -54,11 +54,11 @@ Time for some Elixir
 
 <img src="https://static.thenounproject.com/png/1111032-200.png" alt="Brain icon" style="width: 85px; float: left; margin-bottom: 10px; margin-right: 20px;" />
 
-Take a break and explore an Elixir library called [Essense](https://github.com/nicbet/essence). It is a Natural Language Processing (NLP) and Text Summarization Library. NLP brings together the fields of linguistics and AI to explore how computers can understand text and spoken words like human beings can.
+Take a break and explore an Elixir library called [Essence](https://github.com/nicbet/essence). It is a Natural Language Processing (NLP) and Text Summarization Library. NLP brings together the fields of linguistics and AI to explore how computers can understand text and spoken words like human beings can.
 
 To make the most of this library we need a document. For ours we'll use [Req](https://github.com/wojtekmach/req) to get a short story from Project Gutenburg: The Yellow Wallpaper by Charlotte Perkins.
 
-Essense provides a convenience method for reading the plain text.
+Essence provides a convenience method for reading the plain text.
 
 ```elixir
 doc =

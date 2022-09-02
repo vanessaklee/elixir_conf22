@@ -216,7 +216,7 @@ pie showData
 
 <details>
   <summary>Regression</summary>
-  distinguishing data into continuous real values rather than clases or discrete values. Compared to classification, regression results in ordered continuous values by measuring the root mean square error.
+  distinguishing data into continuous real values rather than classes or discrete values. Compared to classification, regression results in ordered continuous values by measuring the root mean square error.
 </details>
 
 <!-- livebook:{"break_markdown":true} -->

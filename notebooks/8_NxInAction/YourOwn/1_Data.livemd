@@ -22,7 +22,7 @@ Mix.install([
 
 ## Get ready
 
-Find a publically avilable dataset of your own like those on [Kaggle](https://www.kaggle.com/datasets) or [OpenML](https://www.openml.org/). Or, try this one we included with the training repo.
+Find a publicly available dataset of your own like those on [Kaggle](https://www.kaggle.com/datasets) or [OpenML](https://www.openml.org/). Or, try this one we included with the training repo.
 
 [Boston house-price data](http://lib.stat.cmu.edu/datasets/boston)
 

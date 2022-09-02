@@ -47,7 +47,7 @@ Time for some Elixir
 
 [Paasaa](https://github.com/minibikini/paasaa) is Natural language detection for Elixir. To make the most of this library we need a few documents. Use [Req](https://github.com/wojtekmach/req) to get them from Project Gutenburg.
 
-Use the Essense library we explored in an earlier section to read the plain text.
+Use the Essence library we explored in an earlier section to read the plain text.
 
 ```elixir
 doc =
