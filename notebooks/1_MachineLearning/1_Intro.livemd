@@ -167,7 +167,7 @@ Gibran.Tokeniser.tokenise(str)
 
 Gibran.Tokeniser.tokenise(str)
 |> Gibran.Counter.uniq_tokens()
-|> IO.inspect(label: "unqiue tokens")
+|> IO.inspect(label: "unique tokens")
 
 Gibran.Tokeniser.tokenise(str, exclude: &(String.length(&1) < 5))
 |> IO.inspect(label: "tokens > 10")
@@ -231,7 +231,7 @@ For example, the image below shows the error rate of a decision tree on both in-
 
 ### Underfitting
 
-Underfitting is when a model produces inaccurate prediction outcomes because it failed to catpure the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to out of sample data.
+Underfitting is when a model produces inaccurate prediction outcomes because it failed to capture the complexity of the training data. It occurs when the model has not trained for enough time or the input variables are not significant enough to form a meaningful relationship between the input and output. Underfitting, like overfitting, generalizes poorly to out of sample data.
 
 ![](images/underfit.png)
 

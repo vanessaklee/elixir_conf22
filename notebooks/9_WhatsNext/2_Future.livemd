@@ -46,7 +46,7 @@ y = Nx.tensor([1, 2, 4, 8, 9])
 Scholar.Metrics.Similarity.jaccard(x, y)
 ```
 
-As of a week ago, there is an approved PR waiting on a notebook to add the [K-Means aglorithm](https://github.com/elixir-nx/scholar/pull/21) to Scholar.
+As of a week ago, there is an approved PR waiting on a notebook to add the [K-Means algorithm](https://github.com/elixir-nx/scholar/pull/21) to Scholar.
 
 You don't have to wait to try it out. Simply scroll up to the Notebook dependencies and setup section. Comment out the first dep and uncomment the second to pull directly from the creators fork of Scholar. (Although it may be merged into the main Scholar repo by the time of training; you can try the code block out first.)
 
